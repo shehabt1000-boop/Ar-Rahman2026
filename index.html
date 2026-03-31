@@ -43,17 +43,16 @@
         body.lang-sv .section-title { font-size: 1.8rem; }
         body.lang-sv .city-badge { font-family: inherit; }
 
-        /* Header Fixes */
+        /* Header Fixes - تم حل مشكلة اختفاء جرس الإشعارات بإزالة overflow: hidden */
         header {
             position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
             background: rgba(10, 54, 34, 0.95); backdrop-filter: blur(10px);
             padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
             color: var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            overflow: hidden; /* يمنع التمدد الخاطئ */
         }
         .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; white-space: nowrap; }
-        body.lang-sv .header-brand { font-size: 1.1rem; } /* تصغير بسيط للسويدية لعدم تشوه الهيدر */
-        
+        body.lang-sv .header-brand { font-size: 1.1rem; } 
+
         .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: nowrap; }
         .icon-btn { cursor: pointer; font-size: 20px; transition: var(--transition); }
         .icon-btn:hover { color: var(--white); transform: scale(1.1); }
@@ -121,15 +120,14 @@
         .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
         .title-separator i { color: var(--primary); font-size: 1.1rem; }
 
-        /* 👑 تصميم التاريخ الفاخر والصغير جداً 👑 */
-        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } /* مقترب جداً من الصلاة */
+        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } 
         .current-date-box {
             background: linear-gradient(135deg, var(--primary), #0c4a2e);
             color: var(--secondary);
-            padding: 3px 15px; /* تصغير الارتفاع والعرض */
+            padding: 3px 15px; 
             border-radius: 12px;
             display: inline-block;
-            font-size: 0.85rem; /* تصغير الخط */
+            font-size: 0.85rem; 
             font-weight: bold;
             border: 1px solid var(--secondary);
             font-family: 'Cairo', sans-serif;
@@ -157,6 +155,19 @@
         .activity-img { width: 100%; height: 160px; object-fit: cover; }
         .activity-content { padding: 15px; }
         .activity-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 8px; font-weight: bold; }
+        
+        /* تنسيق صندوق النص القابل للتمرير (حل مشكلة خروج النص) */
+        .activity-desc {
+            color: #666; font-size: 0.95rem;
+            max-height: 90px; overflow-y: auto;
+            padding-right: 5px; white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        [dir="ltr"] .activity-desc { padding-right: 0; padding-left: 5px; }
+        /* سكرول بار أنيق للمحتوى */
+        .activity-desc::-webkit-scrollbar { width: 5px; }
+        .activity-desc::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 5px; }
+        .activity-desc::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
 
         /* Gallery */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
@@ -242,6 +253,20 @@
         .admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size:0.9rem;}
         .admin-btn { background: var(--primary); color: var(--white); border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
 
+        /* التذكير المنبثق (Toast) */
+        .app-toast-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 150px);
+            background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white);
+            padding: 12px 25px; border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 12px;
+            opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000; font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: bold;
+            border: 1px solid var(--secondary); text-align: center; max-width: 90%;
+        }
+        .app-toast-container.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
+        .app-toast-icon { color: var(--secondary); font-size: 1.3rem; animation: pulse 2s infinite; }
+
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -302,7 +327,7 @@
                 <div class="title-separator"><i class="fas fa-star-and-crescent"></i></div>
             </div>
 
-            <!-- التاريخ (بدون أيقونة وصغير ومقترب) -->
+            <!-- التاريخ -->
             <div class="date-wrapper">
                 <div class="current-date-box" id="current-date-text">--/--/----</div>
             </div>
@@ -384,10 +409,9 @@
                     <h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2>
                 </div>
                 <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
-                
-                <!-- تم تصغير العنوان وتحديثه ليظهر من اليسار لليمين حتى يقرأ السويدي بشكل صحيح -->
+
                 <p id="address-text" style="font-size: 0.85rem; margin: 10px 0; color: #eee; direction: ltr;"></p>
-                
+
                 <div class="social-btns">
                     <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="https://www.facebook.com/share/1JBr9EDvWA/" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
@@ -405,26 +429,30 @@
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-image"></i> إضافة صور للمعرض</h3>
                 <input type="file" id="gallery-upload" class="admin-input" multiple accept="image/*">
-                
-                <!-- تحديث: إدخال وصف عربي وسويدي -->
                 <input type="text" id="gallery-caption-ar" class="admin-input" placeholder="وصف الصورة (عربي)">
                 <input type="text" id="gallery-caption-sv" class="admin-input" placeholder="Bildbeskrivning (Svenska)">
-                
                 <button class="admin-btn" onclick="uploadGalleryImages()">رفع للمعرض <i class="fas fa-cloud-upload-alt"></i></button>
                 <p id="gallery-status" style="color: green; margin-top: 10px;"></p>
             </div>
+            
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-plus-circle"></i> إضافة نشاط</h3>
-                
-                <!-- تحديث: إدخال عنوان ووصف عربي وسويدي -->
                 <input type="text" id="act-title-ar" class="admin-input" placeholder="عنوان النشاط (عربي)">
                 <input type="text" id="act-title-sv" class="admin-input" placeholder="Aktivitetstitel (Svenska)">
                 <textarea id="act-desc-ar" class="admin-input" placeholder="التفاصيل (عربي)" rows="2"></textarea>
                 <textarea id="act-desc-sv" class="admin-input" placeholder="Detaljer (Svenska)" rows="2"></textarea>
-                
                 <input type="file" id="act-img" class="admin-input" accept="image/*">
                 <button class="admin-btn" onclick="addActivity()">إضافة <i class="fas fa-check"></i></button>
                 <p id="act-status" style="color: green; margin-top: 10px;"></p>
+            </div>
+
+            <!-- الحقل الجديد لإضافة إشعار التذكير -->
+            <div class="admin-card">
+                <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-bell"></i> إرسال تذكير منبثق (Toast)</h3>
+                <input type="text" id="toast-text-ar" class="admin-input" placeholder="نص التذكير (عربي)">
+                <input type="text" id="toast-text-sv" class="admin-input" placeholder="Meddelande (Svenska)">
+                <button class="admin-btn" onclick="sendToast()">إرسال التذكير للمستخدمين <i class="fas fa-paper-plane"></i></button>
+                <p id="toast-status" style="color: green; margin-top: 10px;"></p>
             </div>
         </div>
     </div>
@@ -503,33 +531,30 @@
             ];
         }
 
-    /* تحديث الداتا لتشمل العربي والسويدي مع تعديل وصف نشاط كرة قدم للأطفال */
-let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
-    activities: [
-        {
-            titleAr: "دروس قرآن للأطفال",
-            titleSv: "Koranlektioner för barn",
-            descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.",
-            descSv: "Hålls varje vecka för att lära ut recitation.",
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg"
-        },
-        {
-            titleAr: "نشاط كرة قدم للأطفال",
-            titleSv: "Fotboll för barn",
-            descAr: "الأولى 15:30 - 17:00 صف أول - الرابع كرة قدم Central Skola\nالثانية 17:00 - 18:30 صف الخامس - التاسع كرة قدم Central Skola\nالثالثة 19:00 - 20:30 للرجال كرة طائرة أو ريشة أو نشاط آخر Central Skola\nالرابعة *الأحد* 17:45 - 20:00 من صف الثانوية فما فوق صالة Ugglehallen",
-            descSv: "Första 15:30 - 17:00 årskurs 1 till 4 Fotboll Central Skola\nAndra 17:00 - 18:30 årskurs 5 till 9 Fotboll Central Skola\nTredje 19:00 - 20:30 för män Volleyboll eller Badminton eller annan aktivitet Central Skola\nFjärde *Söndag* 17:45 - 20:00 för gymnasiet och uppåt Ugglehallen",
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg"
-        },
-        {
-            titleAr: "نشاط كرة يد للكبار",
-            titleSv: "Handboll för vuxna",
-            descAr: "نشاط رياضي أسبوعي للشباب والكبار.",
-            descSv: "Idrottsaktivitet för ungdomar och vuxna.",
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg"
-        }
-        // يمكن إضافة أنشطة أخرى بنفس الشكل هنا إذا احتجت
-    ]
-};
+        let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
+            activities:[
+                {
+                    titleAr: "دروس قرآن للأطفال",
+                    titleSv: "Koranlektioner för barn",
+                    descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.",
+                    descSv: "Hålls varje vecka för att lära ut recitation.",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg"
+                },
+                {
+                    titleAr: "نشاط كرة قدم للأطفال",
+                    titleSv: "Fotboll för barn",
+                    descAr: "الأولى 15:30 - 17:00 صف أول - الرابع كرة قدم Central Skola\nالثانية 17:00 - 18:30 صف الخامس - التاسع كرة قدم Central Skola\nالثالثة 19:00 - 20:30 للرجال كرة طائرة أو ريشة أو نشاط آخر Central Skola\nالرابعة *الأحد* 17:45 - 20:00 من صف الثانوية فما فوق صالة Ugglehallen",
+                    descSv: "Första 15:30 - 17:00 årskurs 1 till 4 Fotboll Central Skola\nAndra 17:00 - 18:30 årskurs 5 till 9 Fotboll Central Skola\nTredje 19:00 - 20:30 för män Volleyboll eller Badminton eller annan aktivitet Central Skola\nFjärde *Söndag* 17:45 - 20:00 för gymnasiet och uppåt Ugglehallen",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg"
+                },
+                {
+                    titleAr: "نشاط كرة يد للكبار",
+                    titleSv: "Handboll för vuxna",
+                    descAr: "نشاط رياضي أسبوعي للشباب والكبار.",
+                    descSv: "Idrottsaktivitet för ungdomar och vuxna.",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg"
+                }
+            ],
             gallery:[
                 { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963292/qov2cetpco2z1xmb736h.jpg", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" },
                 { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", captionAr: "المسجد من الداخل", captionSv: "Moskén från insidan" }
@@ -581,8 +606,8 @@ let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
             document.getElementById('address-text').innerText = t.address;
 
             renderPrayers();
-            renderActivities(); // نعيد رسم الأنشطة لتتحدث باللغة المحددة
-            renderGallery();    // نعيد رسم المعرض ليتم تحديث الكلمات التوضيحية
+            renderActivities();
+            renderGallery();
         }
 
         function toggleLanguage() {
@@ -664,19 +689,17 @@ let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
             updateTimer(); 
         }
 
-        /* هنا يتم عرض النشاط باللغة المناسبة */
+        /* هنا تم اضافة الكلاس activity-desc ليكون النص بداخل صندوق ويظهر سكرول */
         function renderActivities() {
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
             siteData.activities.forEach(act => {
-                // نختار النص بناءً على اللغة المحددة، وإذا لم يكن موجوداً نعرض الاسم القديم
                 const displayTitle = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
                 const displayDesc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
-                container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${displayTitle}</h3><p style="color:#666; font-size:0.95rem;">${displayDesc}</p></div></div>`;
+                container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${displayTitle}</h3><p class="activity-desc">${displayDesc}</p></div></div>`;
             });
         }
 
-        /* هنا يتم عرض المعرض باللغة المناسبة */
         function renderGallery() {
             const container = document.getElementById('gallery-container');
             const btnLoadMore = document.getElementById('btn-load-more');
@@ -719,19 +742,65 @@ let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
             }
         }
 
+        /* دوال ارسال وعرض التذكير المنبثق (Toast) */
+        function sendToast() {
+            const ar = document.getElementById('toast-text-ar').value;
+            const sv = document.getElementById('toast-text-sv').value || ar;
+            if(!ar) return;
+            const toastData = { id: Date.now(), ar, sv };
+            localStorage.setItem('app_toast_msg', JSON.stringify(toastData));
+            
+            document.getElementById('toast-status').innerText = "تم الإرسال وسيظهر للمستخدمين ✔️";
+            showToast(toastData); // إظهار معاينة للإدمن
+            setTimeout(() => { document.getElementById('toast-status').innerText = ""; }, 3000);
+        }
+
+        function checkAppToast() {
+            const toastData = JSON.parse(localStorage.getItem('app_toast_msg'));
+            if(toastData) {
+                const seenId = localStorage.getItem('seen_toast_id');
+                // إذا لم يتم رؤية هذا الإشعار مسبقاً، أظهره بعد ثانيتين من فتح الموقع
+                if(seenId != toastData.id) {
+                    setTimeout(() => {
+                        showToast(toastData);
+                        localStorage.setItem('seen_toast_id', toastData.id);
+                    }, 2000);
+                }
+            }
+        }
+
+        function showToast(toastData) {
+            const text = currentLang === 'ar' ? toastData.ar : toastData.sv;
+            let toastEl = document.getElementById('app-toast-box');
+            if(!toastEl) {
+                toastEl = document.createElement('div');
+                toastEl.id = 'app-toast-box';
+                toastEl.className = 'app-toast-container';
+                document.body.appendChild(toastEl);
+            }
+            toastEl.innerHTML = `<i class="fas fa-bell app-toast-icon"></i> <span>${text}</span>`;
+            
+            // إعادة التفعيل ليتم تنفيذ الأنميشن
+            toastEl.classList.remove('show');
+            void toastEl.offsetWidth; 
+            toastEl.classList.add('show');
+            
+            // إخفاء تلقائي بعد 6 ثوانٍ
+            setTimeout(() => { toastEl.classList.remove('show'); }, 6000);
+        }
+
         async function uploadToCloudinary(file) {
             const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", "souq_upload");
             const res = await fetch(`https://api.cloudinary.com/v1_1/db9h7zm1h/image/upload`, { method: "POST", body: fd });
             const data = await res.json(); return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
         }
 
-        /* تحديث الإضافة للمعرض باللغتين */
         async function uploadGalleryImages() {
             const files = document.getElementById('gallery-upload').files;
             if(files.length === 0) return;
             document.getElementById('gallery-status').innerText = "جاري الرفع...";
             const capAr = document.getElementById('gallery-caption-ar').value;
-            const capSv = document.getElementById('gallery-caption-sv').value || capAr; // إذا تركه فارغ نضع العربي
+            const capSv = document.getElementById('gallery-caption-sv').value || capAr;
             for(let f of files) {
                 try {
                     const url = await uploadToCloudinary(f);
@@ -743,19 +812,18 @@ let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
             document.getElementById('gallery-status').innerText = "تم الرفع ✔️";
         }
 
-        /* تحديث الإضافة للأنشطة باللغتين */
         async function addActivity() {
             const titleAr = document.getElementById('act-title-ar').value;
             const titleSv = document.getElementById('act-title-sv').value || titleAr;
             const descAr = document.getElementById('act-desc-ar').value;
             const descSv = document.getElementById('act-desc-sv').value || descAr;
             const file = document.getElementById('act-img').files[0];
-            
+
             if(!titleAr) return;
             document.getElementById('act-status').innerText = "جاري الحفظ...";
             let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
             if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
-            
+
             siteData.activities.push({ titleAr, titleSv, descAr, descSv, img });
             localStorage.setItem('mosque_data', JSON.stringify(siteData));
             renderActivities();
@@ -769,8 +837,9 @@ let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
         window.onload = () => {
             displayCurrentDate(); 
             loadTodaysPrayers();  
-            applyTranslations(); // هذه الدالة تقوم برسم الأنشطة والمعرض بلغة الموقع الصحيحة
+            applyTranslations(); 
             checkNotifications();
+            checkAppToast(); // التحقق من وجود إشعار منبثق جديد وعرضه
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
     </script>
