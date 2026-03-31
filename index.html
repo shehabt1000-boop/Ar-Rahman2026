@@ -503,36 +503,13 @@
             ];
         }
 
-/* تحديث البيانات لتشمل العربي والسويدي */
-let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
-    activities: [
-        { 
-            titleAr: "دروس قرآن للأطفال", 
-            titleSv: "Koranlektioner för barn", 
-            descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.", 
-            descSv: "Hålls varje vecka för att lära ut recitation.", 
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg" 
-        },
-        { 
-            titleAr: "نشاط كرة قدم للأطفال", 
-            titleSv: "Fotboll för barn", 
-            descAr: `الأولى 15.30 - 17.00 صف أول - الرابع كرة قدم centralskola
-الثانية 17.00 - 18.30 صف الخامس - التاسع كرة قدم centralskola
-الرابعة *الأحد* 17.45 - 20.00، من صف الثانوية فما فوق صالة الUgglehallen. يوم السبت`, 
-            descSv: `Första gruppen 15.30 - 17.00 årskurs 1-4 fotboll på centralskola
-Andra gruppen 17.00 - 18.30 årskurs 5-9 fotboll på centralskola
-Fjärde gruppen *Söndag* 17.45 - 20.00, från gymnasiet och uppåt i Ugglehallen. Lördag`, 
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg" 
-        },
-        { 
-            titleAr: "نشاط كرة يد للكبار", 
-            titleSv: "Handboll för vuxna", 
-            descAr: "نشاط رياضي يوم الأحد للشباب والكبار.", 
-            descSv: "Idrottsaktivitet för ungdomar och vuxna på söndagar.", 
-            img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg" 
-        }
-    ]
-};
+        /* تحديث الداتا لتشمل العربي والسويدي */
+        let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
+            activities:[
+                { titleAr: "دروس قرآن للأطفال", titleSv: "Koranlektioner för barn", descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.", descSv: "Hålls varje vecka för att lära ut recitation.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg" },
+                { titleAr: "نشاط كرة قدم للأطفال", titleSv: "Fotboll för barn", descAr: "نشاط رياضي ترفيهي للأشبال كل أسبوع.", descSv: "Fritidsaktivitet för barn varje vecka.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg" },
+                { titleAr: "نشاط كرة يد للكبار", titleSv: "Handboll för vuxna", descAr: "نشاط رياضي أسبوعي للشباب والكبار.", descSv: "Idrottsaktivitet för ungdomar och vuxna.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg" }
+            ],
             gallery:[
                 { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963292/qov2cetpco2z1xmb736h.jpg", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" },
                 { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", captionAr: "المسجد من الداخل", captionSv: "Moskén från insidan" }
