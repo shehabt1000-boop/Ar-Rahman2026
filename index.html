@@ -21,6 +21,7 @@
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script> <!-- تمت إضافة مكتبة المصادقة -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
@@ -89,8 +90,7 @@
             position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
             background: var(--white); box-shadow: -5px 0 15px rgba(0,0,0,0.1);
             transition: var(--transition); z-index: 1002; display: flex; flex-direction: column;
-        }
-        [dir="ltr"] .sidebar { right: auto; left: -300px; }
+        }[dir="ltr"] .sidebar { right: auto; left: -300px; }
         .sidebar.active { right: 0; } [dir="ltr"] .sidebar.active { left: 0; }
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
@@ -316,9 +316,9 @@
             <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">مواقيت الصلاة</span></a>
             <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">الأنشطة</span></a>
             <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">المعرض</span></a>
-            
+
             <button onclick="requestNotificationPermission()"><i class="fas fa-bell"></i> <span id="menu-notif-btn">تفعيل الإشعارات</span></button>
-            
+
             <a href="#" onclick="openAdmin()"><i class="fas fa-cog"></i> <span id="menu-admin">الإدارة</span></a>
             <a href="#" id="logout-btn" onclick="logoutAdmin()" style="display:none; color:#ff3b30;"><i class="fas fa-sign-out-alt"></i> <span id="menu-logout">خروج الإدارة</span></a>
         </div>
@@ -329,10 +329,11 @@
         <div class="modal-content">
             <i class="fas fa-user-shield" style="font-size: 40px; color: var(--primary); margin-bottom: 15px;"></i>
             <h3 style="margin-bottom: 15px; font-family: 'Amiri'; color: var(--primary);">تسجيل دخول الإدارة</h3>
-            <input type="password" id="admin-pass" placeholder="أدخل كود الإدارة السري">
-            <button class="modal-btn" onclick="verifyAdmin()">دخول</button>
+            <input type="email" id="admin-email" placeholder="البريد الإلكتروني">
+            <input type="password" id="admin-pass" placeholder="كلمة المرور">
+            <button class="modal-btn" id="login-btn" onclick="verifyAdmin()">دخول</button>
             <button class="modal-btn cancel" onclick="closeAdminModal()">إلغاء</button>
-            <p id="login-error" style="color: red; font-size: 0.9rem; margin-top: 10px; display: none;">الكود غير صحيح!</p>
+            <p id="login-error" style="color: red; font-size: 0.9rem; margin-top: 10px; display: none;">بيانات الدخول غير صحيحة!</p>
         </div>
     </div>
 
@@ -515,11 +516,9 @@
         // --- 2. المتغيرات واللغات ---
         let currentLang = localStorage.getItem('lang') || 'ar';
         let visibleGalleryCount = 5;
-        let siteData = { activities: [], gallery:[], notifications: [] };
+        let siteData = { activities: [], gallery:[], notifications:[] };
         let prayerTimes =[];
         let notifiedPrayers = {};
-
-        const ADMIN_CODE = "oW1VqNujjWU2uzYWE6vWcsFpguf2";
 
         const langData = {
             ar: {
@@ -572,7 +571,7 @@
                     siteData.notifications.push(data);
                 });
                 renderNotifications();
-                
+
                 if(siteData.notifications.length > 0) {
                     let latest = siteData.notifications[0];
                     let lastSeen = localStorage.getItem('last_seen_notif');
@@ -586,7 +585,9 @@
             });
         }
 
-        // --- 4. تسجيل دخول الإدارة ---
+        // --- 4. تسجيل دخول الإدارة (تحديث Firebase Auth) ---
+        const ADMIN_UID = "oW1VqNujjWU2uzYWE6vWcsFpguf2";
+
         function openAdmin() {
             toggleSidebar();
             if(localStorage.getItem('isAdmin') === 'true') {
@@ -599,28 +600,76 @@
         function closeAdminModal() {
             document.getElementById('admin-login-modal').style.display = 'none';
             document.getElementById('login-error').style.display = 'none';
+            document.getElementById('admin-email').value = '';
             document.getElementById('admin-pass').value = '';
         }
 
         function verifyAdmin() {
+            const email = document.getElementById('admin-email').value;
             const pass = document.getElementById('admin-pass').value;
-            if (pass === ADMIN_CODE) {
-                localStorage.setItem('isAdmin', 'true');
-                closeAdminModal();
-                showPage('admin');
-                document.getElementById('logout-btn').style.display = 'flex';
-            } else {
-                document.getElementById('login-error').style.display = 'block';
+            const errorEl = document.getElementById('login-error');
+            const btn = document.getElementById('login-btn');
+
+            if (!email || !pass) {
+                errorEl.innerText = currentLang === 'ar' ? "يرجى إدخال البريد الإلكتروني وكلمة المرور!" : "Vänligen ange e-post och lösenord!";
+                errorEl.style.display = 'block';
+                return;
             }
+
+            btn.innerText = currentLang === 'ar' ? "جاري الدخول..." : "Loggar in...";
+            btn.disabled = true;
+
+            // تسجيل الدخول عبر Firebase Auth
+            firebase.auth().signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    
+                    // التحقق مما إذا كان الـ UID يطابق كود الإدارة
+                    if (user.uid === ADMIN_UID) {
+                        localStorage.setItem('isAdmin', 'true');
+                        closeAdminModal();
+                        showPage('admin');
+                        document.getElementById('logout-btn').style.display = 'flex';
+                    } else {
+                        // إذا سجل دخول بحساب آخر ليس له صلاحية
+                        firebase.auth().signOut();
+                        errorEl.innerText = currentLang === 'ar' ? "ليس لديك صلاحية الإدارة!" : "Du har inte administratörsbehörighet!";
+                        errorEl.style.display = 'block';
+                    }
+                })
+                .catch((error) => {
+                    errorEl.innerText = currentLang === 'ar' ? "البريد الإلكتروني أو كلمة المرور غير صحيحة!" : "Fel e-post eller lösenord!";
+                    errorEl.style.display = 'block';
+                })
+                .finally(() => {
+                    btn.innerText = currentLang === 'ar' ? "دخول" : "Logga in";
+                    btn.disabled = false;
+                });
         }
 
         function logoutAdmin() {
-            localStorage.removeItem('isAdmin');
-            document.getElementById('logout-btn').style.display = 'none';
-            toggleSidebar();
-            showPage('main');
-            alert(currentLang === 'ar' ? "تم تسجيل الخروج" : "Utloggad");
+            firebase.auth().signOut().then(() => {
+                localStorage.removeItem('isAdmin');
+                document.getElementById('logout-btn').style.display = 'none';
+                toggleSidebar();
+                showPage('main');
+                alert(currentLang === 'ar' ? "تم تسجيل الخروج" : "Utloggad");
+            });
         }
+
+        // الحفاظ على حالة تسجيل الدخول عند تحديث الصفحة
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.uid === ADMIN_UID) {
+                localStorage.setItem('isAdmin', 'true');
+                document.getElementById('logout-btn').style.display = 'flex';
+            } else {
+                localStorage.removeItem('isAdmin');
+                document.getElementById('logout-btn').style.display = 'none';
+                if (document.getElementById('admin-panel').style.display === 'block') {
+                    showPage('main');
+                }
+            }
+        });
 
         // --- 5. واجهة المستخدم والتنقل ---
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
@@ -654,7 +703,7 @@
             document.getElementById('text-load-more').innerText = t.loadMore;
             document.getElementById('title-contact').innerText = t.tContact;
             document.getElementById('address-text').innerText = t.address;
-            
+
             document.getElementById('notif-title-text').innerText = t.notifTitle;
             document.getElementById('menu-notif-btn').innerText = t.notifBtn;
             document.getElementById('menu-logout').innerText = t.logout;
@@ -761,7 +810,7 @@
             const container = document.getElementById('prayer-container');
             const t = langData[currentLang];
             container.innerHTML = '';
-            
+
             // تصفير التمييز ليتم إضافته فوراً في الدالة updateTimer
             nextPrayerElementId = null; 
 
@@ -775,7 +824,7 @@
                 html += `</div>`;
                 container.innerHTML += html;
             });
-            
+
             // استدعاء التحديث فوراً ليعود اللون الأخضر بدون أي تأخير عند تغيير اللغة
             updateTimer(); 
         }
@@ -837,7 +886,7 @@
         function renderActivities() {
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
-            
+
             // الأنشطة الأساسية التجريبية
             const defaultActivities =[
                 {
@@ -912,10 +961,10 @@
             const statusEl = document.getElementById('gallery-status');
             statusEl.style.color = "blue";
             statusEl.innerText = "جاري الرفع...";
-            
+
             const capAr = document.getElementById('gallery-caption-ar').value;
             const capSv = document.getElementById('gallery-caption-sv').value || capAr;
-            
+
             try {
                 for(let f of files) {
                     const url = await uploadToCloudinary(f);
@@ -941,7 +990,7 @@
             const statusEl = document.getElementById('act-status');
             statusEl.style.color = "blue";
             statusEl.innerText = "جاري الحفظ...";
-            
+
             let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
             if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
 
@@ -965,7 +1014,7 @@
             const ar = document.getElementById('toast-text-ar').value;
             const sv = document.getElementById('toast-text-sv').value || ar;
             if(!ar) return;
-            
+
             const statusEl = document.getElementById('toast-status');
             statusEl.style.color = "blue";
             statusEl.innerText = "جاري الإرسال...";
@@ -1028,7 +1077,7 @@
         window.onload = () => {
             if(localStorage.getItem('isAdmin') === 'true') document.getElementById('logout-btn').style.display = 'flex';
             if('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js');
-            
+
             displayCurrentDate(); 
             loadTodaysPrayers();  
             applyTranslations(); 
