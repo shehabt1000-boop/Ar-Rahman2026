@@ -23,60 +23,123 @@
     <script src="prayers.js"></script>
 
     <style>
-        /* [احتفظنا بنفس تصميم CSS السابق بالكامل لضمان عدم تغير شكل الموقع] */
         :root {
-            --primary: #0a3622; --secondary: #d4af37; --light-bg: #f8f9fa;
-            --white: #ffffff; --text-dark: #2c3e50; --shadow: 0 10px 30px rgba(0,0,0,0.08); --transition: all 0.3s ease;
+            --primary: #0a3622;
+            --secondary: #d4af37;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-dark: #2c3e50;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s ease;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Cairo', sans-serif; background-color: var(--light-bg); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
         h1, h2, h3 { font-family: 'Amiri', serif; }
+
         body.lang-sv { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body.lang-sv h1, body.lang-sv h2, body.lang-sv h3, body.lang-sv .prayer-name { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 0.5px; }
         body.lang-sv .hero-title { font-size: 2rem; }
         body.lang-sv .section-title { font-size: 1.8rem; }
         body.lang-sv .city-badge { font-family: inherit; }
-        header { position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px; background: rgba(10, 54, 34, 0.95); backdrop-filter: blur(10px); padding: 0 5%; display: flex; justify-content: space-between; align-items: center; color: var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+        /* Header Fixes - تم حل مشكلة اختفاء جرس الإشعارات بإزالة overflow: hidden */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
+            background: rgba(10, 54, 34, 0.95); backdrop-filter: blur(10px);
+            padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
+            color: var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
         .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; white-space: nowrap; }
         body.lang-sv .header-brand { font-size: 1.1rem; } 
+
         .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: nowrap; }
         .icon-btn { cursor: pointer; font-size: 20px; transition: var(--transition); }
         .icon-btn:hover { color: var(--white); transform: scale(1.1); }
+
         .bell-container { position: relative; }
         .notif-dot { position: absolute; top: 0; right: -2px; width: 10px; height: 10px; background-color: #ff3b30; border-radius: 50%; display: none; }
         .notif-dot.active { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,59,48,0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0); } }
-        .notif-box { position: absolute; top: 50px; left: 0; width: 300px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden; transform: translateY(-10px); transition: var(--transition); z-index: 1001; max-height: 350px; overflow-y: auto; }
+
+        .notif-box {
+            position: absolute; top: 50px; left: 0; width: 300px; background: var(--white);
+            border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden;
+            transform: translateY(-10px); transition: var(--transition); z-index: 1001; max-height: 350px; overflow-y: auto;
+        }
         [dir="ltr"] .notif-box { left: auto; right: 0; }
         .notif-box.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .notif-item { padding: 12px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); font-size: 0.9rem; }
         .notif-item.unread { background-color: #f0fdf4; font-weight: bold; border-right: 4px solid var(--primary); }
-        .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100vh; background: var(--white); box-shadow: -5px 0 15px rgba(0,0,0,0.1); transition: var(--transition); z-index: 1002; display: flex; flex-direction: column; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; right: -300px; width: 280px; height: 100vh;
+            background: var(--white); box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+            transition: var(--transition); z-index: 1002; display: flex; flex-direction: column;
+        }
         [dir="ltr"] .sidebar { right: auto; left: -300px; }
-        .sidebar.active { right: 0; }[dir="ltr"] .sidebar.active { left: 0; }
+        .sidebar.active { right: 0; } [dir="ltr"] .sidebar.active { left: 0; }
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .menu-links a { text-decoration: none; color: var(--text-dark); font-size: 1.1rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .menu-links a { text-decoration: none; color: var(--text-dark); font-size: 1.1rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .menu-links a:hover { background: var(--light-bg); color: var(--primary); }
-        .hero { position: relative; padding-top: 65px; min-height: 350px; height: auto; background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg'); background-position: center center; background-size: cover; background-repeat: no-repeat; display: flex; align-items: center; justify-content: center; text-align: center; padding-bottom: 50px; }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            padding-top: 65px;
+            min-height: 350px; height: auto;
+            background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
+            background-position: center center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            padding-bottom: 50px;
+        }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,54,34,0.2), rgba(10,54,34,0.5)); }
         .hero-content { position: relative; z-index: 1; color: var(--white); padding: 0 20px; width: 100%; max-width: 800px; animation: fadeInUp 1s ease-out; }
         .hero-title { font-size: 2.2rem; color: var(--secondary); margin-bottom: 5px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); word-break: break-word; }
         .hero-subtitle { font-size: 1rem; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); line-height: 1.5; }
-        @media(min-width: 768px) { .hero { min-height: 450px; } .hero-title { font-size: 2.8rem; } .hero-subtitle { font-size: 1.2rem; } body.lang-sv .hero-title { font-size: 2.5rem; } }
+
+        @media(min-width: 768px) {
+            .hero { min-height: 450px; }
+            .hero-title { font-size: 2.8rem; }
+            .hero-subtitle { font-size: 1.2rem; }
+            body.lang-sv .hero-title { font-size: 2.5rem; }
+        }
+
         .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; }
+
         .section-header { text-align: center; margin-bottom: 30px; }
         .title-row { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
         .section-title { font-size: 2rem; color: var(--primary); margin: 0; word-break: break-word; }
         .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Cairo', sans-serif; }
+
         .title-separator { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
         .title-separator i { color: var(--primary); font-size: 1.1rem; }
+
         .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } 
-        .current-date-box { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); padding: 3px 15px; border-radius: 12px; display: inline-block; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--secondary); font-family: 'Cairo', sans-serif; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .current-date-box {
+            background: linear-gradient(135deg, var(--primary), #0c4a2e);
+            color: var(--secondary);
+            padding: 3px 15px; 
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 0.85rem; 
+            font-weight: bold;
+            border: 1px solid var(--secondary);
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Prayer Times */
         .timer-container { text-align: center; margin-bottom: 30px; background: var(--white); padding: 15px; border-radius: 15px; box-shadow: var(--shadow); border-bottom: 3px solid var(--secondary); width: fit-content; min-width: 200px; max-width: 90%; margin-left: auto; margin-right: auto; }
         .timer-title { font-size: 0.95rem; color: var(--text-dark); margin-bottom: 5px; font-weight: bold; }
         .countdown-clock { font-size: 1.8rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 2px; direction: ltr; }
+
         .prayer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
         .prayer-card { background: var(--white); border-radius: 12px; padding: 12px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .prayer-card.next-prayer { background: var(--primary); color: var(--white); border-bottom-color: var(--secondary); transform: scale(1.03); }
@@ -84,41 +147,104 @@
         .prayer-name { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
         .prayer-time { font-size: 0.9rem; color: #666; }
         .prayer-card.next-prayer .prayer-time { color: #ddd; }
+
+        /* Activities */
         .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
         .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
         .activity-card:hover { transform: translateY(-5px); }
         .activity-img { width: 100%; height: 160px; object-fit: cover; }
         .activity-content { padding: 15px; }
         .activity-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 8px; font-weight: bold; }
-        .activity-desc { color: #666; font-size: 0.95rem; max-height: 90px; overflow-y: auto; padding-right: 5px; white-space: pre-wrap; line-height: 1.5; }[dir="ltr"] .activity-desc { padding-right: 0; padding-left: 5px; }
+        
+        /* تنسيق صندوق النص القابل للتمرير (حل مشكلة خروج النص) */
+        .activity-desc {
+            color: #666; font-size: 0.95rem;
+            max-height: 90px; overflow-y: auto;
+            padding-right: 5px; white-space: pre-wrap;
+            line-height: 1.5;
+        }
+        [dir="ltr"] .activity-desc { padding-right: 0; padding-left: 5px; }
+        /* سكرول بار أنيق للمحتوى */
         .activity-desc::-webkit-scrollbar { width: 5px; }
         .activity-desc::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 5px; }
         .activity-desc::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
+
+        /* Gallery */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
         .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .gallery-item:hover img { transform: scale(1.1); }
         .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; }
         .gallery-item:hover .gallery-caption { bottom: 0; }
+
+        /* Gallery Load More Button */
         .load-more-container { text-align: center; margin-top: 25px; width: 100%; }
-        .btn-load-more { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); border: 2px solid var(--secondary); padding: 10px 25px; font-size: 1rem; font-family: 'Cairo', sans-serif; font-weight: bold; border-radius: 50px; cursor: pointer; transition: var(--transition); box-shadow: 0 5px 15px rgba(10, 54, 34, 0.2); display: inline-flex; align-items: center; gap: 8px; }
-        .btn-load-more:hover { transform: translateY(-2px); background: linear-gradient(135deg, #0c4a2e, var(--primary)); color: var(--white); box-shadow: 0 8px 20px rgba(10, 54, 34, 0.3); }
-        .donation-wrap { background: linear-gradient(145deg, #ffffff, #f4fdf8); border-radius: 20px; padding: 30px 15px; box-shadow: 0 10px 30px rgba(10, 54, 34, 0.08); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 20px; position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); }
+        .btn-load-more {
+            background: linear-gradient(135deg, var(--primary), #0c4a2e);
+            color: var(--secondary); border: 2px solid var(--secondary);
+            padding: 10px 25px; font-size: 1rem; font-family: 'Cairo', sans-serif;
+            font-weight: bold; border-radius: 50px; cursor: pointer;
+            transition: var(--transition); box-shadow: 0 5px 15px rgba(10, 54, 34, 0.2);
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .btn-load-more:hover {
+            transform: translateY(-2px); background: linear-gradient(135deg, #0c4a2e, var(--primary));
+            color: var(--white); box-shadow: 0 8px 20px rgba(10, 54, 34, 0.3);
+        }
+
+        /* Donation Section */
+        .donation-wrap { 
+            background: linear-gradient(145deg, #ffffff, #f4fdf8);
+            border-radius: 20px; padding: 30px 15px; 
+            box-shadow: 0 10px 30px rgba(10, 54, 34, 0.08); 
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 20px; 
+            position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2);
+        }
         .donation-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, var(--primary), var(--secondary)); }
+
         .donation-info { text-align: center; max-width: 400px; z-index: 2; }
         .donation-info p { font-size: 1rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
-        .swish-number { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: 2px; padding: 8px 20px; background: var(--white); border-radius: 10px; margin: 10px 0; border: 2px dashed var(--secondary); display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
-        .donate-btn-modern { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--secondary), #b8962e); color: var(--white); padding: 10px 25px; border-radius: 50px; font-size: 1rem; font-weight: bold; text-decoration: none; box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); transition: var(--transition); margin-top: 10px; border: 2px solid transparent; cursor: pointer; }
+        .swish-number { 
+            font-size: 1.4rem; font-weight: 800; color: var(--primary); 
+            letter-spacing: 2px; padding: 8px 20px; 
+            background: var(--white); border-radius: 10px; 
+            margin: 10px 0; border: 2px dashed var(--secondary); 
+            display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .donate-btn-modern {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            background: linear-gradient(135deg, var(--secondary), #b8962e);
+            color: var(--white); padding: 10px 25px; border-radius: 50px;
+            font-size: 1rem; font-weight: bold; text-decoration: none;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); transition: var(--transition);
+            margin-top: 10px; border: 2px solid transparent; cursor: pointer;
+        }
+
         .qr-scanner-box { position: relative; background: var(--white); padding: 8px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: inline-block; z-index: 2; }
         .qr-wrapper img.qr-img { width: 130px; height: 130px; display: block; border-radius: 6px; }
-        .qr-logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; background: #fff; border-radius: 6px; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; }
+        .qr-logo-center {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 35px; height: 35px; background: #fff; border-radius: 6px; padding: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10;
+        }
         .donation-deco { position: absolute; opacity: 0.03; font-size: 250px; color: var(--primary); right: -30px; bottom: -50px; transform: rotate(-15deg); pointer-events: none; }[dir="ltr"] .donation-deco { right: auto; left: -30px; transform: rotate(15deg); }
-        .contact-card { background: linear-gradient(135deg, var(--primary), #052014); color: var(--white); border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-        .contact-avatar { width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--primary); margin: 0 auto 15px auto; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); border: 3px solid var(--white); }
+
+        /* Footer */
+        .contact-card {
+            background: linear-gradient(135deg, var(--primary), #052014); color: var(--white);
+            border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden;
+        }
+        .contact-avatar {
+            width: 80px; height: 80px; background: var(--secondary); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 35px;
+            color: var(--primary); margin: 0 auto 15px auto; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); border: 3px solid var(--white);
+        }
         .social-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
         .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition); }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.3); }
         .btn-wa { background: #25D366; } .btn-fb { background: #1877F2; }
+
+        /* Admin UI */
         #admin-panel { display: none; padding: 40px 5%; background: #fff; min-height: 100vh; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
         @media(max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
@@ -126,9 +252,21 @@
         [dir="ltr"] .admin-card { border-right: none; border-left: 4px solid var(--primary); }
         .admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size:0.9rem;}
         .admin-btn { background: var(--primary); color: var(--white); border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
-        .app-toast-container { position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 150px); background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white); padding: 12px 25px; border-radius: 50px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 12px; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 10000; font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: bold; border: 1px solid var(--secondary); text-align: center; max-width: 90%; }
+
+        /* التذكير المنبثق (Toast) */
+        .app-toast-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translate(-50%, 150px);
+            background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white);
+            padding: 12px 25px; border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 12px;
+            opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 10000; font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: bold;
+            border: 1px solid var(--secondary); text-align: center; max-width: 90%;
+        }
         .app-toast-container.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
         .app-toast-icon { color: var(--secondary); font-size: 1.3rem; animation: pulse 2s infinite; }
+
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -139,14 +277,14 @@
     <!-- Header -->
     <header>
         <div class="header-brand">
-            <i class="fas fa-bars icon-btn" onclick="window.toggleSidebar()"></i>
+            <i class="fas fa-bars icon-btn" onclick="toggleSidebar()"></i>
             <i class="fas fa-mosque"></i>
             <span id="nav-title">مسجد الرحمن</span>
         </div>
         <div class="header-actions">
-            <div class="icon-btn" onclick="window.toggleLanguage()" style="font-size: 13px; border: 1px solid var(--secondary); padding: 3px 6px; border-radius: 12px; font-weight:bold;">AR/SV</div>
+            <div class="icon-btn" onclick="toggleLanguage()" style="font-size: 13px; border: 1px solid var(--secondary); padding: 3px 6px; border-radius: 12px; font-weight:bold;">AR/SV</div>
             <div class="bell-container">
-                <i class="fas fa-bell icon-btn" onclick="window.toggleNotifications()"></i>
+                <i class="fas fa-bell icon-btn" onclick="toggleNotifications()"></i>
                 <div class="notif-dot" id="notif-dot"></div>
                 <div class="notif-box" id="notif-box"></div>
             </div>
@@ -157,21 +295,20 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h3>القائمة</h3>
-            <i class="fas fa-times icon-btn" onclick="window.toggleSidebar()"></i>
+            <i class="fas fa-times icon-btn" onclick="toggleSidebar()"></i>
         </div>
         <div class="menu-links">
-            <a onclick="window.showPage('main'); window.toggleSidebar();"><i class="fas fa-home"></i> <span id="menu-home">الرئيسية</span></a>
-            <a href="#prayers" onclick="window.toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">مواقيت الصلاة</span></a>
-            <a href="#activities" onclick="window.toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">الأنشطة</span></a>
-            <a href="#gallery" onclick="window.toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">المعرض</span></a>
-            <a onclick="window.openAdmin()"><i class="fas fa-cog"></i> <span id="menu-admin">الإدارة</span></a>
-            <a onclick="window.requestNotificationPermission()" style="color:var(--primary); background: #f0fdf4;"><i class="fas fa-bell-slash" id="bell-icon-status"></i> <span id="menu-notify">تفعيل الإشعارات</span></a>
+            <a href="#" onclick="showPage('main'); toggleSidebar();"><i class="fas fa-home"></i> <span id="menu-home">الرئيسية</span></a>
+            <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">مواقيت الصلاة</span></a>
+            <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">الأنشطة</span></a>
+            <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">المعرض</span></a>
+            <a href="#" onclick="openAdmin()"><i class="fas fa-cog"></i> <span id="menu-admin">الإدارة</span></a>
         </div>
     </div>
 
     <!-- Main Content -->
     <div id="main-content">
-        <!-- Hero Section -->
+
         <section class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -180,7 +317,7 @@
             </div>
         </section>
 
-        <!-- Prayers -->
+        <!-- Prayers & Timer -->
         <section class="section fade-in" id="prayers">
             <div class="section-header">
                 <div class="title-row">
@@ -189,13 +326,17 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-star-and-crescent"></i></div>
             </div>
+
+            <!-- التاريخ -->
             <div class="date-wrapper">
                 <div class="current-date-box" id="current-date-text">--/--/----</div>
             </div>
+
             <div class="timer-container">
                 <div class="timer-title" id="timer-title">باقي على ...</div>
                 <div class="countdown-clock" id="countdown-clock">00:00:00</div>
             </div>
+
             <div class="prayer-grid" id="prayer-container"></div>
         </section>
 
@@ -207,9 +348,7 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-users"></i></div>
             </div>
-            <div class="activities-grid" id="activities-container">
-                <p style="text-align: center; width: 100%;">جاري تحميل الأنشطة...</p>
-            </div>
+            <div class="activities-grid" id="activities-container"></div>
         </section>
 
         <!-- Gallery -->
@@ -221,20 +360,23 @@
                 <div class="title-separator"><i class="fas fa-camera"></i></div>
             </div>
             <div class="gallery-grid" id="gallery-container"></div>
+
             <div class="load-more-container">
-                <button class="btn-load-more" id="btn-load-more" onclick="window.loadMoreGallery()" style="display: none;">
+                <button class="btn-load-more" id="btn-load-more" onclick="loadMoreGallery()" style="display: none;">
                     <span id="text-load-more">عرض المزيد</span> <i class="fas fa-chevron-down"></i>
                 </button>
             </div>
         </section>
 
-        <!-- Donate -->
+        <!-- Donation -->
         <section class="section fade-in" id="donate">
-            <!-- نفس كود التبرع بالضبط دون تغيير -->
             <div class="section-header">
-                <div class="title-row"><h2 class="section-title" id="title-donate">تبرع للمسجد</h2></div>
+                <div class="title-row">
+                    <h2 class="section-title" id="title-donate">تبرع للمسجد</h2>
+                </div>
                 <div class="title-separator"><i class="fas fa-hand-holding-heart"></i></div>
             </div>
+
             <div class="donation-wrap">
                 <i class="fas fa-mosque donation-deco"></i>
                 <div class="donation-info">
@@ -242,47 +384,57 @@
                         <i class="fas fa-mobile-alt" style="color: var(--primary);"></i> Swish
                     </div>
                     <p id="text-swish">ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.</p>
-                    <div class="swish-number">123-297 15 47</div><br>
-                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" target="_blank" class="donate-btn-modern" id="btn-donate">اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i></a>
+                    <div class="swish-number">123-297 15 47</div>
+                    <br>
+                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" target="_blank" class="donate-btn-modern" id="btn-donate">
+                        اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i>
+                    </a>
                 </div>
                 <div class="qr-scanner-box">
                     <div class="qr-wrapper">
-                        <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr">
-                        <img class="qr-logo-center" src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774915234/yjqwld9orxskwkl4ttsq.jpg">
+                        <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" alt="Swish QR Code">
+                        <img class="qr-logo-center" src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774915234/yjqwld9orxskwkl4ttsq.jpg" alt="Swish Logo">
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Contact -->
+        <!-- Contact & Footer -->
         <section class="section fade-in" id="contact" style="padding-bottom: 60px;">
             <div class="contact-card">
-                <div class="contact-avatar"><i class="fas fa-user-tie"></i></div>
-                <div class="title-row"><h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2></div>
+                <div class="contact-avatar">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="title-row">
+                    <h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2>
+                </div>
                 <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
+
                 <p id="address-text" style="font-size: 0.85rem; margin: 10px 0; color: #eee; direction: ltr;"></p>
+
                 <div class="social-btns">
                     <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="https://www.facebook.com/share/1JBr9EDvWA/" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
                 </div>
             </div>
         </section>
+
     </div>
 
     <!-- Admin Panel -->
     <div id="admin-panel">
         <h2 style="color:var(--primary); text-align:center; font-family:'Amiri';">لوحة تحكم الإدارة</h2>
-        <button class="admin-btn" style="background: red; width: auto; margin-bottom: 20px;" onclick="window.showPage('main')">إغلاق والعودة للموقع</button>
+        <button class="admin-btn" style="background: red; width: auto; margin-bottom: 20px;" onclick="showPage('main')">إغلاق والعودة للموقع</button>
         <div class="admin-grid">
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-image"></i> إضافة صور للمعرض</h3>
                 <input type="file" id="gallery-upload" class="admin-input" multiple accept="image/*">
                 <input type="text" id="gallery-caption-ar" class="admin-input" placeholder="وصف الصورة (عربي)">
                 <input type="text" id="gallery-caption-sv" class="admin-input" placeholder="Bildbeskrivning (Svenska)">
-                <button class="admin-btn" onclick="window.uploadGalleryImages()">رفع للمعرض <i class="fas fa-cloud-upload-alt"></i></button>
+                <button class="admin-btn" onclick="uploadGalleryImages()">رفع للمعرض <i class="fas fa-cloud-upload-alt"></i></button>
                 <p id="gallery-status" style="color: green; margin-top: 10px;"></p>
             </div>
-
+            
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-plus-circle"></i> إضافة نشاط</h3>
                 <input type="text" id="act-title-ar" class="admin-input" placeholder="عنوان النشاط (عربي)">
@@ -290,55 +442,25 @@
                 <textarea id="act-desc-ar" class="admin-input" placeholder="التفاصيل (عربي)" rows="2"></textarea>
                 <textarea id="act-desc-sv" class="admin-input" placeholder="Detaljer (Svenska)" rows="2"></textarea>
                 <input type="file" id="act-img" class="admin-input" accept="image/*">
-                <button class="admin-btn" onclick="window.addActivity()">إضافة <i class="fas fa-check"></i></button>
+                <button class="admin-btn" onclick="addActivity()">إضافة <i class="fas fa-check"></i></button>
                 <p id="act-status" style="color: green; margin-top: 10px;"></p>
             </div>
 
+            <!-- الحقل الجديد لإضافة إشعار التذكير -->
             <div class="admin-card">
-                <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-bell"></i> إرسال تذكير وإشعار للكل</h3>
+                <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-bell"></i> إرسال تذكير منبثق (Toast)</h3>
                 <input type="text" id="toast-text-ar" class="admin-input" placeholder="نص التذكير (عربي)">
                 <input type="text" id="toast-text-sv" class="admin-input" placeholder="Meddelande (Svenska)">
-                <button class="admin-btn" onclick="window.sendToast()">إرسال التذكير <i class="fas fa-paper-plane"></i></button>
+                <button class="admin-btn" onclick="sendToast()">إرسال التذكير للمستخدمين <i class="fas fa-paper-plane"></i></button>
                 <p id="toast-status" style="color: green; margin-top: 10px;"></p>
             </div>
         </div>
     </div>
 
-    <!-- Firebase SDK (ES Modules) -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
-        import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging.js";
-
-        // إعدادات Firebase الخاصة بك
-        const firebaseConfig = {
-            apiKey: "AIzaSyDLOQ3i-cyhZV-A1oN5Jhy_OQj_KdqClzk",
-            authDomain: "al-rahman-d0529.firebaseapp.com",
-            projectId: "al-rahman-d0529",
-            storageBucket: "al-rahman-d0529.firebasestorage.app",
-            messagingSenderId: "1081097400036",
-            appId: "1:1081097400036:web:a5b9ada478c9bdb7ae06f1",
-            measurementId: "G-8TYFZP4XTJ"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const messaging = getMessaging(app);
-        
-        // مفتاح VAPID للإشعارات
-        const vapidKey = "BOX0a8Dg181ZMjLic3risMEkJZio0hNHGIABg1Mym1qaSorpI6NcJ3QQ79WXg0qi6R1n4SXo-aib3WUkNcIII6E";
-
-        // متغيرات الموقع الأساسية
+    <script>
         let currentLang = localStorage.getItem('lang') || 'ar';
         let visibleGalleryCount = 5;
-        let prayerTimes =[];
-        
-        // المتغيرات التي سيتم جلبها من فايربيس
-        let activitiesData = [];
-        let galleryData = [];
-        let notificationsData =[];
 
-        // الترجمة
         const langData = {
             ar: {
                 nav: "مسجد الرحمن", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة",
@@ -366,37 +488,22 @@
             }
         };
 
-        // --- دوال التحكم بالواجهة (تم رفعها لـ window لتكون متاحة لأزرار HTML) ---
-        window.toggleSidebar = () => document.getElementById('sidebar').classList.toggle('active');
-        window.showPage = (page) => {
-            document.getElementById('main-content').style.display = page === 'main' ? 'block' : 'none';
-            document.getElementById('admin-panel').style.display = page === 'admin' ? 'block' : 'none';
-        }
-        window.openAdmin = () => {
-            window.toggleSidebar();
-            const pass = prompt(currentLang === 'ar' ? "أدخل الرقم السري:" : "Ange lösenord:");
-            if (pass === "r2026r") { window.showPage('admin'); } else { alert("خطأ"); }
-        }
-        
-        window.toggleLanguage = () => {
-            currentLang = currentLang === 'ar' ? 'sv' : 'ar';
-            localStorage.setItem('lang', currentLang);
-            applyTranslations();
-        }
-
-        window.loadMoreGallery = () => { visibleGalleryCount += 5; renderGallery(); }
-
-        // --- دوال المواقيت والتاريخ ---
-        function displayCurrentDate() {
-            const today = new Date();
-            document.getElementById('current-date-text').innerText = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
-        }
+        let prayerTimes =[];
 
         function addMinutes(timeStr, minsToAdd) {
             if (!timeStr) return "";
             let [hours, minutes] = timeStr.split(':').map(Number);
-            let date = new Date(); date.setHours(hours, minutes + minsToAdd, 0, 0);
-            return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+            let date = new Date();
+            date.setHours(hours, minutes + minsToAdd, 0, 0);
+            let h = date.getHours().toString().padStart(2, '0');
+            let m = date.getMinutes().toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
+        function displayCurrentDate() {
+            const today = new Date();
+            const dateString = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+            document.getElementById('current-date-text').innerText = dateString;
         }
 
         function loadTodaysPrayers() {
@@ -409,7 +516,10 @@
             if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months && yearlyPrayerData.months[currentMonthName]) {
                 todayData = yearlyPrayerData.months[currentMonthName].find(d => d.Dat === currentDay);
             }
-            if (!todayData) { todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" }; }
+
+            if (!todayData) {
+                todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
+            }
 
             prayerTimes =[
                 { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) },
@@ -421,27 +531,123 @@
             ];
         }
 
+        let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
+            activities:[
+                {
+                    titleAr: "دروس قرآن للأطفال",
+                    titleSv: "Koranlektioner för barn",
+                    descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.",
+                    descSv: "Hålls varje vecka för att lära ut recitation.",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg"
+                },
+                {
+                    titleAr: "نشاط كرة قدم للأطفال",
+                    titleSv: "Fotboll för barn",
+                    descAr: "الأولى 15:30 - 17:00 صف أول - الرابع كرة قدم Central Skola\nالثانية 17:00 - 18:30 صف الخامس - التاسع كرة قدم Central Skola\nالثالثة 19:00 - 20:30 للرجال كرة طائرة أو ريشة أو نشاط آخر Central Skola\nالرابعة *الأحد* 17:45 - 20:00 من صف الثانوية فما فوق صالة Ugglehallen",
+                    descSv: "Första 15:30 - 17:00 årskurs 1 till 4 Fotboll Central Skola\nAndra 17:00 - 18:30 årskurs 5 till 9 Fotboll Central Skola\nTredje 19:00 - 20:30 för män Volleyboll eller Badminton eller annan aktivitet Central Skola\nFjärde *Söndag* 17:45 - 20:00 för gymnasiet och uppåt Ugglehallen",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg"
+                },
+                {
+                    titleAr: "نشاط كرة يد للكبار",
+                    titleSv: "Handboll för vuxna",
+                    descAr: "نشاط رياضي أسبوعي للشباب والكبار.",
+                    descSv: "Idrottsaktivitet för ungdomar och vuxna.",
+                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg"
+                }
+            ],
+            gallery:[
+                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963292/qov2cetpco2z1xmb736h.jpg", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" },
+                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", captionAr: "المسجد من الداخل", captionSv: "Moskén från insidan" }
+            ]
+        };
+
+        let notifications = JSON.parse(localStorage.getItem('mosque_notifs')) ||[
+            { id: 1, text: "تذكير: درس القرآن اليوم بعد صلاة العصر", time: "منذ ساعتين", read: false }
+        ];
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
+        function showPage(page) {
+            document.getElementById('main-content').style.display = page === 'main' ? 'block' : 'none';
+            document.getElementById('admin-panel').style.display = page === 'admin' ? 'block' : 'none';
+        }
+        function openAdmin() {
+            toggleSidebar();
+            const pass = prompt(currentLang === 'ar' ? "أدخل الرقم السري:" : "Ange lösenord:");
+            if (pass === "r2026r") { showPage('admin'); } else { alert("خطأ"); }
+        }
+
+        function applyTranslations() {
+            const t = langData[currentLang];
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+            if (currentLang === 'sv') {
+                document.body.classList.add('lang-sv');
+            } else {
+                document.body.classList.remove('lang-sv');
+            }
+
+            document.getElementById('nav-title').innerText = t.nav;
+            document.getElementById('menu-home').innerText = t.home;
+            document.getElementById('menu-prayers').innerText = t.prayers;
+            document.getElementById('menu-activities').innerText = t.activities;
+            document.getElementById('menu-gallery').innerText = t.gallery;
+            document.getElementById('menu-admin').innerText = t.admin;
+            document.getElementById('hero-title').innerText = t.heroTitle;
+            document.getElementById('hero-subtitle').innerText = t.heroSub;
+            document.getElementById('title-prayer').innerText = t.tPrayer;
+            document.getElementById('title-activities').innerText = t.tAct;
+            document.getElementById('title-donate').innerText = t.tDonate;
+            document.getElementById('text-swish').innerText = t.tSwish;
+            document.getElementById('btn-donate').innerHTML = t.btnDonate;
+            document.getElementById('title-gallery').innerText = t.tGallery;
+            document.getElementById('text-load-more').innerText = t.loadMore;
+            document.getElementById('title-contact').innerText = t.tContact;
+            document.getElementById('address-text').innerText = t.address;
+
+            renderPrayers();
+            renderActivities();
+            renderGallery();
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'sv' : 'ar';
+            localStorage.setItem('lang', currentLang);
+            applyTranslations();
+        }
+
         let nextPrayerElementId = null;
         function updateTimer() {
             if (prayerTimes.length === 0) return;
             const now = new Date();
             const activePrayers = prayerTimes.filter(p => p.type !== 'no-prayer');
-            let targetDate = null, timerTitle = "", currentActiveId = null;
+            let targetDate = null;
+            let timerTitle = "";
+            let currentActiveId = null;
             const t = langData[currentLang];
 
             for (let i = 0; i < activePrayers.length; i++) {
                 let p = activePrayers[i];
-                let [aH, aM] = p.adhan.split(':').map(Number);
+                let[aH, aM] = p.adhan.split(':').map(Number);
                 let adhanDate = new Date(); adhanDate.setHours(aH, aM, 0, 0);
-                let [iH, iM] = p.iqama.split(':').map(Number);
+
+                let[iH, iM] = p.iqama.split(':').map(Number);
                 let iqamaDate = new Date(); iqamaDate.setHours(iH, iM, 0, 0);
 
-                if (now < adhanDate) { targetDate = adhanDate; timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; currentActiveId = `card-${p.id}`; break; } 
-                else if (now < iqamaDate) { targetDate = iqamaDate; timerTitle = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; currentActiveId = `card-${p.id}`; break; }
+                if (now < adhanDate) {
+                    targetDate = adhanDate;
+                    timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`;
+                    currentActiveId = `card-${p.id}`; break;
+                } else if (now < iqamaDate) {
+                    targetDate = iqamaDate;
+                    timerTitle = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`;
+                    currentActiveId = `card-${p.id}`; break;
+                }
             }
 
             if (!targetDate) {
-                let fajr = activePrayers[0]; let [aH, aM] = fajr.adhan.split(':').map(Number);
+                let fajr = activePrayers[0];
+                let [aH, aM] = fajr.adhan.split(':').map(Number);
                 targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); targetDate.setHours(aH, aM, 0, 0);
                 timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[fajr.id]}`; currentActiveId = `card-${fajr.id}`;
             }
@@ -469,25 +675,25 @@
             const container = document.getElementById('prayer-container');
             const t = langData[currentLang];
             container.innerHTML = '';
+
             prayerTimes.forEach(p => {
                 let html = `<div class="prayer-card" id="card-${p.id}"><i class="fas ${p.icon} prayer-icon"></i><div class="prayer-name">${t.prayerNames[p.id]}</div>`;
-                if(p.type === 'no-prayer') { html += `<div class="prayer-time">${p.time} <br> <span style="font-size:0.8rem">(${t.pLabels.noP})</span></div>`; } 
-                else { html += `<div class="prayer-time">${t.pLabels.adhan} <strong>${p.adhan}</strong><br>${t.pLabels.iqama} <strong>${p.iqama}</strong></div>`; }
+                if(p.type === 'no-prayer') {
+                    html += `<div class="prayer-time">${p.time} <br> <span style="font-size:0.8rem">(${t.pLabels.noP})</span></div>`;
+                } else {
+                    html += `<div class="prayer-time">${t.pLabels.adhan} <strong>${p.adhan}</strong><br>${t.pLabels.iqama} <strong>${p.iqama}</strong></div>`;
+                }
                 html += `</div>`;
                 container.innerHTML += html;
             });
             updateTimer(); 
         }
 
-        // --- دوال عرض البيانات المربوطة بـ Firebase ---
+        /* هنا تم اضافة الكلاس activity-desc ليكون النص بداخل صندوق ويظهر سكرول */
         function renderActivities() {
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
-            if(activitiesData.length === 0) {
-                container.innerHTML = '<p style="text-align:center; width:100%;">لا توجد أنشطة حالياً</p>';
-                return;
-            }
-            activitiesData.forEach(act => {
+            siteData.activities.forEach(act => {
                 const displayTitle = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
                 const displayDesc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
                 container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${displayTitle}</h3><p class="activity-desc">${displayDesc}</p></div></div>`;
@@ -498,168 +704,69 @@
             const container = document.getElementById('gallery-container');
             const btnLoadMore = document.getElementById('btn-load-more');
             container.innerHTML = '';
-            
-            if(galleryData.length === 0) return;
 
-            const itemsToShow = galleryData.slice(0, visibleGalleryCount);
+            const itemsToShow = siteData.gallery.slice(0, visibleGalleryCount);
+
             itemsToShow.forEach(img => {
                 const displayCaption = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
                 container.innerHTML += `<div class="gallery-item" onclick="window.open('${img.url.replace('w_400,', '')}','_blank')"><img src="${img.url}">${displayCaption ? `<div class="gallery-caption">${displayCaption}</div>` : ''}</div>`;
             });
 
-            if (galleryData.length > visibleGalleryCount) btnLoadMore.style.display = 'inline-flex';
-            else btnLoadMore.style.display = 'none';
+            if (siteData.gallery.length > visibleGalleryCount) {
+                btnLoadMore.style.display = 'inline-flex';
+            } else {
+                btnLoadMore.style.display = 'none';
+            }
         }
 
-        // --- الاستماع المباشر (Real-time) من فايربيس ---
-        function setupFirebaseListeners() {
-            // جلب الأنشطة
-            onSnapshot(collection(db, "activities"), (snapshot) => {
-                activitiesData =[];
-                snapshot.forEach((doc) => activitiesData.push(doc.data()));
-                
-                // إضافة البيانات الأساسية إذا كانت القاعدة فارغة تماماً (التنظيف لـ Firebase)
-                if(activitiesData.length === 0) {
-                    uploadDummyDataToFirebase();
-                } else {
-                    renderActivities();
-                }
-            });
+        function loadMoreGallery() { visibleGalleryCount += 5; renderGallery(); }
 
-            // جلب المعرض
-            onSnapshot(collection(db, "gallery"), (snapshot) => {
-                galleryData =[];
-                snapshot.forEach((doc) => galleryData.push(doc.data()));
-                renderGallery();
-            });
-
-            // جلب الإشعارات / التذكيرات المنبثقة
-            onSnapshot(collection(db, "notifications"), (snapshot) => {
-                notificationsData =[];
-                let latestToast = null;
-                snapshot.forEach((doc) => {
-                    let data = doc.data();
-                    notificationsData.push(data);
-                    // تحديد أحدث إشعار ليتم عرضه كمنبثق (Toast)
-                    if(!latestToast || data.timestamp > latestToast.timestamp) {
-                        latestToast = data;
-                    }
-                });
-
-                // تحديث جرس الإشعارات
-                updateNotificationsUI();
-
-                // عرض الإشعار المنبثق إذا لم يسبق رؤيته
-                if(latestToast) {
-                    const seenId = localStorage.getItem('seen_toast_id');
-                    if (seenId != latestToast.timestamp) {
-                        setTimeout(() => {
-                            showToast(latestToast);
-                            localStorage.setItem('seen_toast_id', latestToast.timestamp);
-                        }, 2000);
-                    }
-                }
-            });
-        }
-
-        // دالة لمرة واحدة ترفع البيانات القديمة لـ Firebase
-        async function uploadDummyDataToFirebase() {
-            const defaultActs =[
-                { titleAr: "دروس قرآن للأطفال", titleSv: "Koranlektioner för barn", descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.", descSv: "Hålls varje vecka för att lära ut recitation.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg" },
-                { titleAr: "نشاط كرة قدم للأطفال", titleSv: "Fotboll för barn", descAr: "أنشطة رياضية متنوعة في Central Skola.", descSv: "Sportaktiviteter i Central Skola.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg" }
-            ];
-            const defaultGal =[
-                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963292/qov2cetpco2z1xmb736h.jpg", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" }
-            ];
-            
-            for(let act of defaultActs) await addDoc(collection(db, "activities"), act);
-            for(let img of defaultGal) await addDoc(collection(db, "gallery"), img);
-        }
-
-        // تحديث جرس الإشعارات
-        function updateNotificationsUI() {
-            const unreadCount = notificationsData.filter(n => !n.readBy || !n.readBy.includes(localStorage.getItem('user_id'))).length;
+        function checkNotifications() {
+            const unreadCount = notifications.filter(n => !n.read).length;
             const dot = document.getElementById('notif-dot');
             if (unreadCount > 0) dot.classList.add('active'); else dot.classList.remove('active');
-            
             const box = document.getElementById('notif-box');
-            box.innerHTML = notificationsData.length ? '' : `<div class="notif-item">لا توجد إشعارات</div>`;
-            
-            // ترتيب الإشعارات من الأحدث للأقدم
-            notificationsData.sort((a,b) => b.timestamp - a.timestamp).forEach(n => {
-                let isRead = n.readBy && n.readBy.includes(localStorage.getItem('user_id'));
-                box.innerHTML += `<div class="notif-item ${isRead ? '' : 'unread'}"><i class="fas fa-bell" style="margin-top:4px; color: ${isRead ? '#aaa' : '#0a3622'};"></i><div><div>${currentLang === 'ar' ? n.ar : n.sv}</div></div></div>`;
+            box.innerHTML = notifications.length ? '' : `<div class="notif-item">لا توجد إشعارات</div>`;
+            notifications.forEach(n => {
+                box.innerHTML += `<div class="notif-item ${n.read ? '' : 'unread'}"><i class="fas fa-envelope" style="margin-top:4px; color: ${n.read ? '#aaa' : '#0a3622'};"></i><div><div>${n.text}</div><div style="font-size:0.8rem; color:#888;">${n.time}</div></div></div>`;
             });
         }
 
-        window.toggleNotifications = () => {
+        function toggleNotifications() {
             const box = document.getElementById('notif-box');
             box.classList.toggle('show');
             if(box.classList.contains('show')) {
-                // وضع علامة مقروء (محلياً لتبسيط الأمور)
-                let uid = localStorage.getItem('user_id') || Date.now().toString();
-                localStorage.setItem('user_id', uid);
-                document.getElementById('notif-dot').classList.remove('active');
+                notifications = notifications.map(n => ({...n, read: true}));
+                localStorage.setItem('mosque_notifs', JSON.stringify(notifications));
+                setTimeout(checkNotifications, 1000);
             }
         }
 
-        // --- دوال الإدمن المتصلة بـ فايربيس ---
-        async function uploadToCloudinary(file) {
-            const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", "souq_upload");
-            const res = await fetch(`https://api.cloudinary.com/v1_1/db9h7zm1h/image/upload`, { method: "POST", body: fd });
-            const data = await res.json(); return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
-        }
-
-        window.uploadGalleryImages = async () => {
-            const files = document.getElementById('gallery-upload').files;
-            if(files.length === 0) return;
-            document.getElementById('gallery-status').innerText = "جاري الرفع للفايربيس...";
-            const capAr = document.getElementById('gallery-caption-ar').value;
-            const capSv = document.getElementById('gallery-caption-sv').value || capAr;
-            
-            for(let f of files) {
-                try {
-                    const url = await uploadToCloudinary(f);
-                    await addDoc(collection(db, "gallery"), { url, captionAr: capAr, captionSv: capSv });
-                } catch(e) { console.error(e); }
-            }
-            document.getElementById('gallery-status').innerText = "تم الرفع بنجاح ✔️";
-            setTimeout(()=> document.getElementById('gallery-status').innerText = "", 3000);
-        }
-
-        window.addActivity = async () => {
-            const titleAr = document.getElementById('act-title-ar').value;
-            const titleSv = document.getElementById('act-title-sv').value || titleAr;
-            const descAr = document.getElementById('act-desc-ar').value;
-            const descSv = document.getElementById('act-desc-sv').value || descAr;
-            const file = document.getElementById('act-img').files[0];
-
-            if(!titleAr) return;
-            document.getElementById('act-status').innerText = "جاري الحفظ في الفايربيس...";
-            let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
-            if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
-
-            await addDoc(collection(db, "activities"), { titleAr, titleSv, descAr, descSv, img });
-            document.getElementById('act-status').innerText = "تمت الإضافة بنجاح ✔️";
-            setTimeout(()=> document.getElementById('act-status').innerText = "", 3000);
-        }
-
-        window.sendToast = async () => {
+        /* دوال ارسال وعرض التذكير المنبثق (Toast) */
+        function sendToast() {
             const ar = document.getElementById('toast-text-ar').value;
             const sv = document.getElementById('toast-text-sv').value || ar;
             if(!ar) return;
+            const toastData = { id: Date.now(), ar, sv };
+            localStorage.setItem('app_toast_msg', JSON.stringify(toastData));
             
-            document.getElementById('toast-status').innerText = "جاري الإرسال...";
-            
-            // إضافة الإشعار لفايربيس ليظهر لجميع المستخدمين فوراً
-            await addDoc(collection(db, "notifications"), {
-                ar: ar,
-                sv: sv,
-                timestamp: Date.now()
-            });
-
-            document.getElementById('toast-status').innerText = "تم إرسال الإشعار لجميع المستخدمين ✔️";
+            document.getElementById('toast-status').innerText = "تم الإرسال وسيظهر للمستخدمين ✔️";
+            showToast(toastData); // إظهار معاينة للإدمن
             setTimeout(() => { document.getElementById('toast-status').innerText = ""; }, 3000);
+        }
+
+        function checkAppToast() {
+            const toastData = JSON.parse(localStorage.getItem('app_toast_msg'));
+            if(toastData) {
+                const seenId = localStorage.getItem('seen_toast_id');
+                // إذا لم يتم رؤية هذا الإشعار مسبقاً، أظهره بعد ثانيتين من فتح الموقع
+                if(seenId != toastData.id) {
+                    setTimeout(() => {
+                        showToast(toastData);
+                        localStorage.setItem('seen_toast_id', toastData.id);
+                    }, 2000);
+                }
+            }
         }
 
         function showToast(toastData) {
@@ -672,67 +779,55 @@
                 document.body.appendChild(toastEl);
             }
             toastEl.innerHTML = `<i class="fas fa-bell app-toast-icon"></i> <span>${text}</span>`;
+            
+            // إعادة التفعيل ليتم تنفيذ الأنميشن
             toastEl.classList.remove('show');
             void toastEl.offsetWidth; 
             toastEl.classList.add('show');
+            
+            // إخفاء تلقائي بعد 6 ثوانٍ
             setTimeout(() => { toastEl.classList.remove('show'); }, 6000);
         }
 
-        // --- إعداد إشعارات الهاتف (Firebase Cloud Messaging) ---
-        window.requestNotificationPermission = () => {
-            Notification.requestPermission().then((permission) => {
-                if (permission === 'granted') {
-                    getToken(messaging, { vapidKey: vapidKey }).then((currentToken) => {
-                        if (currentToken) {
-                            console.log('FCM Token:', currentToken);
-                            document.getElementById('menu-notify').innerText = "تم تفعيل الإشعارات";
-                            document.getElementById('bell-icon-status').classList.replace('fa-bell-slash', 'fa-bell');
-                            // يمكنك هنا حفظ التوكن في فايربيس إن أردت إرسال إشعارات مخصصة مستقبلاً
-                        }
-                    }).catch((err) => {
-                        console.log('حدث خطأ أثناء جلب Token.', err);
-                    });
-                } else {
-                    alert("لم يتم منح صلاحية الإشعارات.");
-                }
-            });
+        async function uploadToCloudinary(file) {
+            const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", "souq_upload");
+            const res = await fetch(`https://api.cloudinary.com/v1_1/db9h7zm1h/image/upload`, { method: "POST", body: fd });
+            const data = await res.json(); return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
         }
 
-        // استقبال الإشعارات والموقع مفتوح
-        onMessage(messaging, (payload) => {
-            console.log('Message received. ', payload);
-            showToast({ar: payload.notification.title, sv: payload.notification.title});
-        });
-
-        // --- الترجمة والتطبيق الأولي ---
-        function applyTranslations() {
-            const t = langData[currentLang];
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            if (currentLang === 'sv') document.body.classList.add('lang-sv'); else document.body.classList.remove('lang-sv');
-
-            document.getElementById('nav-title').innerText = t.nav;
-            document.getElementById('menu-home').innerText = t.home;
-            document.getElementById('menu-prayers').innerText = t.prayers;
-            document.getElementById('menu-activities').innerText = t.activities;
-            document.getElementById('menu-gallery').innerText = t.gallery;
-            document.getElementById('menu-admin').innerText = t.admin;
-            document.getElementById('hero-title').innerText = t.heroTitle;
-            document.getElementById('hero-subtitle').innerText = t.heroSub;
-            document.getElementById('title-prayer').innerText = t.tPrayer;
-            document.getElementById('title-activities').innerText = t.tAct;
-            document.getElementById('title-donate').innerText = t.tDonate;
-            document.getElementById('text-swish').innerText = t.tSwish;
-            document.getElementById('btn-donate').innerHTML = t.btnDonate;
-            document.getElementById('title-gallery').innerText = t.tGallery;
-            document.getElementById('text-load-more').innerText = t.loadMore;
-            document.getElementById('title-contact').innerText = t.tContact;
-            document.getElementById('address-text').innerText = t.address;
-
-            renderPrayers();
-            renderActivities();
+        async function uploadGalleryImages() {
+            const files = document.getElementById('gallery-upload').files;
+            if(files.length === 0) return;
+            document.getElementById('gallery-status').innerText = "جاري الرفع...";
+            const capAr = document.getElementById('gallery-caption-ar').value;
+            const capSv = document.getElementById('gallery-caption-sv').value || capAr;
+            for(let f of files) {
+                try {
+                    const url = await uploadToCloudinary(f);
+                    siteData.gallery.push({ url, captionAr: capAr, captionSv: capSv });
+                } catch(e) {}
+            }
+            localStorage.setItem('mosque_data', JSON.stringify(siteData));
             renderGallery();
-            updateNotificationsUI();
+            document.getElementById('gallery-status').innerText = "تم الرفع ✔️";
+        }
+
+        async function addActivity() {
+            const titleAr = document.getElementById('act-title-ar').value;
+            const titleSv = document.getElementById('act-title-sv').value || titleAr;
+            const descAr = document.getElementById('act-desc-ar').value;
+            const descSv = document.getElementById('act-desc-sv').value || descAr;
+            const file = document.getElementById('act-img').files[0];
+
+            if(!titleAr) return;
+            document.getElementById('act-status').innerText = "جاري الحفظ...";
+            let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
+            if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
+
+            siteData.activities.push({ titleAr, titleSv, descAr, descSv, img });
+            localStorage.setItem('mosque_data', JSON.stringify(siteData));
+            renderActivities();
+            document.getElementById('act-status').innerText = "تمت الإضافة ✔️";
         }
 
         const observer = new IntersectionObserver(entries => {
@@ -743,14 +838,9 @@
             displayCurrentDate(); 
             loadTodaysPrayers();  
             applyTranslations(); 
-            setupFirebaseListeners(); // تفعيل فايربيس عند تحميل الصفحة
+            checkNotifications();
+            checkAppToast(); // التحقق من وجود إشعار منبثق جديد وعرضه
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-            
-            // التحقق من حالة الإشعارات
-            if(Notification.permission === 'granted') {
-                document.getElementById('menu-notify').innerText = "الإشعارات مفعلة";
-                document.getElementById('bell-icon-status').classList.replace('fa-bell-slash', 'fa-bell');
-            }
         };
     </script>
 </body>
