@@ -5,22 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مسجد الرحمن | Masjid Ar-Rahman</title>
 
-<!-- إعدادات مشاركة الرابط على منصات التواصل (Open Graph) -->
-<meta property="og:title" content="مسجد الرحمن | Masjid Ar-Rahman">
-<meta property="og:description" content="نرحب بكم في بيت الله في مدينة بيرستورب السويدية">
-<!-- هنا نضع رابط الصورة التي ستظهر في الماسنجر (اخترت لك صورة خلفية الموقع) -->
-<meta property="og:image" content="https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg">
-<meta property="og:url" content="https://shehabt1000-boop.github.io/Ar-Rahman2026/">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
+    <meta property="og:title" content="مسجد الرحمن | Masjid Ar-Rahman">
+    <meta property="og:description" content="نرحب بكم في بيت الله في مدينة بيرستورب السويدية">
+    <meta property="og:image" content="https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg">
+    <meta property="og:url" content="https://shehabt1000-boop.github.io/Ar-Rahman2026/">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0a3622">
-    <!-- تصغير الأيقونة -->
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg">
-    
+
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <!-- استدعاء ملف المواقيت -->
+    <script src="prayers.js"></script>
 
     <style>
         :root {
@@ -43,31 +43,34 @@
         body.lang-sv .section-title { font-size: 1.8rem; }
         body.lang-sv .city-badge { font-family: inherit; }
 
-        /* Header */
+        /* Header Fixes */
         header {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
+            position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
             background: rgba(10, 54, 34, 0.95); backdrop-filter: blur(10px);
-            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
             color: var(--secondary); box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden; /* يمنع التمدد الخاطئ */
         }
-        .header-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: bold; }
-        .header-actions { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .icon-btn { cursor: pointer; font-size: 22px; transition: var(--transition); }
-        .icon-btn:hover { color: var(--white); transform: scale(1.1); }
+        .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; white-space: nowrap; }
+        body.lang-sv .header-brand { font-size: 1.1rem; } /* تصغير بسيط للسويدية لعدم تشوه الهيدر */
         
+        .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: nowrap; }
+        .icon-btn { cursor: pointer; font-size: 20px; transition: var(--transition); }
+        .icon-btn:hover { color: var(--white); transform: scale(1.1); }
+
         .bell-container { position: relative; }
-        .notif-dot { position: absolute; top: 0; right: -2px; width: 12px; height: 12px; background-color: #ff3b30; border-radius: 50%; display: none; }
+        .notif-dot { position: absolute; top: 0; right: -2px; width: 10px; height: 10px; background-color: #ff3b30; border-radius: 50%; display: none; }
         .notif-dot.active { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,59,48,0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0); } }
 
         .notif-box {
-            position: absolute; top: 50px; left: 0; width: 320px; background: var(--white);
+            position: absolute; top: 50px; left: 0; width: 300px; background: var(--white);
             border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden;
             transform: translateY(-10px); transition: var(--transition); z-index: 1001; max-height: 350px; overflow-y: auto;
         }
         [dir="ltr"] .notif-box { left: auto; right: 0; }
         .notif-box.show { opacity: 1; visibility: visible; transform: translateY(0); }
-        .notif-item { padding: 15px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); }
+        .notif-item { padding: 12px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); font-size: 0.9rem; }
         .notif-item.unread { background-color: #f0fdf4; font-weight: bold; border-right: 4px solid var(--primary); }
 
         /* Sidebar */
@@ -80,13 +83,13 @@
         .sidebar.active { right: 0; } [dir="ltr"] .sidebar.active { left: 0; }
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .menu-links a { text-decoration: none; color: var(--text-dark); font-size: 18px; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
+        .menu-links a { text-decoration: none; color: var(--text-dark); font-size: 1.1rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; }
         .menu-links a:hover { background: var(--light-bg); color: var(--primary); }
 
         /* Hero Section */
         .hero {
             position: relative;
-            padding-top: 70px;
+            padding-top: 65px;
             min-height: 350px; height: auto;
             background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
             background-position: center center;
@@ -107,156 +110,141 @@
             body.lang-sv .hero-title { font-size: 2.5rem; }
         }
 
-        .section { padding: 60px 5%; max-width: 1200px; margin: 0 auto; }
+        .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; }
 
-        .section-header { text-align: center; margin-bottom: 40px; }
-        .title-row { display: flex; justify-content: center; align-items: baseline; gap: 15px; margin-bottom: 5px; flex-wrap: wrap; }
-        .section-title { font-size: 2.2rem; color: var(--primary); margin: 0; word-break: break-word; }
-        .city-badge { font-size: 1rem; color: var(--white); background: var(--secondary); padding: 4px 15px; border-radius: 20px; font-weight: bold; font-family: 'Cairo', sans-serif; }
-        
+        .section-header { text-align: center; margin-bottom: 30px; }
+        .title-row { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
+        .section-title { font-size: 2rem; color: var(--primary); margin: 0; word-break: break-word; }
+        .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Cairo', sans-serif; }
+
         .title-separator { display: flex; align-items: center; justify-content: center; gap: 15px; }
-        .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 60px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
-        .title-separator i { color: var(--primary); font-size: 1.2rem; }
-        
-        /* Prayer Times */
-        .timer-container { text-align: center; margin-bottom: 40px; background: var(--white); padding: 15px; border-radius: 15px; box-shadow: var(--shadow); border-bottom: 3px solid var(--secondary); width: fit-content; min-width: 250px; max-width: 90%; margin-left: auto; margin-right: auto; }
-        .timer-title { font-size: 1rem; color: var(--text-dark); margin-bottom: 5px; font-weight: bold; }
-        .countdown-clock { font-size: 2rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 2px; direction: ltr; }
+        .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
+        .title-separator i { color: var(--primary); font-size: 1.1rem; }
 
-        .prayer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
-        .prayer-card { background: var(--white); border-radius: 15px; padding: 15px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); border-bottom: 4px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .prayer-card.next-prayer { background: var(--primary); color: var(--white); border-bottom-color: var(--secondary); transform: scale(1.05); }
-        .prayer-icon { font-size: 26px; color: var(--secondary); margin-bottom: 10px; }
-        .prayer-name { font-size: 1.1rem; font-weight: bold; margin-bottom: 5px; }
-        .prayer-time { font-size: 1rem; color: #666; }
+        /* 👑 تصميم التاريخ الفاخر والصغير جداً 👑 */
+        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } /* مقترب جداً من الصلاة */
+        .current-date-box {
+            background: linear-gradient(135deg, var(--primary), #0c4a2e);
+            color: var(--secondary);
+            padding: 3px 15px; /* تصغير الارتفاع والعرض */
+            border-radius: 12px;
+            display: inline-block;
+            font-size: 0.85rem; /* تصغير الخط */
+            font-weight: bold;
+            border: 1px solid var(--secondary);
+            font-family: 'Cairo', sans-serif;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Prayer Times */
+        .timer-container { text-align: center; margin-bottom: 30px; background: var(--white); padding: 15px; border-radius: 15px; box-shadow: var(--shadow); border-bottom: 3px solid var(--secondary); width: fit-content; min-width: 200px; max-width: 90%; margin-left: auto; margin-right: auto; }
+        .timer-title { font-size: 0.95rem; color: var(--text-dark); margin-bottom: 5px; font-weight: bold; }
+        .countdown-clock { font-size: 1.8rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 2px; direction: ltr; }
+
+        .prayer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
+        .prayer-card { background: var(--white); border-radius: 12px; padding: 12px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .prayer-card.next-prayer { background: var(--primary); color: var(--white); border-bottom-color: var(--secondary); transform: scale(1.03); }
+        .prayer-icon { font-size: 22px; color: var(--secondary); margin-bottom: 8px; }
+        .prayer-name { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
+        .prayer-time { font-size: 0.9rem; color: #666; }
         .prayer-card.next-prayer .prayer-time { color: #ddd; }
 
         /* Activities */
-        .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .activity-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
+        .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
         .activity-card:hover { transform: translateY(-5px); }
-        .activity-img { width: 100%; height: 180px; object-fit: cover; }
-        .activity-content { padding: 20px; }
-        .activity-title { font-size: 1.2rem; color: var(--primary); margin-bottom: 10px; font-weight: bold; }
+        .activity-img { width: 100%; height: 160px; object-fit: cover; }
+        .activity-content { padding: 15px; }
+        .activity-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 8px; font-weight: bold; }
 
         /* Gallery */
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .gallery-item { position: relative; border-radius: 12px; overflow: hidden; height: 180px; box-shadow: var(--shadow); cursor: pointer; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+        .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .gallery-item:hover img { transform: scale(1.1); }
-        .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 10px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.9rem; }
+        .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; }
         .gallery-item:hover .gallery-caption { bottom: 0; }
 
         /* Gallery Load More Button */
-        .load-more-container { text-align: center; margin-top: 35px; width: 100%; }
+        .load-more-container { text-align: center; margin-top: 25px; width: 100%; }
         .btn-load-more {
             background: linear-gradient(135deg, var(--primary), #0c4a2e);
-            color: var(--secondary);
-            border: 2px solid var(--secondary);
-            padding: 12px 35px;
-            font-size: 1.1rem;
-            font-family: 'Cairo', sans-serif;
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: 0 8px 20px rgba(10, 54, 34, 0.2);
-            display: inline-flex; align-items: center; gap: 10px;
+            color: var(--secondary); border: 2px solid var(--secondary);
+            padding: 10px 25px; font-size: 1rem; font-family: 'Cairo', sans-serif;
+            font-weight: bold; border-radius: 50px; cursor: pointer;
+            transition: var(--transition); box-shadow: 0 5px 15px rgba(10, 54, 34, 0.2);
+            display: inline-flex; align-items: center; gap: 8px;
         }
         .btn-load-more:hover {
-            transform: translateY(-3px);
-            background: linear-gradient(135deg, #0c4a2e, var(--primary));
-            color: var(--white);
-            box-shadow: 0 12px 25px rgba(10, 54, 34, 0.3);
+            transform: translateY(-2px); background: linear-gradient(135deg, #0c4a2e, var(--primary));
+            color: var(--white); box-shadow: 0 8px 20px rgba(10, 54, 34, 0.3);
         }
 
         /* Donation Section */
         .donation-wrap { 
             background: linear-gradient(145deg, #ffffff, #f4fdf8);
-            border-radius: 25px; padding: 40px 20px; 
-            box-shadow: 0 15px 40px rgba(10, 54, 34, 0.08); 
-            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 30px; 
+            border-radius: 20px; padding: 30px 15px; 
+            box-shadow: 0 10px 30px rgba(10, 54, 34, 0.08); 
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 20px; 
             position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2);
         }
-        .donation-wrap::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-        }
+        .donation-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, var(--primary), var(--secondary)); }
 
-        .donation-info { text-align: center; max-width: 450px; z-index: 2; }
-        
-        .donation-info p { font-size: 1.1rem; color: #555; margin-bottom: 15px; line-height: 1.6; }
-
+        .donation-info { text-align: center; max-width: 400px; z-index: 2; }
+        .donation-info p { font-size: 1rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
         .swish-number { 
-            font-size: 1.6rem; font-weight: 800; color: var(--primary); 
-            letter-spacing: 2px; padding: 10px 25px; 
-            background: var(--white); border-radius: 12px; 
+            font-size: 1.4rem; font-weight: 800; color: var(--primary); 
+            letter-spacing: 2px; padding: 8px 20px; 
+            background: var(--white); border-radius: 10px; 
             margin: 10px 0; border: 2px dashed var(--secondary); 
             display: inline-block; box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
-        
         .donate-btn-modern {
-            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
             background: linear-gradient(135deg, var(--secondary), #b8962e);
-            color: var(--white); padding: 12px 35px; border-radius: 50px;
-            font-size: 1.1rem; font-weight: bold; text-decoration: none;
-            box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3); transition: var(--transition);
-            margin-top: 15px; border: 2px solid transparent; cursor: pointer;
-        }
-        .donate-btn-modern:hover {
-            transform: translateY(-3px); box-shadow: 0 12px 25px rgba(212, 175, 55, 0.5);
-            background: linear-gradient(135deg, #b8962e, var(--secondary)); color: white;
+            color: var(--white); padding: 10px 25px; border-radius: 50px;
+            font-size: 1rem; font-weight: bold; text-decoration: none;
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3); transition: var(--transition);
+            margin-top: 10px; border: 2px solid transparent; cursor: pointer;
         }
 
-        /* الباركود والشعار بداخله */
-        .qr-scanner-box {
-            position: relative; background: var(--white); padding: 10px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: inline-block; z-index: 2;
-        }
-        .qr-wrapper { position: relative; display: inline-block; z-index: 1; }
-        .qr-wrapper img.qr-img { width: 150px; height: 150px; display: block; border-radius: 8px; }
-        
-        /* الشعار داخل منتصف الباركود */
+        .qr-scanner-box { position: relative; background: var(--white); padding: 8px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: inline-block; z-index: 2; }
+        .qr-wrapper img.qr-img { width: 130px; height: 130px; display: block; border-radius: 6px; }
         .qr-logo-center {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 40px; height: 40px;
-            background: #fff;
-            border-radius: 8px;
-            padding: 3px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-            z-index: 10;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 35px; height: 35px; background: #fff; border-radius: 6px; padding: 2px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10;
         }
-        
-        .donation-deco { position: absolute; opacity: 0.03; font-size: 300px; color: var(--primary); right: -50px; bottom: -80px; transform: rotate(-15deg); pointer-events: none; }[dir="ltr"] .donation-deco { right: auto; left: -50px; transform: rotate(15deg); }
+        .donation-deco { position: absolute; opacity: 0.03; font-size: 250px; color: var(--primary); right: -30px; bottom: -50px; transform: rotate(-15deg); pointer-events: none; }[dir="ltr"] .donation-deco { right: auto; left: -30px; transform: rotate(15deg); }
 
         /* Footer */
         .contact-card {
             background: linear-gradient(135deg, var(--primary), #052014); color: var(--white);
-            border-radius: 20px; padding: 50px 20px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden;
+            border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden;
         }
         .contact-avatar {
-            width: 90px; height: 90px; background: var(--secondary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 45px;
-            color: var(--primary); margin: 0 auto 20px auto; box-shadow: 0 0 20px rgba(212, 175, 55, 0.5); border: 4px solid var(--white);
+            width: 80px; height: 80px; background: var(--secondary); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; font-size: 35px;
+            color: var(--primary); margin: 0 auto 15px auto; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); border: 3px solid var(--white);
         }
-        .social-btns { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
-        .btn { padding: 12px 25px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .social-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+        .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition); }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.3); }
         .btn-wa { background: #25D366; } .btn-fb { background: #1877F2; }
 
         /* Admin UI */
         #admin-panel { display: none; padding: 40px 5%; background: #fff; min-height: 100vh; }
         .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        @media(max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } .donation-wrap { padding: 30px 15px; } .swish-number { font-size: 1.4rem; } }
+        @media(max-width: 768px) { .admin-grid { grid-template-columns: 1fr; } }
         .admin-card { background: var(--light-bg); padding: 20px; border-radius: 10px; border-right: 4px solid var(--primary); }
         [dir="ltr"] .admin-card { border-right: none; border-left: 4px solid var(--primary); }
-        .admin-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; }
-        .admin-btn { background: var(--primary); color: var(--white); border: none; padding: 12px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; }
+        .admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size:0.9rem;}
+        .admin-btn { background: var(--primary); color: var(--white); border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        .fade-in { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -269,7 +257,7 @@
             <span id="nav-title">مسجد الرحمن</span>
         </div>
         <div class="header-actions">
-            <div class="icon-btn" onclick="toggleLanguage()" style="font-size: 14px; border: 1px solid var(--secondary); padding: 2px 8px; border-radius: 15px;">AR/SV</div>
+            <div class="icon-btn" onclick="toggleLanguage()" style="font-size: 13px; border: 1px solid var(--secondary); padding: 3px 6px; border-radius: 12px; font-weight:bold;">AR/SV</div>
             <div class="bell-container">
                 <i class="fas fa-bell icon-btn" onclick="toggleNotifications()"></i>
                 <div class="notif-dot" id="notif-dot"></div>
@@ -295,7 +283,7 @@
 
     <!-- Main Content -->
     <div id="main-content">
-        
+
         <section class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -313,7 +301,12 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-star-and-crescent"></i></div>
             </div>
-            
+
+            <!-- التاريخ (بدون أيقونة وصغير ومقترب) -->
+            <div class="date-wrapper">
+                <div class="current-date-box" id="current-date-text">--/--/----</div>
+            </div>
+
             <div class="timer-container">
                 <div class="timer-title" id="timer-title">باقي على ...</div>
                 <div class="countdown-clock" id="countdown-clock">00:00:00</div>
@@ -342,8 +335,7 @@
                 <div class="title-separator"><i class="fas fa-camera"></i></div>
             </div>
             <div class="gallery-grid" id="gallery-container"></div>
-            
-            <!-- زر عرض المزيد -->
+
             <div class="load-more-container">
                 <button class="btn-load-more" id="btn-load-more" onclick="loadMoreGallery()" style="display: none;">
                     <span id="text-load-more">عرض المزيد</span> <i class="fas fa-chevron-down"></i>
@@ -351,7 +343,7 @@
             </div>
         </section>
 
-        <!-- Donation (الآن بعد المعرض) -->
+        <!-- Donation -->
         <section class="section fade-in" id="donate">
             <div class="section-header">
                 <div class="title-row">
@@ -362,13 +354,10 @@
 
             <div class="donation-wrap">
                 <i class="fas fa-mosque donation-deco"></i>
-                
                 <div class="donation-info">
-                    <!-- استعادة الكلمة ورمز الهاتف كالسابق -->
-                    <div style="font-size: 28px; font-weight: 800; color: var(--text-dark); margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <div style="font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
                         <i class="fas fa-mobile-alt" style="color: var(--primary);"></i> Swish
                     </div>
-
                     <p id="text-swish">ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.</p>
                     <div class="swish-number">123-297 15 47</div>
                     <br>
@@ -376,12 +365,9 @@
                         اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i>
                     </a>
                 </div>
-                
                 <div class="qr-scanner-box">
                     <div class="qr-wrapper">
-                        <!-- الباركود الأصلي -->
                         <img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" alt="Swish QR Code">
-                        <!-- صورة Swish بداخل الباركود -->
                         <img class="qr-logo-center" src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774915234/yjqwld9orxskwkl4ttsq.jpg" alt="Swish Logo">
                     </div>
                 </div>
@@ -399,9 +385,11 @@
                 </div>
                 <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
                 
-                <p id="address-text" style="font-size: 1.1rem; margin: 10px 0; color: #eee;">العنوان: بيرستورب (السويد) - Perstorp</p>
+                <!-- تم تصغير العنوان وتحديثه ليظهر من اليسار لليمين حتى يقرأ السويدي بشكل صحيح -->
+                <p id="address-text" style="font-size: 0.85rem; margin: 10px 0; color: #eee; direction: ltr;"></p>
+                
                 <div class="social-btns">
-                    <a href="https://wa.me/46764463737" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+                    <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="https://www.facebook.com/share/1JBr9EDvWA/" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
                 </div>
             </div>
@@ -417,14 +405,23 @@
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-image"></i> إضافة صور للمعرض</h3>
                 <input type="file" id="gallery-upload" class="admin-input" multiple accept="image/*">
-                <input type="text" id="gallery-caption" class="admin-input" placeholder="وصف الصورة">
+                
+                <!-- تحديث: إدخال وصف عربي وسويدي -->
+                <input type="text" id="gallery-caption-ar" class="admin-input" placeholder="وصف الصورة (عربي)">
+                <input type="text" id="gallery-caption-sv" class="admin-input" placeholder="Bildbeskrivning (Svenska)">
+                
                 <button class="admin-btn" onclick="uploadGalleryImages()">رفع للمعرض <i class="fas fa-cloud-upload-alt"></i></button>
                 <p id="gallery-status" style="color: green; margin-top: 10px;"></p>
             </div>
             <div class="admin-card">
                 <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-plus-circle"></i> إضافة نشاط</h3>
-                <input type="text" id="act-title" class="admin-input" placeholder="عنوان النشاط">
-                <textarea id="act-desc" class="admin-input" placeholder="التفاصيل" rows="2"></textarea>
+                
+                <!-- تحديث: إدخال عنوان ووصف عربي وسويدي -->
+                <input type="text" id="act-title-ar" class="admin-input" placeholder="عنوان النشاط (عربي)">
+                <input type="text" id="act-title-sv" class="admin-input" placeholder="Aktivitetstitel (Svenska)">
+                <textarea id="act-desc-ar" class="admin-input" placeholder="التفاصيل (عربي)" rows="2"></textarea>
+                <textarea id="act-desc-sv" class="admin-input" placeholder="Detaljer (Svenska)" rows="2"></textarea>
+                
                 <input type="file" id="act-img" class="admin-input" accept="image/*">
                 <button class="admin-btn" onclick="addActivity()">إضافة <i class="fas fa-check"></i></button>
                 <p id="act-status" style="color: green; margin-top: 10px;"></p>
@@ -434,8 +431,8 @@
 
     <script>
         let currentLang = localStorage.getItem('lang') || 'ar';
-        let visibleGalleryCount = 5; // عدد الصور الظاهرة مبدئياً
-        
+        let visibleGalleryCount = 5;
+
         const langData = {
             ar: {
                 nav: "مسجد الرحمن", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة",
@@ -443,7 +440,8 @@
                 tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد",
                 tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.",
                 btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>",
-                tGallery: "معرض الصور", loadMore: "عرض المزيد", tContact: "تواصل مع الإدارة", address: "العنوان: بيرستورب (السويد) - Perstorp",
+                tGallery: "معرض الصور", loadMore: "عرض المزيد", tContact: "تواصل مع الإدارة", 
+                address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد",
                 prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" },
                 pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" },
                 timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }
@@ -454,32 +452,67 @@
                 tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén",
                 tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.",
                 btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>",
-                tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", address: "Adress: Perstorp (Sverige)",
+                tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", 
+                address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige",
                 prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" },
                 pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" },
                 timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }
             }
         };
 
-        const prayerTimes =[
-            { id: 'fajr', icon: 'fa-moon', adhan: '04:23', iqama: '04:38' },
-            { id: 'shurooq', icon: 'fa-sun', time: '06:32', type: 'no-prayer' },
-            { id: 'dhuhr', icon: 'fa-sun', adhan: '13:14', iqama: '13:29' },
-            { id: 'asr', icon: 'fa-cloud-sun', adhan: '16:41', iqama: '16:56' },
-            { id: 'maghrib', icon: 'fa-cloud-moon', adhan: '19:47', iqama: '19:52' },
-            { id: 'isha', icon: 'fa-star-and-crescent', adhan: '21:37', iqama: '21:47' }
-        ];
+        let prayerTimes =[];
 
-        /* تم تطبيق خاصية التصغير w=400 على كل الصور */
+        function addMinutes(timeStr, minsToAdd) {
+            if (!timeStr) return "";
+            let [hours, minutes] = timeStr.split(':').map(Number);
+            let date = new Date();
+            date.setHours(hours, minutes + minsToAdd, 0, 0);
+            let h = date.getHours().toString().padStart(2, '0');
+            let m = date.getMinutes().toString().padStart(2, '0');
+            return `${h}:${m}`;
+        }
+
+        function displayCurrentDate() {
+            const today = new Date();
+            const dateString = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+            document.getElementById('current-date-text').innerText = dateString;
+        }
+
+        function loadTodaysPrayers() {
+            const today = new Date();
+            const monthNames =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+            const currentMonthName = monthNames[today.getMonth()];
+            const currentDay = today.getDate().toString();
+
+            let todayData = null;
+            if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months && yearlyPrayerData.months[currentMonthName]) {
+                todayData = yearlyPrayerData.months[currentMonthName].find(d => d.Dat === currentDay);
+            }
+
+            if (!todayData) {
+                todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
+            }
+
+            prayerTimes =[
+                { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) },
+                { id: 'shurooq', icon: 'fa-sun', time: todayData.Shuruk, type: 'no-prayer' },
+                { id: 'dhuhr', icon: 'fa-sun', adhan: todayData.Dhohr, iqama: addMinutes(todayData.Dhohr, 10) },
+                { id: 'asr', icon: 'fa-cloud-sun', adhan: todayData.Asr, iqama: addMinutes(todayData.Asr, 10) },
+                { id: 'maghrib', icon: 'fa-cloud-moon', adhan: todayData.Magrib, iqama: addMinutes(todayData.Magrib, 10) },
+                { id: 'isha', icon: 'fa-star-and-crescent', adhan: todayData.Isha, iqama: addMinutes(todayData.Isha, 10) }
+            ];
+        }
+
+        /* تحديث الداتا لتشمل العربي والسويدي */
         let siteData = JSON.parse(localStorage.getItem('mosque_data')) || {
             activities:[
-                { title: "دروس قرآن للأطفال", desc: "تقام أسبوعياً لتعليم التلاوة والتجويد.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg" },
-                { title: "نشاط كرة قدم للأطفال", desc: "نشاط رياضي ترفيهي للأشبال كل أسبوع.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920284/fd2x7ijjuc601uiqiuxd.jpg" },
-                { title: "نشاط كرة يد للكبار", desc: "نشاط رياضي أسبوعي للشباب والكبار.", img: "https://images.pexels.com/photos/1263426/pexels-photo-1263426.jpeg?auto=compress&cs=tinysrgb&w=400" }
+                { titleAr: "دروس قرآن للأطفال", titleSv: "Koranlektioner för barn", descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.", descSv: "Hålls varje vecka för att lära ut recitation.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg" },
+                { titleAr: "نشاط كرة قدم للأطفال", titleSv: "Fotboll för barn", descAr: "نشاط رياضي ترفيهي للأشبال كل أسبوع.", descSv: "Fritidsaktivitet för barn varje vecka.", img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920284/fd2x7ijjuc601uiqiuxd.jpg" },
+                { titleAr: "نشاط كرة يد للكبار", titleSv: "Handboll för vuxna", descAr: "نشاط رياضي أسبوعي للشباب والكبار.", descSv: "Idrottsaktivitet för ungdomar och vuxna.", img: "https://images.pexels.com/photos/1263426/pexels-photo-1263426.jpeg?auto=compress&cs=tinysrgb&w=400" }
             ],
             gallery:[
-                { url: "https://images.pexels.com/photos/2236674/pexels-photo-2236674.jpeg?auto=compress&cs=tinysrgb&w=400", caption: "صلاة الجمعة" },
-                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", caption: "المسجد من الداخل" }
+                { url: "https://images.pexels.com/photos/2236674/pexels-photo-2236674.jpeg?auto=compress&cs=tinysrgb&w=400", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" },
+                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", captionAr: "المسجد من الداخل", captionSv: "Moskén från insidan" }
             ]
         };
 
@@ -526,8 +559,10 @@
             document.getElementById('text-load-more').innerText = t.loadMore;
             document.getElementById('title-contact').innerText = t.tContact;
             document.getElementById('address-text').innerText = t.address;
-            
+
             renderPrayers();
+            renderActivities(); // نعيد رسم الأنشطة لتتحدث باللغة المحددة
+            renderGallery();    // نعيد رسم المعرض ليتم تحديث الكلمات التوضيحية
         }
 
         function toggleLanguage() {
@@ -538,6 +573,7 @@
 
         let nextPrayerElementId = null;
         function updateTimer() {
+            if (prayerTimes.length === 0) return;
             const now = new Date();
             const activePrayers = prayerTimes.filter(p => p.type !== 'no-prayer');
             let targetDate = null;
@@ -548,34 +584,27 @@
             for (let i = 0; i < activePrayers.length; i++) {
                 let p = activePrayers[i];
                 let[aH, aM] = p.adhan.split(':').map(Number);
-                let adhanDate = new Date();
-                adhanDate.setHours(aH, aM, 0, 0);
+                let adhanDate = new Date(); adhanDate.setHours(aH, aM, 0, 0);
 
                 let[iH, iM] = p.iqama.split(':').map(Number);
-                let iqamaDate = new Date();
-                iqamaDate.setHours(iH, iM, 0, 0);
+                let iqamaDate = new Date(); iqamaDate.setHours(iH, iM, 0, 0);
 
                 if (now < adhanDate) {
                     targetDate = adhanDate;
                     timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`;
-                    currentActiveId = `card-${p.id}`;
-                    break;
+                    currentActiveId = `card-${p.id}`; break;
                 } else if (now < iqamaDate) {
                     targetDate = iqamaDate;
                     timerTitle = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`;
-                    currentActiveId = `card-${p.id}`;
-                    break;
+                    currentActiveId = `card-${p.id}`; break;
                 }
             }
 
             if (!targetDate) {
                 let fajr = activePrayers[0];
                 let [aH, aM] = fajr.adhan.split(':').map(Number);
-                targetDate = new Date();
-                targetDate.setDate(targetDate.getDate() + 1);
-                targetDate.setHours(aH, aM, 0, 0);
-                timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[fajr.id]}`;
-                currentActiveId = `card-${fajr.id}`;
+                targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); targetDate.setHours(aH, aM, 0, 0);
+                timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[fajr.id]}`; currentActiveId = `card-${fajr.id}`;
             }
 
             let diff = targetDate - now;
@@ -584,8 +613,7 @@
             let s = Math.floor((diff % (1000 * 60)) / 1000);
 
             document.getElementById('timer-title').innerText = timerTitle;
-            document.getElementById('countdown-clock').innerText = 
-                `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 
             if (nextPrayerElementId !== currentActiveId) {
                 document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer'));
@@ -597,11 +625,12 @@
         setInterval(updateTimer, 1000);
 
         function renderPrayers() {
+            if (prayerTimes.length === 0) return;
             nextPrayerElementId = null; 
             const container = document.getElementById('prayer-container');
             const t = langData[currentLang];
             container.innerHTML = '';
-            
+
             prayerTimes.forEach(p => {
                 let html = `<div class="prayer-card" id="card-${p.id}"><i class="fas ${p.icon} prayer-icon"></i><div class="prayer-name">${t.prayerNames[p.id]}</div>`;
                 if(p.type === 'no-prayer') {
@@ -615,27 +644,31 @@
             updateTimer(); 
         }
 
+        /* هنا يتم عرض النشاط باللغة المناسبة */
         function renderActivities() {
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
             siteData.activities.forEach(act => {
-                container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${act.title}</h3><p style="color:#666;">${act.desc}</p></div></div>`;
+                // نختار النص بناءً على اللغة المحددة، وإذا لم يكن موجوداً نعرض الاسم القديم
+                const displayTitle = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
+                const displayDesc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
+                container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${displayTitle}</h3><p style="color:#666; font-size:0.95rem;">${displayDesc}</p></div></div>`;
             });
         }
 
+        /* هنا يتم عرض المعرض باللغة المناسبة */
         function renderGallery() {
             const container = document.getElementById('gallery-container');
             const btnLoadMore = document.getElementById('btn-load-more');
             container.innerHTML = '';
-            
-            // جلب مجموعة الصور التي سيتم عرضها بناءً على العداد
+
             const itemsToShow = siteData.gallery.slice(0, visibleGalleryCount);
 
             itemsToShow.forEach(img => {
-                container.innerHTML += `<div class="gallery-item" onclick="window.open('${img.url.replace('w_400,', '')}','_blank')"><img src="${img.url}">${img.caption ? `<div class="gallery-caption">${img.caption}</div>` : ''}</div>`;
+                const displayCaption = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
+                container.innerHTML += `<div class="gallery-item" onclick="window.open('${img.url.replace('w_400,', '')}','_blank')"><img src="${img.url}">${displayCaption ? `<div class="gallery-caption">${displayCaption}</div>` : ''}</div>`;
             });
 
-            // إظهار أو إخفاء زر "عرض المزيد"
             if (siteData.gallery.length > visibleGalleryCount) {
                 btnLoadMore.style.display = 'inline-flex';
             } else {
@@ -643,16 +676,12 @@
             }
         }
 
-        function loadMoreGallery() {
-            visibleGalleryCount += 5; // إضافة 5 صور في كل نقرة
-            renderGallery();
-        }
+        function loadMoreGallery() { visibleGalleryCount += 5; renderGallery(); }
 
         function checkNotifications() {
             const unreadCount = notifications.filter(n => !n.read).length;
             const dot = document.getElementById('notif-dot');
             if (unreadCount > 0) dot.classList.add('active'); else dot.classList.remove('active');
-            
             const box = document.getElementById('notif-box');
             box.innerHTML = notifications.length ? '' : `<div class="notif-item">لا توجد إشعارات</div>`;
             notifications.forEach(n => {
@@ -671,22 +700,22 @@
         }
 
         async function uploadToCloudinary(file) {
-            const fd = new FormData();
-            fd.append("file", file);
-            fd.append("upload_preset", "souq_upload");
+            const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", "souq_upload");
             const res = await fetch(`https://api.cloudinary.com/v1_1/db9h7zm1h/image/upload`, { method: "POST", body: fd });
-            const data = await res.json();
-            return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
+            const data = await res.json(); return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
         }
 
+        /* تحديث الإضافة للمعرض باللغتين */
         async function uploadGalleryImages() {
             const files = document.getElementById('gallery-upload').files;
             if(files.length === 0) return;
             document.getElementById('gallery-status').innerText = "جاري الرفع...";
+            const capAr = document.getElementById('gallery-caption-ar').value;
+            const capSv = document.getElementById('gallery-caption-sv').value || capAr; // إذا تركه فارغ نضع العربي
             for(let f of files) {
                 try {
                     const url = await uploadToCloudinary(f);
-                    siteData.gallery.push({ url, caption: document.getElementById('gallery-caption').value });
+                    siteData.gallery.push({ url, captionAr: capAr, captionSv: capSv });
                 } catch(e) {}
             }
             localStorage.setItem('mosque_data', JSON.stringify(siteData));
@@ -694,15 +723,20 @@
             document.getElementById('gallery-status').innerText = "تم الرفع ✔️";
         }
 
+        /* تحديث الإضافة للأنشطة باللغتين */
         async function addActivity() {
-            const title = document.getElementById('act-title').value;
-            const desc = document.getElementById('act-desc').value;
+            const titleAr = document.getElementById('act-title-ar').value;
+            const titleSv = document.getElementById('act-title-sv').value || titleAr;
+            const descAr = document.getElementById('act-desc-ar').value;
+            const descSv = document.getElementById('act-desc-sv').value || descAr;
             const file = document.getElementById('act-img').files[0];
-            if(!title) return;
+            
+            if(!titleAr) return;
             document.getElementById('act-status').innerText = "جاري الحفظ...";
             let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
             if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
-            siteData.activities.push({ title, desc, img });
+            
+            siteData.activities.push({ titleAr, titleSv, descAr, descSv, img });
             localStorage.setItem('mosque_data', JSON.stringify(siteData));
             renderActivities();
             document.getElementById('act-status').innerText = "تمت الإضافة ✔️";
@@ -713,9 +747,9 @@
         }, { threshold: 0.1 });
 
         window.onload = () => {
-            applyTranslations();
-            renderActivities();
-            renderGallery();
+            displayCurrentDate(); 
+            loadTodaysPrayers();  
+            applyTranslations(); // هذه الدالة تقوم برسم الأنشطة والمعرض بلغة الموقع الصحيحة
             checkNotifications();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
