@@ -1,12 +1,15 @@
 {
   "name": "Masjid Ar-Rahman | مسجد الرحمن",
   "short_name": "Ar-Rahman",
+  "id": "/",
   "description": "تطبيق مسجد الرحمن في مدينة بيرستورب - السويد",
   "start_url": "/index.html",
   "display": "standalone",
   "background_color": "#0a3622",
   "theme_color": "#0a3622",
   "orientation": "portrait",
+  "categories": ["lifestyle", "education"],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "icon-192.png",
@@ -18,7 +21,7 @@
       "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -27,7 +30,14 @@
       "sizes": "1080x2408",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "الشاشة الرئيسية للموبايل"
+      "label": "Mobile View"
+    },
+    {
+      "src": "screenshot-desktop.png",
+      "sizes": "1920x1080",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Desktop View"
     }
   ]
 }
