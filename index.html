@@ -21,7 +21,7 @@
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script> <!-- تمت إضافة مكتبة المصادقة -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
@@ -49,7 +49,7 @@
         body.lang-sv .section-title { font-size: 1.8rem; }
         body.lang-sv .city-badge { font-family: inherit; }
 
-        /* Header Fixes */
+        /* Header */
         header {
             position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
             background: rgba(10, 54, 34, 0.95); backdrop-filter: blur(10px);
@@ -68,14 +68,13 @@
         .notif-dot.active { display: block; animation: pulse 2s infinite; }
         @keyframes pulse { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(255,59,48,0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255,59,48,0); } }
 
-        /* صندوق الإشعارات */
+        /* Notifications Box */
         .notif-box {
             position: absolute; top: 50px; left: 0; width: 300px; background: var(--white);
             border-radius: 12px; box-shadow: var(--shadow); opacity: 0; visibility: hidden;
             transform: translateY(-10px); transition: var(--transition); z-index: 1001;
             display: flex; flex-direction: column; overflow: hidden;
-        }
-        [dir="ltr"] .notif-box { left: auto; right: 0; }
+        }[dir="ltr"] .notif-box { left: auto; right: 0; }
         .notif-box.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .notif-header { background: var(--primary); color: var(--secondary); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 0.95rem; }
         .notif-body { max-height: 300px; overflow-y: auto; }
@@ -83,7 +82,7 @@
         .notif-body::-webkit-scrollbar-track { background: #f1f1f1; }
         .notif-body::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
         .notif-item { padding: 12px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); font-size: 0.9rem; }
-        .notif-item.unread { background-color: #f0fdf4; font-weight: bold; border-right: 4px solid var(--primary); }
+        .notif-item.prayer-alert { background: #f4fdf8; border-right: 3px solid var(--secondary); }
 
         /* Sidebar */
         .sidebar {
@@ -91,23 +90,18 @@
             background: var(--white); box-shadow: -5px 0 15px rgba(0,0,0,0.1);
             transition: var(--transition); z-index: 1002; display: flex; flex-direction: column;
         }[dir="ltr"] .sidebar { right: auto; left: -300px; }
-        .sidebar.active { right: 0; } [dir="ltr"] .sidebar.active { left: 0; }
+        .sidebar.active { right: 0; }[dir="ltr"] .sidebar.active { left: 0; }
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .menu-links a, .menu-links button { text-decoration: none; color: var(--text-dark); font-size: 1.1rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; text-align: right; font-family: inherit; width: 100%;}
         .menu-links a:hover, .menu-links button:hover { background: var(--light-bg); color: var(--primary); }
 
-        /* Hero Section */
+        /* Hero */
         .hero {
-            position: relative;
-            padding-top: 65px;
-            min-height: 350px; height: auto;
+            position: relative; padding-top: 65px; min-height: 350px; height: auto;
             background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            display: flex; align-items: center; justify-content: center; text-align: center;
-            padding-bottom: 50px;
+            background-position: center center; background-size: cover; background-repeat: no-repeat;
+            display: flex; align-items: center; justify-content: center; text-align: center; padding-bottom: 50px;
         }
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,54,34,0.2), rgba(10,54,34,0.5)); }
         .hero-content { position: relative; z-index: 1; color: var(--white); padding: 0 20px; width: 100%; max-width: 800px; animation: fadeInUp 1s ease-out; }
@@ -121,39 +115,34 @@
             body.lang-sv .hero-title { font-size: 2.5rem; }
         }
 
-        .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; }
-
+        /* Sections General */
+        .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; position: relative;}
         .section-header { text-align: center; margin-bottom: 30px; }
         .title-row { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
         .section-title { font-size: 2rem; color: var(--primary); margin: 0; word-break: break-word; }
         .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Cairo', sans-serif; }
-
         .title-separator { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
         .title-separator i { color: var(--primary); font-size: 1.1rem; }
 
-        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } 
-        .current-date-box {
-            background: linear-gradient(135deg, var(--primary), #0c4a2e);
-            color: var(--secondary);
-            padding: 3px 15px; 
-            border-radius: 12px;
-            display: inline-block;
-            font-size: 0.85rem; 
-            font-weight: bold;
-            border: 1px solid var(--secondary);
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        /* Loader Spinner */
+        .loader-spinner {
+            border: 4px solid #f3f3f3; border-top: 4px solid var(--secondary); border-right: 4px solid var(--primary);
+            border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; display: none;
         }
+        .loader-spinner.active { display: block; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Prayer Times */
+        /* Prayers */
+        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } 
+        .current-date-box { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); padding: 3px 15px; border-radius: 12px; display: inline-block; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+
         .timer-container { text-align: center; margin-bottom: 30px; background: var(--white); padding: 15px; border-radius: 15px; box-shadow: var(--shadow); border-bottom: 3px solid var(--secondary); width: fit-content; min-width: 200px; max-width: 90%; margin-left: auto; margin-right: auto; }
         .timer-title { font-size: 0.95rem; color: var(--text-dark); margin-bottom: 5px; font-weight: bold; }
         .countdown-clock { font-size: 1.8rem; font-weight: bold; color: var(--primary); font-family: monospace; letter-spacing: 2px; direction: ltr; }
 
         .prayer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 12px; }
-        .prayer-card { background: var(--white); border-radius: 12px; padding: 12px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; word-break: break-word; }
+        .prayer-card { background: var(--white); border-radius: 12px; padding: 12px; text-align: center; box-shadow: var(--shadow); transition: var(--transition); border-bottom: 3px solid transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .prayer-card.next-prayer { background: var(--primary); color: var(--white); border-bottom-color: var(--secondary); transform: scale(1.03); }
         .prayer-icon { font-size: 22px; color: var(--secondary); margin-bottom: 8px; }
         .prayer-name { font-size: 1rem; font-weight: bold; margin-bottom: 4px; }
@@ -162,38 +151,44 @@
 
         /* Activities */
         .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); }
+        .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: var(--transition); position: relative;}
         .activity-card:hover { transform: translateY(-5px); }
         .activity-img { width: 100%; height: 160px; object-fit: cover; }
         .activity-content { padding: 15px; }
         .activity-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 8px; font-weight: bold; }
-        .activity-desc {
-            color: #666; font-size: 0.95rem;
-            max-height: 90px; overflow-y: auto;
-            padding-right: 5px; white-space: pre-wrap;
-            line-height: 1.5;
-        }
-        [dir="ltr"] .activity-desc { padding-right: 0; padding-left: 5px; }
-        .activity-desc::-webkit-scrollbar { width: 5px; }
-        .activity-desc::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 5px; }
-        .activity-desc::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
+        .activity-desc { color: #666; font-size: 0.95rem; max-height: 90px; overflow-y: auto; padding-right: 5px; white-space: pre-wrap; line-height: 1.5; }
+        .activity-desc::-webkit-scrollbar { width: 4px; }
+        .activity-desc::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
 
         /* Gallery */
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
         .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .gallery-item:hover img { transform: scale(1.1); }
-        .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; }
-        .gallery-item:hover .gallery-caption { bottom: 0; }
-        .load-more-container { text-align: center; margin-top: 25px; width: 100%; }
-        .btn-load-more {
-            background: linear-gradient(135deg, var(--primary), #0c4a2e);
-            color: var(--secondary); border: 2px solid var(--secondary);
-            padding: 10px 25px; font-size: 1rem; font-family: 'Cairo', sans-serif;
-            font-weight: bold; border-radius: 50px; cursor: pointer;
-            transition: var(--transition); box-shadow: 0 5px 15px rgba(10, 54, 34, 0.2);
-            display: inline-flex; align-items: center; gap: 8px;
+        
+        .gallery-caption { 
+            position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; 
+            background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; 
+            text-align: center; font-size: 0.85rem; pointer-events: none;
         }
+
+        /* حل مشكلة ظهور النص عند النزول في الهاتف (Hover Fix for Touch Devices) */
+        @media (hover: hover) {
+            .gallery-item:hover img { transform: scale(1.1); }
+            .gallery-item:hover .gallery-caption { bottom: 0; }
+        }
+        
+        /* Admin Controls */
+        .admin-controls {
+            position: absolute; top: 10px; left: 10px; z-index: 10;
+            display: flex; gap: 8px; background: rgba(255,255,255,0.9); padding: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .admin-controls button { border: none; background: none; cursor: pointer; font-size: 16px; padding: 5px; border-radius: 5px; transition: 0.2s; }
+        .admin-controls .btn-edit { color: var(--primary); }
+        .admin-controls .btn-delete { color: #ff3b30; }
+        .admin-controls button:hover { background: #eee; }
+
+        .load-more-container { text-align: center; margin-top: 25px; width: 100%; }
+        .btn-load-more { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); border: 2px solid var(--secondary); padding: 10px 25px; font-size: 1rem; font-family: inherit; font-weight: bold; border-radius: 50px; cursor: pointer; transition: var(--transition); display: inline-flex; align-items: center; gap: 8px; }
 
         /* Donation Section */
         .donation-wrap { 
@@ -229,20 +224,12 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10;
         }
         .donation-deco { position: absolute; opacity: 0.03; font-size: 250px; color: var(--primary); right: -30px; bottom: -50px; transform: rotate(-15deg); pointer-events: none; }
-
-        /* Contact & Footer */
-        .contact-card {
-            background: linear-gradient(135deg, var(--primary), #052014); color: var(--white);
-            border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden;
-        }
-        .contact-avatar {
-            width: 80px; height: 80px; background: var(--secondary); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center; font-size: 35px;
-            color: var(--primary); margin: 0 auto 15px auto; box-shadow: 0 0 15px rgba(212, 175, 55, 0.5); border: 3px solid var(--white);
-        }
+        
+        /* Contact */
+        .contact-card { background: linear-gradient(135deg, var(--primary), #052014); color: var(--white); border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+        .contact-avatar { width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--primary); margin: 0 auto 15px auto; border: 3px solid var(--white); }
         .social-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; transition: var(--transition); }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 10px rgba(0,0,0,0.3); }
+        .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; }
         .btn-wa { background: #25D366; } .btn-fb { background: #1877F2; }
 
         /* Admin UI */
@@ -253,27 +240,25 @@
         .admin-input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; font-size:0.9rem;}
         .admin-btn { background: var(--primary); color: var(--white); border: none; padding: 10px 15px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        /* Admin Login Modal */
-        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 2000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
-        .modal-content { background: #fff; padding: 30px; border-radius: 15px; width: 90%; max-width: 400px; text-align: center; box-shadow: var(--shadow); }
-        .modal-content input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; font-size: 1rem; text-align: center;}
-        .modal-btn { background: var(--primary); color: var(--secondary); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%; margin-bottom: 10px; font-family: inherit; font-size: 1rem;}
-        .modal-btn.cancel { background: #eee; color: #333; }
+        /* Custom Modals (Professional Modals for Edit & Confirm) */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 3000; display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+        .modal-content { background: #fff; padding: 25px; border-radius: 15px; width: 90%; max-width: 450px; text-align: center; box-shadow: 0 15px 30px rgba(0,0,0,0.2); transform: scale(0.9); animation: scaleUp 0.3s forwards; max-height: 90vh; overflow-y: auto;}
+        @keyframes scaleUp { to { transform: scale(1); } }
+        .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; }
+        .modal-content textarea { resize: vertical; }
+        .modal-content label { display: block; text-align: right; font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-top: 5px; }
+        [dir="ltr"] .modal-content label { text-align: left; }
+        .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
+        .modal-btn { flex: 1; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: inherit; font-size: 1rem; transition: 0.2s; }
+        .modal-btn.primary { background: var(--primary); color: var(--white); }
+        .modal-btn.primary:hover { background: #08291a; }
+        .modal-btn.cancel { background: #f1f1f1; color: #333; }
+        .modal-btn.cancel:hover { background: #e2e2e2; }
+        .modal-btn.danger { background: #ff3b30; color: #fff; }
+        .modal-btn.danger:hover { background: #d32f2f; }
 
-        /* التذكير المنبثق (Toast) */
-        .app-toast-container {
-            position: fixed; top: 80px; left: 50%; transform: translate(-50%, -150px);
-            background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white);
-            padding: 12px 25px; border-radius: 50px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: flex; align-items: center; gap: 12px;
-            opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            z-index: 10000; font-family: 'Cairo', sans-serif; font-size: 0.95rem; font-weight: bold;
-            border: 1px solid var(--secondary); text-align: center; max-width: 90%;
-        }
+        .app-toast-container { position: fixed; top: 80px; left: 50%; transform: translate(-50%, -150px); background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white); padding: 12px 25px; border-radius: 50px; display: flex; align-items: center; gap: 12px; opacity: 0; visibility: hidden; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 10000; border: 1px solid var(--secondary); text-align: center; max-width:90%;}
         .app-toast-container.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
-        .app-toast-icon { color: var(--secondary); font-size: 1.3rem; animation: pulse 2s infinite; }
-
         .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
@@ -293,7 +278,6 @@
             <div class="bell-container">
                 <i class="fas fa-bell icon-btn" onclick="toggleNotifications()"></i>
                 <div class="notif-dot" id="notif-dot"></div>
-                <!-- صندوق الإشعارات -->
                 <div class="notif-box" id="notif-box">
                     <div class="notif-header">
                         <span id="notif-title-text">الإشعارات</span>
@@ -316,9 +300,7 @@
             <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">مواقيت الصلاة</span></a>
             <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">الأنشطة</span></a>
             <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">المعرض</span></a>
-
             <button onclick="requestNotificationPermission()"><i class="fas fa-bell"></i> <span id="menu-notif-btn">تفعيل الإشعارات</span></button>
-
             <a href="#" onclick="openAdmin()"><i class="fas fa-cog"></i> <span id="menu-admin">الإدارة</span></a>
             <a href="#" id="logout-btn" onclick="logoutAdmin()" style="display:none; color:#ff3b30;"><i class="fas fa-sign-out-alt"></i> <span id="menu-logout">خروج الإدارة</span></a>
         </div>
@@ -331,15 +313,77 @@
             <h3 style="margin-bottom: 15px; font-family: 'Amiri'; color: var(--primary);">تسجيل دخول الإدارة</h3>
             <input type="email" id="admin-email" placeholder="البريد الإلكتروني">
             <input type="password" id="admin-pass" placeholder="كلمة المرور">
-            <button class="modal-btn" id="login-btn" onclick="verifyAdmin()">دخول</button>
-            <button class="modal-btn cancel" onclick="closeAdminModal()">إلغاء</button>
+            <button class="modal-btn primary" id="login-btn" onclick="verifyAdmin()" style="margin-bottom: 10px; width: 100%;">دخول</button>
+            <button class="modal-btn cancel" onclick="closeAdminModal()" style="width: 100%;">إلغاء</button>
             <p id="login-error" style="color: red; font-size: 0.9rem; margin-top: 10px; display: none;">بيانات الدخول غير صحيحة!</p>
+        </div>
+    </div>
+
+    <!-- Custom Delete Confirmation Modal -->
+    <div class="modal-overlay" id="confirm-modal">
+        <div class="modal-content" style="max-width: 350px;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 45px; color: #ff3b30; margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px; color: var(--text-dark);" id="confirm-title">تأكيد الحذف</h3>
+            <p style="color: #666; margin-bottom: 20px; font-size: 0.95rem;" id="confirm-msg">هل أنت متأكد من أنك تريد حذف هذا العنصر نهائياً؟</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeConfirmModal()">إلغاء</button>
+                <button class="modal-btn danger" id="confirm-yes-btn">حذف</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Activity Modal (In-Place Edit) -->
+    <div class="modal-overlay" id="edit-activity-modal">
+        <div class="modal-content">
+            <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-edit"></i> تعديل النشاط</h3>
+            <input type="hidden" id="modal-edit-act-id">
+            
+            <label>عنوان النشاط (عربي)</label>
+            <input type="text" id="modal-act-title-ar" placeholder="العنوان بالعربية">
+            
+            <label>عنوان النشاط (سويدي)</label>
+            <input type="text" id="modal-act-title-sv" placeholder="Aktivitetstitel (Svenska)">
+            
+            <label>التفاصيل (عربي)</label>
+            <textarea id="modal-act-desc-ar" rows="3" placeholder="التفاصيل بالعربية"></textarea>
+            
+            <label>التفاصيل (سويدي)</label>
+            <textarea id="modal-act-desc-sv" rows="3" placeholder="Detaljer (Svenska)"></textarea>
+            
+            <label>تغيير الصورة (اختياري)</label>
+            <input type="file" id="modal-act-img" accept="image/*">
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeEditActivityModal()">إلغاء</button>
+                <button class="modal-btn primary" id="modal-btn-save-act" onclick="saveEditedActivity()">حفظ التعديلات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Gallery Modal (In-Place Edit) -->
+    <div class="modal-overlay" id="edit-gallery-modal">
+        <div class="modal-content">
+            <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-edit"></i> تعديل صورة المعرض</h3>
+            <input type="hidden" id="modal-edit-gal-id">
+            
+            <label>رابط الصورة (URL)</label>
+            <input type="text" id="modal-gal-url" placeholder="رابط الصورة المباشر" style="direction: ltr;">
+            
+            <label>الوصف (عربي)</label>
+            <input type="text" id="modal-gal-cap-ar" placeholder="وصف الصورة بالعربية">
+            
+            <label>الوصف (سويدي)</label>
+            <input type="text" id="modal-gal-cap-sv" placeholder="Bildbeskrivning (Svenska)">
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" onclick="closeEditGalleryModal()">إلغاء</button>
+                <button class="modal-btn primary" id="modal-btn-save-gal" onclick="saveEditedGallery()">حفظ التعديلات</button>
+            </div>
         </div>
     </div>
 
     <!-- Main Content -->
     <div id="main-content">
-
         <section class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
@@ -348,7 +392,7 @@
             </div>
         </section>
 
-        <!-- Prayers & Timer -->
+        <!-- Prayers -->
         <section class="section fade-in" id="prayers">
             <div class="section-header">
                 <div class="title-row">
@@ -357,16 +401,14 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-star-and-crescent"></i></div>
             </div>
-
+            
             <div class="date-wrapper">
                 <div class="current-date-box" id="current-date-text">--/--/----</div>
             </div>
-
             <div class="timer-container">
                 <div class="timer-title" id="timer-title">باقي على ...</div>
                 <div class="countdown-clock" id="countdown-clock">00:00:00</div>
             </div>
-
             <div class="prayer-grid" id="prayer-container"></div>
         </section>
 
@@ -378,7 +420,9 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-users"></i></div>
             </div>
+            <div id="loader-activities" class="loader-spinner active"></div>
             <div class="activities-grid" id="activities-container"></div>
+            <p id="no-activities-msg" style="text-align:center; color:#666; display:none;">لا توجد أنشطة حالياً. الإدارة ستقوم بإضافة الأنشطة قريباً.</p>
         </section>
 
         <!-- Gallery -->
@@ -389,8 +433,9 @@
                 </div>
                 <div class="title-separator"><i class="fas fa-camera"></i></div>
             </div>
+            <div id="loader-gallery" class="loader-spinner active"></div>
             <div class="gallery-grid" id="gallery-container"></div>
-
+            <p id="no-gallery-msg" style="text-align:center; color:#666; display:none;">لا توجد صور حالياً. الإدارة ستقوم بإضافة الصور قريباً.</p>
             <div class="load-more-container">
                 <button class="btn-load-more" id="btn-load-more" onclick="loadMoreGallery()" style="display: none;">
                     <span id="text-load-more">عرض المزيد</span> <i class="fas fa-chevron-down"></i>
@@ -429,29 +474,22 @@
             </div>
         </section>
 
-        <!-- Contact & Footer -->
+        <!-- Contact -->
         <section class="section fade-in" id="contact" style="padding-bottom: 60px;">
             <div class="contact-card">
-                <div class="contact-avatar">
-                    <i class="fas fa-user-tie"></i>
-                </div>
-                <div class="title-row">
-                    <h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2>
-                </div>
+                <div class="contact-avatar"><i class="fas fa-user-tie"></i></div>
+                <h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2>
                 <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
-
                 <p id="address-text" style="font-size: 0.85rem; margin: 10px 0; color: #eee; direction: ltr;"></p>
-
                 <div class="social-btns">
                     <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="https://www.facebook.com/share/1JBr9EDvWA/" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
                 </div>
             </div>
         </section>
-
     </div>
 
-    <!-- Admin Panel -->
+    <!-- Admin Panel (For Additions Only) -->
     <div id="admin-panel">
         <h2 style="color:var(--primary); text-align:center; font-family:'Amiri';">لوحة تحكم الإدارة</h2>
         <button class="admin-btn" style="background: red; width: auto; margin-bottom: 20px;" onclick="showPage('main')">إغلاق والعودة للموقع</button>
@@ -466,13 +504,13 @@
             </div>
 
             <div class="admin-card">
-                <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-plus-circle"></i> إضافة نشاط</h3>
+                <h3 style="margin-bottom: 15px; color: var(--primary);"><i class="fas fa-plus-circle"></i> إضافة نشاط جديد</h3>
                 <input type="text" id="act-title-ar" class="admin-input" placeholder="عنوان النشاط (عربي)">
                 <input type="text" id="act-title-sv" class="admin-input" placeholder="Aktivitetstitel (Svenska)">
                 <textarea id="act-desc-ar" class="admin-input" placeholder="التفاصيل (عربي)" rows="2"></textarea>
                 <textarea id="act-desc-sv" class="admin-input" placeholder="Detaljer (Svenska)" rows="2"></textarea>
                 <input type="file" id="act-img" class="admin-input" accept="image/*">
-                <button class="admin-btn" onclick="addActivity()">إضافة <i class="fas fa-check"></i></button>
+                <button class="admin-btn" onclick="addNewActivity()">حفظ النشاط <i class="fas fa-check"></i></button>
                 <p id="act-status" style="color: green; margin-top: 10px; font-weight:bold;"></p>
             </div>
 
@@ -486,14 +524,14 @@
         </div>
     </div>
 
-    <!-- Toast Container -->
+    <!-- Toast -->
     <div id="app-toast-box" class="app-toast-container">
-        <i class="fas fa-bell app-toast-icon"></i> 
+        <i class="fas fa-bell" style="color: var(--secondary); font-size: 1.3rem;"></i> 
         <span id="toast-msg-text"></span>
     </div>
 
     <script>
-        // --- 1. إعدادات Firebase ---
+        // --- 1. Firebase Setup ---
         const firebaseConfig = {
             apiKey: "AIzaSyDLOQ3i-cyhZV-A1oN5Jhy_OQj_KdqClzk",
             authDomain: "al-rahman-d0529.firebaseapp.com",
@@ -503,585 +541,286 @@
             appId: "1:1081097400036:web:a5b9ada478c9bdb7ae06f1",
             measurementId: "G-8TYFZP4XTJ"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        let messaging;
-        try {
-            if (firebase.messaging.isSupported()) {
-                messaging = firebase.messaging();
-            }
-        } catch (e) { console.log("Messaging not supported"); }
+        let messaging; try { if (firebase.messaging.isSupported()) messaging = firebase.messaging(); } catch (e) {}
 
-        // --- 2. المتغيرات واللغات ---
+        // --- 2. Variables & Local Storage ---
         let currentLang = localStorage.getItem('lang') || 'ar';
-        let visibleGalleryCount = 5;
+        let visibleGalleryCount = 6;
         let siteData = { activities: [], gallery:[], notifications:[] };
         let prayerTimes =[];
         let notifiedPrayers = {};
+        const ADMIN_UID = "oW1VqNujjWU2uzYWE6vWcsFpguf2";
+        let localPrayerNotifs = JSON.parse(localStorage.getItem('localPrayerNotifs') || '[]');
 
         const langData = {
-            ar: {
-                nav: "مسجد الرحمن", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة",
-                heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية",
-                tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد",
-                tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.",
-                btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>",
-                tGallery: "معرض الصور", loadMore: "عرض المزيد", tContact: "تواصل مع الإدارة", 
-                address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد",
-                prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" },
-                pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" },
-                timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" },
-                notifTitle: "الإشعارات", notifBtn: "تفعيل الإشعارات", logout: "خروج الإدارة"
-            },
-            sv: {
-                nav: "Moské Ar-Rahman", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin",
-                heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige",
-                tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén",
-                tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.",
-                btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>",
-                tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", 
-                address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige",
-                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" },
-                pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" },
-                timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" },
-                notifTitle: "Notiser", notifBtn: "Aktivera Notiser", logout: "Logga ut Admin"
-            }
+            ar: { nav: "مسجد الرحمن", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة", heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية", tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد", tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.", btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>", tGallery: "معرض الصور", loadMore: "عرض المزيد", tContact: "تواصل مع الإدارة", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد", prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtn: "تفعيل الإشعارات", logout: "خروج الإدارة", edit: "تعديل", delete: "حذف", confirmDelTitle: "تأكيد الحذف", confirmDelMsg: "هل أنت متأكد من أنك تريد حذف هذا العنصر نهائياً؟", prayerAlertText: "تنبيه: اقترب موعد الصلاة لـ" },
+            sv: { nav: "Moské Ar-Rahman", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.", btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtn: "Aktivera Notiser", logout: "Logga ut Admin", edit: "Redigera", delete: "Radera", confirmDelTitle: "Bekräfta radering", confirmDelMsg: "Är du säker på att du vill radera detta objekt permanent?", prayerAlertText: "Påminnelse: Det är snart dags för" }
         };
 
-        // --- 3. جلب البيانات من Firebase (Realtime) ---
+        // --- 3. Firebase Fetch ---
+        let lastAdminNotif = null;
         function listenToFirebase() {
-            db.collection("activities").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-                siteData.activities =[];
-                snapshot.forEach(doc => siteData.activities.push(doc.data()));
+            db.collection("activities").orderBy("timestamp", "desc").limit(30).onSnapshot(snapshot => {
+                siteData.activities =[]; snapshot.forEach(doc => siteData.activities.push({ id: doc.id, ...doc.data() }));
+                document.getElementById('loader-activities').classList.remove('active');
                 renderActivities();
             });
 
-            db.collection("gallery").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-                siteData.gallery =[];
-                snapshot.forEach(doc => siteData.gallery.push(doc.data()));
+            db.collection("gallery").orderBy("timestamp", "desc").limit(50).onSnapshot(snapshot => {
+                siteData.gallery =[]; snapshot.forEach(doc => siteData.gallery.push({ id: doc.id, ...doc.data() }));
+                document.getElementById('loader-gallery').classList.remove('active');
                 renderGallery();
             });
 
-            db.collection("notifications").orderBy("timestamp", "desc").onSnapshot(snapshot => {
-                siteData.notifications =[];
-                snapshot.forEach(doc => {
-                    let data = doc.data();
-                    data.id = doc.id;
-                    siteData.notifications.push(data);
-                });
-                renderNotifications();
-
+            db.collection("notifications").orderBy("timestamp", "desc").limit(10).onSnapshot(snapshot => {
+                siteData.notifications =[]; snapshot.forEach(doc => siteData.notifications.push({ id: doc.id, ...doc.data() }));
                 if(siteData.notifications.length > 0) {
-                    let latest = siteData.notifications[0];
+                    lastAdminNotif = siteData.notifications[0];
                     let lastSeen = localStorage.getItem('last_seen_notif');
-                    if(lastSeen !== latest.id) {
-                        setTimeout(() => {
-                            showToast(currentLang === 'ar' ? latest.ar : latest.sv);
-                            localStorage.setItem('last_seen_notif', latest.id);
-                        }, 2000);
+                    if(lastSeen !== lastAdminNotif.id) {
+                        setTimeout(() => { showToast(currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv); localStorage.setItem('last_seen_notif', lastAdminNotif.id); }, 2000);
                     }
                 }
+                renderNotifications();
             });
         }
+        setInterval(() => { if(lastAdminNotif) { const text = currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv; showToast(text); sendLocalPushNotification(langData[currentLang].notifTitle, text); } }, 3600000);
 
-        // --- 4. تسجيل دخول الإدارة (تحديث Firebase Auth) ---
-        const ADMIN_UID = "oW1VqNujjWU2uzYWE6vWcsFpguf2";
-
-        function openAdmin() {
-            toggleSidebar();
-            if(localStorage.getItem('isAdmin') === 'true') {
-                showPage('admin');
-            } else {
-                document.getElementById('admin-login-modal').style.display = 'flex';
-            }
+        // --- 4. Custom Confirm Modal ---
+        let confirmActionCallback = null;
+        function showConfirmModal(callback) {
+            document.getElementById('confirm-title').innerText = langData[currentLang].confirmDelTitle;
+            document.getElementById('confirm-msg').innerText = langData[currentLang].confirmDelMsg;
+            confirmActionCallback = callback;
+            document.getElementById('confirm-modal').style.display = 'flex';
         }
-
-        function closeAdminModal() {
-            document.getElementById('admin-login-modal').style.display = 'none';
-            document.getElementById('login-error').style.display = 'none';
-            document.getElementById('admin-email').value = '';
-            document.getElementById('admin-pass').value = '';
-        }
-
-        function verifyAdmin() {
-            const email = document.getElementById('admin-email').value;
-            const pass = document.getElementById('admin-pass').value;
-            const errorEl = document.getElementById('login-error');
-            const btn = document.getElementById('login-btn');
-
-            if (!email || !pass) {
-                errorEl.innerText = currentLang === 'ar' ? "يرجى إدخال البريد الإلكتروني وكلمة المرور!" : "Vänligen ange e-post och lösenord!";
-                errorEl.style.display = 'block';
-                return;
-            }
-
-            btn.innerText = currentLang === 'ar' ? "جاري الدخول..." : "Loggar in...";
-            btn.disabled = true;
-
-            // تسجيل الدخول عبر Firebase Auth
-            firebase.auth().signInWithEmailAndPassword(email, pass)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    
-                    // التحقق مما إذا كان الـ UID يطابق كود الإدارة
-                    if (user.uid === ADMIN_UID) {
-                        localStorage.setItem('isAdmin', 'true');
-                        closeAdminModal();
-                        showPage('admin');
-                        document.getElementById('logout-btn').style.display = 'flex';
-                    } else {
-                        // إذا سجل دخول بحساب آخر ليس له صلاحية
-                        firebase.auth().signOut();
-                        errorEl.innerText = currentLang === 'ar' ? "ليس لديك صلاحية الإدارة!" : "Du har inte administratörsbehörighet!";
-                        errorEl.style.display = 'block';
-                    }
-                })
-                .catch((error) => {
-                    errorEl.innerText = currentLang === 'ar' ? "البريد الإلكتروني أو كلمة المرور غير صحيحة!" : "Fel e-post eller lösenord!";
-                    errorEl.style.display = 'block';
-                })
-                .finally(() => {
-                    btn.innerText = currentLang === 'ar' ? "دخول" : "Logga in";
-                    btn.disabled = false;
-                });
-        }
-
-        function logoutAdmin() {
-            firebase.auth().signOut().then(() => {
-                localStorage.removeItem('isAdmin');
-                document.getElementById('logout-btn').style.display = 'none';
-                toggleSidebar();
-                showPage('main');
-                alert(currentLang === 'ar' ? "تم تسجيل الخروج" : "Utloggad");
-            });
-        }
-
-        // الحفاظ على حالة تسجيل الدخول عند تحديث الصفحة
-        firebase.auth().onAuthStateChanged((user) => {
-            if (user && user.uid === ADMIN_UID) {
-                localStorage.setItem('isAdmin', 'true');
-                document.getElementById('logout-btn').style.display = 'flex';
-            } else {
-                localStorage.removeItem('isAdmin');
-                document.getElementById('logout-btn').style.display = 'none';
-                if (document.getElementById('admin-panel').style.display === 'block') {
-                    showPage('main');
-                }
-            }
+        function closeConfirmModal() { document.getElementById('confirm-modal').style.display = 'none'; confirmActionCallback = null; }
+        document.getElementById('confirm-yes-btn').addEventListener('click', () => {
+            if(confirmActionCallback) confirmActionCallback();
+            closeConfirmModal();
         });
 
-        // --- 5. واجهة المستخدم والتنقل ---
+        // --- 5. Admin Auth ---
+        function openAdmin() { toggleSidebar(); if(localStorage.getItem('isAdmin') === 'true') showPage('admin'); else document.getElementById('admin-login-modal').style.display = 'flex'; }
+        function closeAdminModal() { document.getElementById('admin-login-modal').style.display = 'none'; document.getElementById('login-error').style.display = 'none'; document.getElementById('admin-email').value = ''; document.getElementById('admin-pass').value = ''; }
+        function verifyAdmin() {
+            const email = document.getElementById('admin-email').value; const pass = document.getElementById('admin-pass').value; const btn = document.getElementById('login-btn');
+            if(!email || !pass) return; btn.disabled = true; btn.innerText = "...";
+            firebase.auth().signInWithEmailAndPassword(email, pass).then((userCred) => {
+                if (userCred.user.uid === ADMIN_UID) { localStorage.setItem('isAdmin', 'true'); closeAdminModal(); showPage('admin'); document.getElementById('logout-btn').style.display = 'flex'; renderActivities(); renderGallery(); }
+                else { firebase.auth().signOut(); throw new Error("Unauthorized"); }
+            }).catch(() => { document.getElementById('login-error').style.display = 'block'; }).finally(() => { btn.disabled = false; btn.innerText = "دخول"; });
+        }
+        function logoutAdmin() { firebase.auth().signOut().then(() => { localStorage.removeItem('isAdmin'); document.getElementById('logout-btn').style.display = 'none'; toggleSidebar(); showPage('main'); renderActivities(); renderGallery(); }); }
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user && user.uid === ADMIN_UID) { localStorage.setItem('isAdmin', 'true'); document.getElementById('logout-btn').style.display = 'flex'; renderActivities(); renderGallery(); }
+            else { localStorage.removeItem('isAdmin'); document.getElementById('logout-btn').style.display = 'none'; if(document.getElementById('admin-panel').style.display === 'block') showPage('main'); renderActivities(); renderGallery(); }
+        });
+
+        // --- 6. UI & Translations ---
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function showPage(page) {
-            document.getElementById('main-content').style.display = page === 'main' ? 'block' : 'none';
-            document.getElementById('admin-panel').style.display = page === 'admin' ? 'block' : 'none';
-        }
-
+        function showPage(page) { document.getElementById('main-content').style.display = page === 'main' ? 'block' : 'none'; document.getElementById('admin-panel').style.display = page === 'admin' ? 'block' : 'none'; window.scrollTo(0,0); }
+        function toggleLanguage() { currentLang = currentLang === 'ar' ? 'sv' : 'ar'; localStorage.setItem('lang', currentLang); applyTranslations(); }
         function applyTranslations() {
-            const t = langData[currentLang];
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-
-            if (currentLang === 'sv') document.body.classList.add('lang-sv');
-            else document.body.classList.remove('lang-sv');
-
-            document.getElementById('nav-title').innerText = t.nav;
-            document.getElementById('menu-home').innerText = t.home;
-            document.getElementById('menu-prayers').innerText = t.prayers;
-            document.getElementById('menu-activities').innerText = t.activities;
-            document.getElementById('menu-gallery').innerText = t.gallery;
-            document.getElementById('menu-admin').innerText = t.admin;
-            document.getElementById('hero-title').innerText = t.heroTitle;
-            document.getElementById('hero-subtitle').innerText = t.heroSub;
-            document.getElementById('title-prayer').innerText = t.tPrayer;
-            document.getElementById('title-activities').innerText = t.tAct;
-            document.getElementById('title-donate').innerText = t.tDonate;
-            document.getElementById('text-swish').innerText = t.tSwish;
-            document.getElementById('btn-donate').innerHTML = t.btnDonate;
-            document.getElementById('title-gallery').innerText = t.tGallery;
-            document.getElementById('text-load-more').innerText = t.loadMore;
-            document.getElementById('title-contact').innerText = t.tContact;
-            document.getElementById('address-text').innerText = t.address;
-
-            document.getElementById('notif-title-text').innerText = t.notifTitle;
-            document.getElementById('menu-notif-btn').innerText = t.notifBtn;
-            document.getElementById('menu-logout').innerText = t.logout;
-
-            renderPrayers();
-            renderActivities();
-            renderGallery();
-            renderNotifications();
+            const t = langData[currentLang]; document.documentElement.lang = currentLang; document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            if (currentLang === 'sv') document.body.classList.add('lang-sv'); else document.body.classList.remove('lang-sv');
+            document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('text-load-more').innerText = t.loadMore; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle; document.getElementById('menu-notif-btn').innerText = t.notifBtn; document.getElementById('menu-logout').innerText = t.logout;
+            renderPrayers(); renderActivities(); renderGallery(); renderNotifications();
         }
 
-        function toggleLanguage() {
-            currentLang = currentLang === 'ar' ? 'sv' : 'ar';
-            localStorage.setItem('lang', currentLang);
-            applyTranslations();
-        }
-
-        // --- 6. الإشعارات والتذكير ---
-        function toggleNotifications() {
-            const box = document.getElementById('notif-box');
-            box.classList.toggle('show');
-            if(box.classList.contains('show')) {
-                document.getElementById('notif-dot').classList.remove('active');
-            }
-        }
-
+        function toggleNotifications() { const box = document.getElementById('notif-box'); box.classList.toggle('show'); if(box.classList.contains('show')) document.getElementById('notif-dot').classList.remove('active'); }
         function renderNotifications() {
             const body = document.getElementById('notif-body');
-            body.innerHTML = '';
-            if(siteData.notifications.length === 0) {
-                body.innerHTML = `<div class="notif-item">لا توجد إشعارات</div>`;
-                return;
-            }
-            siteData.notifications.forEach(n => {
-                const text = currentLang === 'ar' ? n.ar : n.sv;
-                const date = new Date(n.timestamp).toLocaleDateString();
-                body.innerHTML += `
-                    <div class="notif-item">
-                        <i class="fas fa-envelope" style="margin-top:4px; color: var(--primary);"></i>
-                        <div>
-                            <div>${text}</div>
-                            <div style="font-size:0.8rem; color:#888;">${date}</div>
-                        </div>
-                    </div>`;
+            let allNotifs =[];
+            siteData.notifications.forEach(n => { allNotifs.push({ type: 'admin', text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-envelope' }); });
+            localPrayerNotifs.forEach(n => { allNotifs.push({ type: 'prayer', text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-clock' }); });
+            allNotifs.sort((a, b) => b.time - a.time);
+            if(allNotifs.length === 0) { body.innerHTML = `<div class="notif-item">لا توجد إشعارات</div>`; return; }
+            let html = '';
+            allNotifs.forEach(n => {
+                const date = new Date(n.time).toLocaleString(); const bgClass = n.type === 'prayer' ? 'prayer-alert' : '';
+                html += `<div class="notif-item ${bgClass}"><i class="fas ${n.icon}" style="margin-top:4px; color: var(--primary);"></i><div><div>${n.text}</div><div style="font-size:0.8rem; color:#888;">${date}</div></div></div>`;
             });
-            document.getElementById('notif-dot').classList.add('active');
+            body.innerHTML = html; document.getElementById('notif-dot').classList.add('active');
+        }
+        function showToast(text) { const toastEl = document.getElementById('app-toast-box'); document.getElementById('toast-msg-text').innerText = text; toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 6000); }
+
+        function requestNotificationPermission() {
+            if (!("Notification" in window)) { alert("متصفحك لا يدعم الإشعارات"); return; }
+            Notification.requestPermission().then(permission => { if (permission === "granted") { alert(currentLang === 'ar' ? "تم تفعيل الإشعارات بنجاح" : "Notiser aktiverade"); toggleSidebar(); } });
+        }
+        function sendLocalPushNotification(title, body) {
+            if (Notification.permission === "granted") { navigator.serviceWorker.ready.then(reg => { reg.showNotification(title, { body: body, icon: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg", vibrate:[200, 100, 200] }); }); }
         }
 
-        function showToast(text) {
-            const toastEl = document.getElementById('app-toast-box');
-            document.getElementById('toast-msg-text').innerText = text;
-            toastEl.classList.remove('show');
-            void toastEl.offsetWidth; 
-            toastEl.classList.add('show');
-            setTimeout(() => { toastEl.classList.remove('show'); }, 6000);
-        }
-
-        // --- 7. المواقيت ---
-        function addMinutes(timeStr, minsToAdd) {
-            if (!timeStr) return "";
-            let [hours, minutes] = timeStr.split(':').map(Number);
-            let date = new Date();
-            date.setHours(hours, minutes + minsToAdd, 0, 0);
-            let h = date.getHours().toString().padStart(2, '0');
-            let m = date.getMinutes().toString().padStart(2, '0');
-            return `${h}:${m}`;
-        }
-
-        function displayCurrentDate() {
-            const today = new Date();
-            const dateString = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
-            document.getElementById('current-date-text').innerText = dateString;
-        }
-
+        // --- 7. Prayers ---
+        function addMinutes(timeStr, minsToAdd) { if (!timeStr) return ""; let [hours, minutes] = timeStr.split(':').map(Number); let date = new Date(); date.setHours(hours, minutes + minsToAdd, 0, 0); return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`; }
         function loadTodaysPrayers() {
-            const today = new Date();
-            const monthNames =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
-            const currentMonthName = monthNames[today.getMonth()];
-            const currentDay = today.getDate().toString();
-
-            let todayData = null;
-            if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months && yearlyPrayerData.months[currentMonthName]) {
-                todayData = yearlyPrayerData.months[currentMonthName].find(d => d.Dat === currentDay);
-            }
-
-            if (!todayData) {
-                todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
-            }
-
-            prayerTimes =[
-                { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) },
-                { id: 'shurooq', icon: 'fa-sun', time: todayData.Shuruk, type: 'no-prayer' },
-                { id: 'dhuhr', icon: 'fa-sun', adhan: todayData.Dhohr, iqama: addMinutes(todayData.Dhohr, 10) },
-                { id: 'asr', icon: 'fa-cloud-sun', adhan: todayData.Asr, iqama: addMinutes(todayData.Asr, 10) },
-                { id: 'maghrib', icon: 'fa-cloud-moon', adhan: todayData.Magrib, iqama: addMinutes(todayData.Magrib, 10) },
-                { id: 'isha', icon: 'fa-star-and-crescent', adhan: todayData.Isha, iqama: addMinutes(todayData.Isha, 10) }
-            ];
-            renderPrayers();
+            const today = new Date(); const monthNames =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+            let todayData = null; if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months[monthNames[today.getMonth()]]) todayData = yearlyPrayerData.months[monthNames[today.getMonth()]].find(d => d.Dat === today.getDate().toString());
+            if (!todayData) todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
+            prayerTimes =[ { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) }, { id: 'shurooq', icon: 'fa-sun', time: todayData.Shuruk, type: 'no-prayer' }, { id: 'dhuhr', icon: 'fa-sun', adhan: todayData.Dhohr, iqama: addMinutes(todayData.Dhohr, 10) }, { id: 'asr', icon: 'fa-cloud-sun', adhan: todayData.Asr, iqama: addMinutes(todayData.Asr, 10) }, { id: 'maghrib', icon: 'fa-cloud-moon', adhan: todayData.Magrib, iqama: addMinutes(todayData.Magrib, 10) }, { id: 'isha', icon: 'fa-star-and-crescent', adhan: todayData.Isha, iqama: addMinutes(todayData.Isha, 10) } ];
+            renderPrayers(); document.getElementById('current-date-text').innerText = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
         }
-
-        let nextPrayerElementId = null;
-
         function renderPrayers() {
-            if (prayerTimes.length === 0) return;
-            const container = document.getElementById('prayer-container');
-            const t = langData[currentLang];
-            container.innerHTML = '';
-
-            // تصفير التمييز ليتم إضافته فوراً في الدالة updateTimer
-            nextPrayerElementId = null; 
-
-            prayerTimes.forEach(p => {
-                let html = `<div class="prayer-card" id="card-${p.id}"><i class="fas ${p.icon} prayer-icon"></i><div class="prayer-name">${t.prayerNames[p.id]}</div>`;
-                if(p.type === 'no-prayer') {
-                    html += `<div class="prayer-time">${p.time} <br> <span style="font-size:0.8rem">(${t.pLabels.noP})</span></div>`;
-                } else {
-                    html += `<div class="prayer-time">${t.pLabels.adhan} <strong>${p.adhan}</strong><br>${t.pLabels.iqama} <strong>${p.iqama}</strong></div>`;
-                }
-                html += `</div>`;
-                container.innerHTML += html;
-            });
-
-            // استدعاء التحديث فوراً ليعود اللون الأخضر بدون أي تأخير عند تغيير اللغة
-            updateTimer(); 
+            const t = langData[currentLang]; let html = '';
+            prayerTimes.forEach(p => { html += `<div class="prayer-card" id="card-${p.id}"><i class="fas ${p.icon} prayer-icon"></i><div class="prayer-name">${t.prayerNames[p.id]}</div>`; if(p.type === 'no-prayer') html += `<div class="prayer-time">${p.time} <br> <span style="font-size:0.8rem">(${t.pLabels.noP})</span></div></div>`; else html += `<div class="prayer-time">${t.pLabels.adhan} <strong>${p.adhan}</strong><br>${t.pLabels.iqama} <strong>${p.iqama}</strong></div></div>`; });
+            document.getElementById('prayer-container').innerHTML = html; updateTimer();
         }
-
+        function savePrayerNotificationLocal(pId) {
+            const pNameAr = langData['ar'].prayerNames[pId]; const pNameSv = langData['sv'].prayerNames[pId]; const textAr = `تنبيه: اقترب موعد ${pNameAr}`; const textSv = `Påminnelse: Det är snart dags för ${pNameSv}`;
+            localPrayerNotifs.unshift({ ar: textAr, sv: textSv, timestamp: Date.now() }); if(localPrayerNotifs.length > 10) localPrayerNotifs.pop(); localStorage.setItem('localPrayerNotifs', JSON.stringify(localPrayerNotifs)); renderNotifications();
+        }
         function updateTimer() {
-            if (prayerTimes.length === 0) return;
-            const now = new Date();
-            const activePrayers = prayerTimes.filter(p => p.type !== 'no-prayer');
-            let targetDate = null; let timerTitle = ""; let currentActiveId = null; let pName = "";
-            const t = langData[currentLang];
-
-            for (let i = 0; i < activePrayers.length; i++) {
-                let p = activePrayers[i];
-                let[aH, aM] = p.adhan.split(':').map(Number);
-                let adhanDate = new Date(); adhanDate.setHours(aH, aM, 0, 0);
-
-                let[iH, iM] = p.iqama.split(':').map(Number);
-                let iqamaDate = new Date(); iqamaDate.setHours(iH, iM, 0, 0);
-
-                if (now < adhanDate) {
-                    targetDate = adhanDate; timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; currentActiveId = p.id; pName = t.prayerNames[p.id]; break;
-                } else if (now < iqamaDate) {
-                    targetDate = iqamaDate; timerTitle = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; currentActiveId = p.id; pName = t.prayerNames[p.id]; break;
-                }
+            if (prayerTimes.length === 0) return; const now = new Date(); const t = langData[currentLang]; let target = null; let title = ""; let cId = null; let actualPrayerName = "";
+            for (let p of prayerTimes.filter(p => p.type !== 'no-prayer')) {
+                let aDate = new Date(); aDate.setHours(...p.adhan.split(':'), 0, 0); let iDate = new Date(); iDate.setHours(...p.iqama.split(':'), 0, 0);
+                if (now < aDate) { target = aDate; title = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; cId = p.id; actualPrayerName = t.prayerNames[p.id]; break; } 
+                else if (now < iDate) { target = iDate; title = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; cId = p.id; actualPrayerName = t.prayerNames[p.id]; break; }
             }
+            if (!target) { let f = prayerTimes[0]; target = new Date(); target.setDate(target.getDate() + 1); target.setHours(...f.adhan.split(':'), 0, 0); title = `${t.timerTexts.adhan} ${t.prayerNames[f.id]}`; cId = f.id; actualPrayerName = t.prayerNames[f.id]; }
+            let diff = target - now; let h = Math.floor((diff % 86400000) / 3600000); let m = Math.floor((diff % 3600000) / 60000); let s = Math.floor((diff % 60000) / 1000);
+            document.getElementById('timer-title').innerText = title; document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
+            if (h === 0 && m === 15 && s === 0 && !notifiedPrayers[cId]) { notifiedPrayers[cId] = true; sendLocalPushNotification(currentLang === 'ar' ? "تذكير بالصلاة" : "Bönpåminnelse", `${t.prayerAlertText} ${actualPrayerName}`); savePrayerNotificationLocal(cId); }
+        } setInterval(updateTimer, 1000);
 
-            if (!targetDate) {
-                let fajr = activePrayers[0];
-                let[aH, aM] = fajr.adhan.split(':').map(Number);
-                targetDate = new Date(); targetDate.setDate(targetDate.getDate() + 1); targetDate.setHours(aH, aM, 0, 0);
-                timerTitle = `${t.timerTexts.adhan} ${t.prayerNames[fajr.id]}`; currentActiveId = fajr.id; pName = t.prayerNames[fajr.id];
-            }
-
-            let diff = targetDate - now;
-            let h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            let m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            let s = Math.floor((diff % (1000 * 60)) / 1000);
-
-            document.getElementById('timer-title').innerText = timerTitle;
-            document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-
-            if (nextPrayerElementId !== `card-${currentActiveId}`) {
-                document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer'));
-                let targetCard = document.getElementById(`card-${currentActiveId}`);
-                if(targetCard) targetCard.classList.add('next-prayer');
-                nextPrayerElementId = `card-${currentActiveId}`;
-            }
-
-            if (h === 0 && m === 15 && s === 0 && !notifiedPrayers[currentActiveId]) {
-                notifiedPrayers[currentActiveId] = true;
-                const title = currentLang === 'ar' ? "تذكير بالصلاة" : "Bönpåminnelse";
-                const body = currentLang === 'ar' ? `اقترب موعد ${timerTitle} (باقي 15 دقيقة)` : `Det är 15 minuter kvar till ${pName}.`;
-                sendLocalPushNotification(title, body);
-            }
-        }
-        setInterval(updateTimer, 1000);
-
-        // --- 8. عرض الأنشطة والمعرض ---
+        // --- 8. Render Activities & Gallery ---
         function renderActivities() {
-            const container = document.getElementById('activities-container');
-            container.innerHTML = '';
-
-            // الأنشطة الأساسية التجريبية
-            const defaultActivities =[
-                {
-                    titleAr: "دروس قرآن للأطفال",
-                    titleSv: "Koranlektioner för barn",
-                    descAr: "تقام أسبوعياً لتعليم التلاوة والتجويد.",
-                    descSv: "Hålls varje vecka för att lära ut recitation.",
-                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774920287/m0coq025ne7neghwqtqa.jpg"
-                },
-                {
-                    titleAr: "نشاط كرة قدم للأطفال",
-                    titleSv: "Fotboll för barn",
-                    descAr: "الأولى 15:30 - 17:00 صف أول - الرابع كرة قدم Central Skola\nالثانية 17:00 - 18:30 صف الخامس - التاسع كرة قدم Central",
-                    descSv: "Första 15:30 - 17:00 årskurs 1 till 4 Fotboll Central Skola\nAndra 17:00 - 18:30 årskurs 5 till 9 Fotboll Central",
-                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774962742/srkzeefa60luks6ord99.jpg"
-                },
-                {
-                    titleAr: "نشاط كرة طائرة للكبار",
-                    titleSv: "Handboll för vuxna",
-                    descAr: "Skola\nالثالثة 19:00 - 20:30 للرجال كرة طائرة أو ريشة أو نشاط آخر Central Skola\nالرابعة *الأحد* 17:45 - 20:00 من صف الثانوية فما فوق صالة Ugglehallen",
-                    descSv: "Skola\nTredje 19:00 - 20:30 för män Volleyboll eller Badminton eller annan aktivitet Central Skola\nFjärde *Söndag* 17:45 - 20:00 för gymnasiet och uppåt Ugglehallen",
-                    img: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963280/hzqsrnz0hrtbsplcpk2w.jpg"
-                }
-            ];
-
-            // دمج الأنشطة القادمة من Firebase مع الأنشطة الأساسية
-            const dataToRender = [...siteData.activities, ...defaultActivities];
-
-            dataToRender.forEach(act => {
-                const displayTitle = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
-                const displayDesc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
-                container.innerHTML += `<div class="activity-card"><img src="${act.img}" class="activity-img"><div class="activity-content"><h3 class="activity-title">${displayTitle}</h3><p class="activity-desc">${displayDesc}</p></div></div>`;
+            const container = document.getElementById('activities-container'); const msg = document.getElementById('no-activities-msg'); const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if(siteData.activities.length === 0) { container.innerHTML = ''; msg.style.display = 'block'; return; } else { msg.style.display = 'none'; }
+            let html = '';
+            siteData.activities.forEach(act => {
+                const title = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
+                const desc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
+                let adminBtns = '';
+                if(isAdmin) adminBtns = `<div class="admin-controls"><button class="btn-edit" onclick="openEditActivityModal('${act.id}')" title="تعديل"><i class="fas fa-pen"></i></button><button class="btn-delete" onclick="deleteActivity('${act.id}')" title="حذف"><i class="fas fa-trash"></i></button></div>`;
+                html += `<div class="activity-card">${adminBtns}<img src="${act.img}" loading="lazy" class="activity-img"><div class="activity-content"><h3 class="activity-title">${title}</h3><p class="activity-desc">${desc}</p></div></div>`;
             });
+            container.innerHTML = html;
         }
 
         function renderGallery() {
-            const container = document.getElementById('gallery-container');
-            const btnLoadMore = document.getElementById('btn-load-more');
-            container.innerHTML = '';
-
-            // الصور الأساسية التجريبية
-            const defaultGallery =[
-                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774963292/qov2cetpco2z1xmb736h.jpg", captionAr: "صلاة الجمعة", captionSv: "Fredagsbön" },
-                { url: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_400,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg", captionAr: "المسجد من الداخل", captionSv: "Moskén från insidan" }
-            ];
-
-            // دمج الصور القادمة من Firebase مع الصور الأساسية
-            const dataToRender =[...siteData.gallery, ...defaultGallery];
-            const itemsToShow = dataToRender.slice(0, visibleGalleryCount);
-
+            const container = document.getElementById('gallery-container'); const msg = document.getElementById('no-gallery-msg'); const isAdmin = localStorage.getItem('isAdmin') === 'true';
+            if(siteData.gallery.length === 0) { container.innerHTML = ''; msg.style.display = 'block'; document.getElementById('btn-load-more').style.display='none'; return; } else { msg.style.display = 'none'; }
+            const itemsToShow = siteData.gallery.slice(0, visibleGalleryCount); let html = '';
             itemsToShow.forEach(img => {
-                const displayCaption = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
-                container.innerHTML += `<div class="gallery-item" onclick="window.open('${img.url.replace('w_400,', '')}','_blank')"><img src="${img.url}">${displayCaption ? `<div class="gallery-caption">${displayCaption}</div>` : ''}</div>`;
+                const cap = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
+                let adminBtns = '';
+                if(isAdmin) adminBtns = `<div class="admin-controls"><button class="btn-edit" onclick="openEditGalleryModal('${img.id}', event)" title="تعديل"><i class="fas fa-pen"></i></button><button class="btn-delete" onclick="deleteGallery('${img.id}', event)" title="حذف"><i class="fas fa-trash"></i></button></div>`;
+                html += `<div class="gallery-item" onclick="if(event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') window.open('${img.url.replace('w_400,', '')}','_blank')">${adminBtns}<img src="${img.url}" loading="lazy">${cap ? `<div class="gallery-caption">${cap}</div>` : ''}</div>`;
             });
-
-            if (dataToRender.length > visibleGalleryCount) btnLoadMore.style.display = 'inline-flex';
-            else btnLoadMore.style.display = 'none';
+            container.innerHTML = html; document.getElementById('btn-load-more').style.display = siteData.gallery.length > visibleGalleryCount ? 'inline-flex' : 'none';
         }
+        function loadMoreGallery() { visibleGalleryCount += 6; renderGallery(); }
 
-        function loadMoreGallery() { visibleGalleryCount += 5; renderGallery(); }
-
-        // --- 9. دوال الإدارة ---
+        // --- 9. Admin In-Place Editing & CRUD ---
         async function uploadToCloudinary(file) {
             const fd = new FormData(); fd.append("file", file); fd.append("upload_preset", "souq_upload");
             const res = await fetch(`https://api.cloudinary.com/v1_1/db9h7zm1h/image/upload`, { method: "POST", body: fd });
             const data = await res.json(); return data.secure_url.replace('/upload/', '/upload/w_400,q_auto,f_auto/');
         }
 
-        async function uploadGalleryImages() {
-            const files = document.getElementById('gallery-upload').files;
-            if(files.length === 0) return;
-            const statusEl = document.getElementById('gallery-status');
-            statusEl.style.color = "blue";
-            statusEl.innerText = "جاري الرفع...";
-
-            const capAr = document.getElementById('gallery-caption-ar').value;
-            const capSv = document.getElementById('gallery-caption-sv').value || capAr;
-
-            try {
-                for(let f of files) {
-                    const url = await uploadToCloudinary(f);
-                    await db.collection("gallery").add({ url, captionAr: capAr, captionSv: capSv, timestamp: Date.now() });
-                }
-                statusEl.style.color = "green";
-                statusEl.innerText = "تم الرفع بنجاح ✔️";
+        // --- Add New Actions (Admin Panel) ---
+        async function addNewActivity() {
+            const titleAr = document.getElementById('act-title-ar').value; const titleSv = document.getElementById('act-title-sv').value || titleAr;
+            const descAr = document.getElementById('act-desc-ar').value; const descSv = document.getElementById('act-desc-sv').value || descAr;
+            const file = document.getElementById('act-img').files[0];
+            if(!titleAr) return; const statusEl = document.getElementById('act-status'); statusEl.style.color = "blue"; statusEl.innerText = "جاري الحفظ...";
+            let data = { titleAr, titleSv, descAr, descSv, timestamp: Date.now() };
+            if(file) { try { data.img = await uploadToCloudinary(file); } catch(e){} } else { data.img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400"; }
+            db.collection("activities").add(data).then(() => {
+                statusEl.style.color = "green"; statusEl.innerText = "تم الحفظ بنجاح ✔️";
+                document.getElementById('act-title-ar').value=''; document.getElementById('act-title-sv').value=''; document.getElementById('act-desc-ar').value=''; document.getElementById('act-desc-sv').value=''; document.getElementById('act-img').value='';
                 setTimeout(() => statusEl.innerText = "", 3000);
-            } catch(error) {
-                statusEl.style.color = "red";
-                statusEl.innerText = "خطأ في الصلاحيات! يرجى تعديل Rules في Firebase.";
-            }
+            });
         }
 
-        async function addActivity() {
-            const titleAr = document.getElementById('act-title-ar').value;
-            const titleSv = document.getElementById('act-title-sv').value || titleAr;
-            const descAr = document.getElementById('act-desc-ar').value;
-            const descSv = document.getElementById('act-desc-sv').value || descAr;
-            const file = document.getElementById('act-img').files[0];
-
-            if(!titleAr) return;
-            const statusEl = document.getElementById('act-status');
-            statusEl.style.color = "blue";
-            statusEl.innerText = "جاري الحفظ...";
-
-            let img = "https://images.pexels.com/photos/8166072/pexels-photo-8166072.jpeg?auto=compress&cs=tinysrgb&w=400";
-            if(file) { try { img = await uploadToCloudinary(file); } catch(e){} }
-
-            db.collection("activities").add({ titleAr, titleSv, descAr, descSv, img, timestamp: Date.now() })
-            .then(() => {
-                statusEl.style.color = "green";
-                statusEl.innerText = "تمت الإضافة بنجاح ✔️";
-                document.getElementById('act-title-ar').value = '';
-                document.getElementById('act-title-sv').value = '';
-                document.getElementById('act-desc-ar').value = '';
-                document.getElementById('act-desc-sv').value = '';
+        async function uploadGalleryImages() {
+            const files = document.getElementById('gallery-upload').files; if(files.length === 0) return;
+            const statusEl = document.getElementById('gallery-status'); statusEl.style.color = "blue"; statusEl.innerText = "جاري الرفع...";
+            const capAr = document.getElementById('gallery-caption-ar').value; const capSv = document.getElementById('gallery-caption-sv').value || capAr;
+            try {
+                for(let f of files) { const url = await uploadToCloudinary(f); await db.collection("gallery").add({ url, captionAr: capAr, captionSv: capSv, timestamp: Date.now() }); }
+                statusEl.style.color = "green"; statusEl.innerText = "تم الرفع بنجاح ✔️";
+                document.getElementById('gallery-upload').value = ''; document.getElementById('gallery-caption-ar').value = ''; document.getElementById('gallery-caption-sv').value = '';
                 setTimeout(() => statusEl.innerText = "", 3000);
-            })
-            .catch(error => {
-                statusEl.style.color = "red";
-                statusEl.innerText = "خطأ في الصلاحيات! يرجى تعديل Rules في Firebase.";
-            });
+            } catch(e) { statusEl.style.color = "red"; statusEl.innerText = "حدث خطأ أثناء الرفع!"; }
         }
 
         function sendToast() {
-            const ar = document.getElementById('toast-text-ar').value;
-            const sv = document.getElementById('toast-text-sv').value || ar;
-            if(!ar) return;
-
-            const statusEl = document.getElementById('toast-status');
-            statusEl.style.color = "blue";
-            statusEl.innerText = "جاري الإرسال...";
-
-            db.collection("notifications").add({ ar, sv, timestamp: Date.now() })
-            .then(() => {
-                statusEl.style.color = "green";
-                statusEl.innerText = "تم الإرسال وسيظهر للمستخدمين ✔️";
-                document.getElementById('toast-text-ar').value = '';
-                document.getElementById('toast-text-sv').value = '';
-                setTimeout(() => { statusEl.innerText = ""; }, 3000);
-            })
-            .catch(error => {
-                statusEl.style.color = "red";
-                statusEl.innerText = "خطأ في الصلاحيات! يرجى تعديل Rules في Firebase.";
+            const ar = document.getElementById('toast-text-ar').value; const sv = document.getElementById('toast-text-sv').value || ar;
+            if(!ar) return; const statusEl = document.getElementById('toast-status'); statusEl.style.color = "blue"; statusEl.innerText = "جاري الإرسال...";
+            db.collection("notifications").add({ ar, sv, timestamp: Date.now() }).then(() => {
+                statusEl.style.color = "green"; statusEl.innerText = "تم الإرسال ✔️"; document.getElementById('toast-text-ar').value = ''; document.getElementById('toast-text-sv').value = ''; setTimeout(() => { statusEl.innerText = ""; }, 3000);
             });
         }
 
-        // --- 10. إشعارات المتصفح الخارجية (FCM) ---
-        function requestNotificationPermission() {
-            if (!("Notification" in window)) {
-                alert("متصفحك لا يدعم الإشعارات"); return;
-            }
-            Notification.requestPermission().then(permission => {
-                if (permission === "granted") {
-                    alert(currentLang === 'ar' ? "تم تفعيل الإشعارات بنجاح" : "Notiser aktiverade");
-                    toggleSidebar();
-                    if(messaging) {
-                        messaging.getToken({ vapidKey: "BOX0a8Dg181ZMjLic3risMEkJZio0hNHGIABg1Mym1qaSorpI6NcJ3QQ79WXg0qi6R1n4SXo-aib3WUkNcIII6E" })
-                        .then((currentToken) => {
-                            if (currentToken) console.log("FCM Token:", currentToken);
-                        }).catch((err) => console.log('Error retrieving token', err));
-                    }
-                }
-            });
+        // --- In-Place Edit Actions (Modals) ---
+        function deleteActivity(id) { showConfirmModal(() => { db.collection("activities").doc(id).delete(); showToast("تم الحذف بنجاح"); }); }
+        function deleteGallery(id, event) { event.stopPropagation(); showConfirmModal(() => { db.collection("gallery").doc(id).delete(); showToast("تم الحذف بنجاح"); }); }
+
+        function openEditActivityModal(id) {
+            const act = siteData.activities.find(a => a.id === id); if(!act) return;
+            document.getElementById('modal-edit-act-id').value = id;
+            document.getElementById('modal-act-title-ar').value = act.titleAr || '';
+            document.getElementById('modal-act-title-sv').value = act.titleSv || '';
+            document.getElementById('modal-act-desc-ar').value = act.descAr || '';
+            document.getElementById('modal-act-desc-sv').value = act.descSv || '';
+            document.getElementById('modal-act-img').value = ''; 
+            document.getElementById('edit-activity-modal').style.display = 'flex';
+        }
+        function closeEditActivityModal() { document.getElementById('edit-activity-modal').style.display = 'none'; }
+        
+        async function saveEditedActivity() {
+            const id = document.getElementById('modal-edit-act-id').value;
+            const titleAr = document.getElementById('modal-act-title-ar').value; const titleSv = document.getElementById('modal-act-title-sv').value || titleAr;
+            const descAr = document.getElementById('modal-act-desc-ar').value; const descSv = document.getElementById('modal-act-desc-sv').value || descAr;
+            const file = document.getElementById('modal-act-img').files[0];
+            const btn = document.getElementById('modal-btn-save-act');
+
+            if(!titleAr) return; btn.disabled = true; btn.innerText = "جاري الحفظ...";
+            let updateData = { titleAr, titleSv, descAr, descSv };
+            if(file) { try { updateData.img = await uploadToCloudinary(file); } catch(e){} }
+            
+            db.collection("activities").doc(id).update(updateData).then(() => {
+                showToast("تم تحديث النشاط بنجاح ✔️");
+                closeEditActivityModal();
+            }).finally(() => { btn.disabled = false; btn.innerText = "حفظ التعديلات"; });
         }
 
-        function sendLocalPushNotification(title, body) {
-            if (Notification.permission === "granted") {
-                navigator.serviceWorker.ready.then(registration => {
-                    registration.showNotification(title, {
-                        body: body,
-                        icon: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg",
-                        vibrate:[200, 100, 200]
-                    });
-                });
-            }
+        function openEditGalleryModal(id, event) {
+            event.stopPropagation();
+            const img = siteData.gallery.find(g => g.id === id); if(!img) return;
+            document.getElementById('modal-edit-gal-id').value = id;
+            document.getElementById('modal-gal-url').value = img.url || '';
+            document.getElementById('modal-gal-cap-ar').value = img.captionAr || '';
+            document.getElementById('modal-gal-cap-sv').value = img.captionSv || '';
+            document.getElementById('edit-gallery-modal').style.display = 'flex';
+        }
+        function closeEditGalleryModal() { document.getElementById('edit-gallery-modal').style.display = 'none'; }
+
+        function saveEditedGallery() {
+            const id = document.getElementById('modal-edit-gal-id').value;
+            const url = document.getElementById('modal-gal-url').value;
+            const capAr = document.getElementById('modal-gal-cap-ar').value;
+            const capSv = document.getElementById('modal-gal-cap-sv').value || capAr;
+            const btn = document.getElementById('modal-btn-save-gal');
+            
+            if(!url) return; btn.disabled = true; btn.innerText = "جاري الحفظ...";
+            db.collection("gallery").doc(id).update({ url: url, captionAr: capAr, captionSv: capSv }).then(() => {
+                showToast("تم تحديث الصورة بنجاح ✔️");
+                closeEditGalleryModal();
+            }).finally(() => { btn.disabled = false; btn.innerText = "حفظ التعديلات"; });
         }
 
-        if(messaging) {
-            messaging.onMessage((payload) => {
-                showToast(payload.notification.body);
-            });
-        }
-
-        const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.1 });
-
+        const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
         window.onload = () => {
             if(localStorage.getItem('isAdmin') === 'true') document.getElementById('logout-btn').style.display = 'flex';
-            if('serviceWorker' in navigator) navigator.serviceWorker.register('firebase-messaging-sw.js');
-
-            displayCurrentDate(); 
-            loadTodaysPrayers();  
-            applyTranslations(); 
-            listenToFirebase();
+            if('serviceWorker' in navigator) { navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.log('SW setup failed')); }
+            loadTodaysPrayers(); applyTranslations(); listenToFirebase();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
     </script>
