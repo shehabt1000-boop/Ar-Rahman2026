@@ -254,14 +254,14 @@
         /* Analog Clock Styles */
         .clock-section {
             display: flex; justify-content: center; align-items: center;
-            margin-top: -60px; /* رفع الساعة فوق الغلاف */
+            margin-top: -30px; /* تم خفض الساعة قليلاً */
             position: relative; z-index: 10; padding: 0 20px;
-            margin-bottom: 30px;
+            margin-bottom: 15px; /* تم تقليل المسافة بين الساعة والمواقيت */
         }
         .lux-clock-wrapper {
             background: linear-gradient(145deg, #0a3622, #052014);
             border: 2px solid var(--secondary);
-            border-radius: 20px; padding: 20px;
+            border-radius: 20px; padding: 15px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.3);
             text-align: center; color: var(--white);
             backdrop-filter: blur(10px);
@@ -269,11 +269,11 @@
         }
         
         .analog-clock {
-            width: 200px; 
-            height: 200px;
+            width: 160px; /* تم تصغير حجم الساعة */
+            height: 160px; /* تم تصغير حجم الساعة */
             border: 4px solid var(--secondary);
             border-radius: 50%;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             position: relative;
             background: radial-gradient(circle, #0a3622 0%, #03120b 100%);
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3);
@@ -285,36 +285,35 @@
         /* علامات الساعات والدقائق */
         .tick {
             position: absolute;
-            top: 4px; /* المسافة من الإطار */
+            top: 3px;
             left: 50%;
             width: 2px;
-            height: 6px;
-            background: rgba(212, 175, 55, 0.4); /* لون ذهبي خفيف للدقائق */
-            transform-origin: 50% 92px; /* مركز الدوران بدقة */
+            height: 5px;
+            background: rgba(212, 175, 55, 0.4);
+            transform-origin: 50% 77px; /* مركز الدوران تم تعديله ليتناسب مع 160px */
             margin-left: -1px;
             z-index: 1;
         }
         .tick.hour-tick {
-            width: 4px;
-            height: 12px;
-            background: var(--secondary); /* لون ذهبي بارز للساعات */
-            margin-left: -2px;
+            width: 3px;
+            height: 10px;
+            background: var(--secondary);
+            margin-left: -1.5px;
         }
 
         .clock-number {
             position: absolute;
             font-family: 'Amiri', serif;
-            font-size: 1.2rem;
+            font-size: 1.1rem; /* تم تصغير الخط */
             font-weight: bold;
             color: var(--secondary);
             transform: translate(-50%, -50%);
             z-index: 2;
         }
-        /* إزاحة الأرقام للداخل قليلاً حتى لا تتداخل مع علامات الساعات */
-        .num-12 { top: 24px; left: 50%; }
-        .num-3 { top: 50%; left: calc(100% - 24px); }
-        .num-6 { top: calc(100% - 24px); left: 50%; }
-        .num-9 { top: 50%; left: 24px; }
+        .num-12 { top: 20px; left: 50%; }
+        .num-3 { top: 50%; left: calc(100% - 20px); }
+        .num-6 { top: calc(100% - 20px); left: 50%; }
+        .num-9 { top: 50%; left: 20px; }
 
         .hand {
             position: absolute;
@@ -324,31 +323,31 @@
             z-index: 3;
         }
         .hour-hand {
-            width: 6px; height: 50px;
+            width: 5px; height: 40px; /* تم تصغير العقرب */
             background: var(--white);
-            left: calc(50% - 3px);
+            left: calc(50% - 2.5px);
         }
         .minute-hand {
-            width: 4px; height: 70px;
+            width: 4px; height: 55px; /* تم تصغير العقرب */
             background: var(--secondary);
             left: calc(50% - 2px);
         }
         .second-hand {
-            width: 2px; height: 85px;
+            width: 2px; height: 65px; /* تم تصغير العقرب */
             background: #ff3b30;
             left: calc(50% - 1px);
             z-index: 4;
         }
         .center-dot {
             position: absolute; top: 50%; left: 50%;
-            width: 12px; height: 12px; background: var(--secondary);
+            width: 10px; height: 10px; background: var(--secondary);
             border-radius: 50%; transform: translate(-50%, -50%); z-index: 5;
             box-shadow: 0 0 5px rgba(0,0,0,0.5);
         }
 
         .lux-date {
-            font-size: 1.1rem; color: #e0e0e0; font-family: 'Cairo', sans-serif;
-            font-weight: 600; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 10px;
+            font-size: 1rem; color: #e0e0e0; font-family: 'Cairo', sans-serif;
+            font-weight: 600; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 10px;
         }
         body.lang-sv .lux-date { font-family: 'Segoe UI', Tahoma, sans-serif; }
     </style>
@@ -654,7 +653,7 @@
             },
             sv: { 
                 nav: "Moské Ar-Rahman", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.", btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
-                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnDisable: "Inaktivera Notiser", logout: "Logga ut Admin", edit: "Redigera", delete: "Radera", confirmDelTitle: "Bekräfta radering", confirmDelMsg: "Är du säker på att du vill radera detta objekt permanent?",
+                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnDisable: "Inaktivera Notiser", logout: "Logga ut Admin", edit: "Redigera", delete: "Radera", confirmDelTitle: "Bekräfta radering", confirmDelMsg: "Äر du säker på att du vill radera detta objekt permanent?",
                 installTitle: "Moskéns App", installDesc: "Installera appen på din telefon för snabb åtkomst.", installBtn: "Installera"
             }
         };
@@ -665,9 +664,9 @@
             for (let i = 0; i < 60; i++) {
                 const tick = document.createElement('div');
                 if (i % 5 === 0) {
-                    tick.className = 'tick hour-tick'; // علامة ساعة (سميكة)
+                    tick.className = 'tick hour-tick'; 
                 } else {
-                    tick.className = 'tick'; // علامة دقيقة (رفيعة)
+                    tick.className = 'tick'; 
                 }
                 tick.style.transform = `rotate(${i * 6}deg)`;
                 face.appendChild(tick);
@@ -805,6 +804,7 @@
         }
 
         function toggleNotifications() { const box = document.getElementById('notif-box'); box.classList.toggle('show'); if(box.classList.contains('show')) document.getElementById('notif-dot').classList.remove('active'); }
+        
         function renderNotifications() {
             const body = document.getElementById('notif-body'); let allNotifs =[];
             siteData.notifications.forEach(n => { allNotifs.push({ type: 'admin', text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-envelope' }); });
@@ -834,24 +834,71 @@
 
         // --- 7. Prayers ---
         function addMinutes(timeStr, minsToAdd) { if (!timeStr) return ""; let[hours, minutes] = timeStr.split(':').map(Number); let date = new Date(); date.setHours(hours, minutes + minsToAdd, 0, 0); return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`; }
+        
         function loadTodaysPrayers() {
             const today = new Date(); const monthNames =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
             let todayData = null; if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months[monthNames[today.getMonth()]]) todayData = yearlyPrayerData.months[monthNames[today.getMonth()]].find(d => d.Dat === today.getDate().toString());
             if (!todayData) todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
             prayerTimes =[ { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) }, { id: 'shurooq', icon: 'fa-sun', time: todayData.Shuruk, type: 'no-prayer' }, { id: 'dhuhr', icon: 'fa-sun', adhan: todayData.Dhohr, iqama: addMinutes(todayData.Dhohr, 10) }, { id: 'asr', icon: 'fa-cloud-sun', adhan: todayData.Asr, iqama: addMinutes(todayData.Asr, 10) }, { id: 'maghrib', icon: 'fa-cloud-moon', adhan: todayData.Magrib, iqama: addMinutes(todayData.Magrib, 10) }, { id: 'isha', icon: 'fa-star-and-crescent', adhan: todayData.Isha, iqama: addMinutes(todayData.Isha, 10) } ];
             renderPrayers(); document.getElementById('current-date-text').innerText = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+            syncMissedPrayerNotifications(); // فحص الإشعارات الفائتة فور التحميل
         }
+
         function renderPrayers() {
             const t = langData[currentLang]; let html = '';
             prayerTimes.forEach(p => { html += `<div class="prayer-card" id="card-${p.id}"><i class="fas ${p.icon} prayer-icon"></i><div class="prayer-name">${t.prayerNames[p.id]}</div>`; if(p.type === 'no-prayer') html += `<div class="prayer-time">${p.time} <br> <span style="font-size:0.8rem">(${t.pLabels.noP})</span></div></div>`; else html += `<div class="prayer-time">${t.pLabels.adhan} <strong>${p.adhan}</strong><br>${t.pLabels.iqama} <strong>${p.iqama}</strong></div></div>`; });
             document.getElementById('prayer-container').innerHTML = html; updateTimer();
         }
-        function savePrayerNotificationLocal(pId, type) {
-            const pNameAr = langData['ar'].prayerNames[pId]; const pNameSv = langData['sv'].prayerNames[pId]; 
-            const textAr = type === 'adhan' ? `تذكير: باقي 15 دقيقة على أذان ${pNameAr}` : `تذكير: باقي 5 دقائق على إقامة ${pNameAr}`;
-            const textSv = type === 'adhan' ? `Påminnelse: 15 min till Adhan för ${pNameSv}` : `Påminnelse: 5 min till Iqama för ${pNameSv}`;
-            localPrayerNotifs.unshift({ ar: textAr, sv: textSv, timestamp: Date.now() }); if(localPrayerNotifs.length > 15) localPrayerNotifs.pop(); localStorage.setItem('localPrayerNotifs', JSON.stringify(localPrayerNotifs)); renderNotifications();
+
+        // --- نظام فحص الإشعارات الفائتة وتسجيلها في الذاكرة ---
+        function syncMissedPrayerNotifications() {
+            if (!prayerTimes || prayerTimes.length === 0) return;
+            const now = new Date();
+            const todayStr = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+            let updated = false;
+
+            prayerTimes.forEach(p => {
+                if (p.type === 'no-prayer') return;
+
+                // موعد الأذان (قبل 15 دقيقة)
+                let adhanDate = new Date();
+                adhanDate.setHours(...p.adhan.split(':'), 0, 0);
+                let milestoneAdhan = new Date(adhanDate.getTime() - 15 * 60000);
+
+                // موعد الإقامة (قبل 5 دقائق)
+                let iqamaDate = new Date();
+                iqamaDate.setHours(...p.iqama.split(':'), 0, 0);
+                let milestoneIqama = new Date(iqamaDate.getTime() - 5 * 60000);
+
+                const idAdhan = `${p.id}_adhan_${todayStr}`;
+                const idIqama = `${p.id}_iqama_${todayStr}`;
+
+                // إذا مر وقت الأذان ولم يسجل بعد
+                if (now > milestoneAdhan && !localPrayerNotifs.some(n => n.id === idAdhan)) {
+                    const tAr = `تذكير: باقي 15 دقيقة على أذان ${langData['ar'].prayerNames[p.id]}`;
+                    const tSv = `Påminnelse: 15 min till Adhan för ${langData['sv'].prayerNames[p.id]}`;
+                    localPrayerNotifs.push({ id: idAdhan, ar: tAr, sv: tSv, time: milestoneAdhan.getTime(), type: 'prayer' });
+                    updated = true;
+                }
+
+                // إذا مر وقت الإقامة ولم يسجل بعد
+                if (now > milestoneIqama && !localPrayerNotifs.some(n => n.id === idIqama)) {
+                    const tAr = `تذكير: باقي 5 دقائق على إقامة ${langData['ar'].prayerNames[p.id]}`;
+                    const tSv = `Påminnelse: 5 min till Iqama för ${langData['sv'].prayerNames[p.id]}`;
+                    localPrayerNotifs.push({ id: idIqama, ar: tAr, sv: tSv, time: milestoneIqama.getTime(), type: 'prayer' });
+                    updated = true;
+                }
+            });
+
+            if (updated) {
+                // ترتيب تنازلي حسب الوقت (الأحدث في الأعلى)
+                localPrayerNotifs.sort((a, b) => b.time - a.time);
+                if (localPrayerNotifs.length > 20) localPrayerNotifs = localPrayerNotifs.slice(0, 20);
+                localStorage.setItem('localPrayerNotifs', JSON.stringify(localPrayerNotifs));
+                renderNotifications();
+            }
         }
+
         function updateTimer() {
             if (prayerTimes.length === 0) return; const now = new Date(); const t = langData[currentLang]; let target = null; let title = ""; let cId = null; let actualPrayerName = ""; let targetType = "";
             for (let p of prayerTimes.filter(p => p.type !== 'no-prayer')) {
@@ -865,26 +912,24 @@
             document.getElementById('timer-title').innerText = title; document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
 
-            // تنبيه الأذان (15 دقيقة) وعرضه على الشاشة (15 ثانية)
+            // تنبيه الأذان الفوري (15 دقيقة)
             if (targetType === "adhan" && h === 0 && m === 15 && s === 0 && !notifiedPrayers[cId+'_adhan']) { 
                 notifiedPrayers[cId+'_adhan'] = true; 
                 let pushTitle = currentLang === 'ar' ? "تنبيه الأذان" : "Adhan Påminnelse";
                 let pushBody = currentLang === 'ar' ? `باقي 15 دقيقة على أذان ${actualPrayerName}` : `15 minuter till Adhan för ${actualPrayerName}`;
-                
-                showToast(pushBody, 15000); // عرض لمدة 15 ثانية على شاشة المسجد
+                showToast(pushBody, 15000); 
                 sendLocalPushNotification(pushTitle, pushBody); 
-                savePrayerNotificationLocal(cId, 'adhan'); 
             }
-            // تنبيه الإقامة (5 دقائق) وعرضه على الشاشة (15 ثانية)
+            // تنبيه الإقامة الفوري (5 دقائق)
             if (targetType === "iqama" && h === 0 && m === 5 && s === 0 && !notifiedPrayers[cId+'_iqama']) { 
                 notifiedPrayers[cId+'_iqama'] = true; 
                 let pushTitle = currentLang === 'ar' ? "تنبيه الإقامة" : "Iqama Påminnelse";
                 let pushBody = currentLang === 'ar' ? `باقي 5 دقائق على إقامة ${actualPrayerName}` : `5 minuter till Iqama för ${actualPrayerName}`;
-                
-                showToast(pushBody, 15000); // عرض لمدة 15 ثانية على شاشة المسجد
+                showToast(pushBody, 15000); 
                 sendLocalPushNotification(pushTitle, pushBody); 
-                savePrayerNotificationLocal(cId, 'iqama'); 
             }
+
+            syncMissedPrayerNotifications(); // فحص مستمر لتحديث صندوق الإشعارات
         } setInterval(updateTimer, 1000);
 
         // --- 8. Render Activities & Gallery ---
@@ -1014,10 +1059,7 @@
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
         
         window.onload = () => {
-            // تفعيل منع انطفاء الشاشة (وضع المسجد)
             requestWakeLock();
-            
-            // رسم علامات الساعة (الدقائق والساعات)
             createClockTicks();
 
             if(localStorage.getItem('isAdmin') === 'true') document.getElementById('logout-btn').style.display = 'flex';
