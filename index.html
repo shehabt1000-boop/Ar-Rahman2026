@@ -823,7 +823,15 @@
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
         window.onload = () => {
             if(localStorage.getItem('isAdmin') === 'true') document.getElementById('logout-btn').style.display = 'flex';
-            if('serviceWorker' in navigator) { navigator.serviceWorker.register('firebase-messaging-sw.js').catch(err => console.log('SW setup failed')); }
+            if ('serviceWorker' in navigator) { 
+    navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+    .then(function(registration) {
+        console.log('Service Worker Registered successfully with scope: ', registration.scope);
+    })
+    .catch(function(err) {
+        console.error('Service Worker registration failed: ', err);
+    }); 
+}
             loadTodaysPrayers(); applyTranslations(); listenToFirebase();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
