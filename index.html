@@ -12,7 +12,7 @@
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
 
-<link rel="manifest" href="/manifest.json">
+    <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0a3622">
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg">
 
@@ -79,7 +79,7 @@
         .notif-body::-webkit-scrollbar { width: 5px; }
         .notif-body::-webkit-scrollbar-track { background: #f1f1f1; }
         .notif-body::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
-        
+
         .notif-item { padding: 12px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); }
         .notif-item.prayer-alert { background: #f4fdf8; border-right: 3px solid var(--secondary); }
 
@@ -97,9 +97,8 @@
             z-index: 1002; display: flex; flex-direction: column; will-change: transform;
         }
         [dir="ltr"] .sidebar { right: auto; left: 0; transform: translateX(-100%); }
-        .sidebar.active { transform: translateX(0); }
-        [dir="ltr"] .sidebar.active { transform: translateX(0); }
-        
+        .sidebar.active { transform: translateX(0); }[dir="ltr"] .sidebar.active { transform: translateX(0); }
+
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
         .menu-links a, .menu-links button { text-decoration: none; color: var(--text-dark); font-size: 1.05rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; text-align: right; font-family: inherit; width: 100%; transition: background 0.2s;}
@@ -167,7 +166,7 @@
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; pointer-events: none; }
         @media (hover: hover) { .gallery-item:hover img { transform: scale(1.05); } .gallery-item:hover .gallery-caption { bottom: 0; } }
-        
+
         /* Admin Controls */
         .admin-controls { position: absolute; top: 10px; left: 10px; z-index: 10; display: flex; gap: 8px; background: rgba(255,255,255,0.9); padding: 5px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .admin-controls button { border: none; background: none; cursor: pointer; font-size: 16px; padding: 5px; border-radius: 5px; transition: background 0.2s; }
@@ -189,7 +188,7 @@
         .qr-wrapper img.qr-img { width: 130px; height: 130px; display: block; border-radius: 6px; }
         .qr-logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; background: #fff; border-radius: 6px; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; }
         .donation-deco { position: absolute; opacity: 0.03; font-size: 250px; color: var(--primary); right: -30px; bottom: -50px; transform: rotate(-15deg); pointer-events: none; }
-        
+
         /* Contact */
         .contact-card { background: linear-gradient(135deg, var(--primary), #052014); color: var(--white); border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
         .contact-avatar { width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--primary); margin: 0 auto 15px auto; border: 3px solid var(--white); }
@@ -211,8 +210,7 @@
         @keyframes scaleUp { to { transform: scale(1); } }
         .modal-content input, .modal-content textarea { width: 100%; padding: 12px; margin: 8px 0 15px 0; border: 1px solid #ddd; border-radius: 8px; font-family: inherit; font-size: 0.95rem; }
         .modal-content textarea { resize: vertical; }
-        .modal-content label { display: block; text-align: right; font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-top: 5px; }
-        [dir="ltr"] .modal-content label { text-align: left; }
+        .modal-content label { display: block; text-align: right; font-weight: bold; color: var(--primary); font-size: 0.9rem; margin-top: 5px; }[dir="ltr"] .modal-content label { text-align: left; }
         .modal-actions { display: flex; gap: 10px; margin-top: 15px; }
         .modal-btn { flex: 1; border: none; padding: 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-family: inherit; font-size: 1rem; transition: background 0.2s; }
         .modal-btn.primary { background: var(--primary); color: var(--white); }
@@ -236,22 +234,123 @@
         .btn-install-yes { background: linear-gradient(135deg, #d4af37, #b8962e); border: none; color: #fff; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; }
         .btn-install-no { background: none; border: none; color: #888; font-size: 1rem; cursor: pointer; padding: 5px; }
 
-        /* Toast Container المحدث والأصغر حجماً */
+        /* Toast Container */
         .app-toast-container { 
             position: fixed; top: 80px; left: 50%; transform: translate(-50%, -50px); 
             background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white); 
-            padding: 8px 18px; border-radius: 30px; display: flex; align-items: center; gap: 10px; 
+            padding: 15px 25px; border-radius: 30px; display: flex; align-items: center; gap: 10px; 
             opacity: 0; visibility: hidden; transition: transform 0.4s ease, opacity 0.4s ease; 
             z-index: 10000; border: 1px solid var(--secondary); text-align: center; 
-            max-width: 85%; font-size: 0.85rem; font-family: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            max-width: 90%; font-size: 1.1rem; font-family: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             will-change: transform, opacity;
         }
         .app-toast-container i { font-size: 1.1rem; }
         .app-toast-container.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
-        
+
         .fade-in { opacity: 0; transform: translateY(15px); transition: opacity 0.5s ease, transform 0.5s ease; will-change: transform, opacity; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* Analog Clock Styles */
+        .clock-section {
+            display: flex; justify-content: center; align-items: center;
+            margin-top: -60px; /* رفع الساعة فوق الغلاف */
+            position: relative; z-index: 10; padding: 0 20px;
+            margin-bottom: 30px;
+        }
+        .lux-clock-wrapper {
+            background: linear-gradient(145deg, #0a3622, #052014);
+            border: 2px solid var(--secondary);
+            border-radius: 20px; padding: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            text-align: center; color: var(--white);
+            backdrop-filter: blur(10px);
+            display: flex; flex-direction: column; align-items: center;
+        }
+        
+        .analog-clock {
+            width: 200px; 
+            height: 200px;
+            border: 4px solid var(--secondary);
+            border-radius: 50%;
+            margin-bottom: 15px;
+            position: relative;
+            background: radial-gradient(circle, #0a3622 0%, #03120b 100%);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .clock-face {
+            width: 100%; height: 100%; position: relative;
+        }
+        
+        /* علامات الساعات والدقائق */
+        .tick {
+            position: absolute;
+            top: 4px; /* المسافة من الإطار */
+            left: 50%;
+            width: 2px;
+            height: 6px;
+            background: rgba(212, 175, 55, 0.4); /* لون ذهبي خفيف للدقائق */
+            transform-origin: 50% 92px; /* مركز الدوران بدقة */
+            margin-left: -1px;
+            z-index: 1;
+        }
+        .tick.hour-tick {
+            width: 4px;
+            height: 12px;
+            background: var(--secondary); /* لون ذهبي بارز للساعات */
+            margin-left: -2px;
+        }
+
+        .clock-number {
+            position: absolute;
+            font-family: 'Amiri', serif;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        /* إزاحة الأرقام للداخل قليلاً حتى لا تتداخل مع علامات الساعات */
+        .num-12 { top: 24px; left: 50%; }
+        .num-3 { top: 50%; left: calc(100% - 24px); }
+        .num-6 { top: calc(100% - 24px); left: 50%; }
+        .num-9 { top: 50%; left: 24px; }
+
+        .hand {
+            position: absolute;
+            bottom: 50%;
+            transform-origin: bottom center;
+            border-radius: 10px;
+            z-index: 3;
+        }
+        .hour-hand {
+            width: 6px; height: 50px;
+            background: var(--white);
+            left: calc(50% - 3px);
+        }
+        .minute-hand {
+            width: 4px; height: 70px;
+            background: var(--secondary);
+            left: calc(50% - 2px);
+        }
+        .second-hand {
+            width: 2px; height: 85px;
+            background: #ff3b30;
+            left: calc(50% - 1px);
+            z-index: 4;
+        }
+        .center-dot {
+            position: absolute; top: 50%; left: 50%;
+            width: 12px; height: 12px; background: var(--secondary);
+            border-radius: 50%; transform: translate(-50%, -50%); z-index: 5;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .lux-date {
+            font-size: 1.1rem; color: #e0e0e0; font-family: 'Cairo', sans-serif;
+            font-weight: 600; background: rgba(0,0,0,0.2); padding: 5px 15px; border-radius: 10px;
+        }
+        body.lang-sv .lux-date { font-family: 'Segoe UI', Tahoma, sans-serif; }
     </style>
 </head>
 <body>
@@ -279,7 +378,7 @@
         </div>
     </header>
 
-    <!-- Sidebar Overlay (To close sidebar when clicking outside) -->
+    <!-- Sidebar Overlay -->
     <div id="sidebar-overlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
@@ -380,6 +479,28 @@
             </div>
         </section>
 
+        <!-- Analog Clock Section (Mosque Screen Mode) -->
+        <div class="clock-section fade-in">
+            <div class="lux-clock-wrapper">
+                <div class="analog-clock">
+                    <div class="clock-face" id="clock-face">
+                        <!-- الأرقام الأساسية -->
+                        <div class="clock-number num-12">12</div>
+                        <div class="clock-number num-3">3</div>
+                        <div class="clock-number num-6">6</div>
+                        <div class="clock-number num-9">9</div>
+                        
+                        <!-- العقارب -->
+                        <div class="hand hour-hand" id="hour-hand"></div>
+                        <div class="hand minute-hand" id="minute-hand"></div>
+                        <div class="hand second-hand" id="second-hand"></div>
+                        <div class="center-dot"></div>
+                    </div>
+                </div>
+                <div class="lux-date" id="lux-date">--</div>
+            </div>
+        </div>
+
         <!-- Prayers -->
         <section class="section fade-in" id="prayers">
             <div class="section-header">
@@ -459,7 +580,7 @@
         </section>
     </div>
 
-    <!-- Admin Panel (For Additions Only) -->
+    <!-- Admin Panel -->
     <div id="admin-panel">
         <h2 style="color:var(--primary); text-align:center; font-family:'Amiri';">لوحة تحكم الإدارة</h2>
         <button class="admin-btn" style="background: red; width: auto; margin-bottom: 20px;" onclick="showPage('main')">إغلاق والعودة للموقع</button>
@@ -538,6 +659,62 @@
             }
         };
 
+        // --- رسم علامات الدقائق والساعات ---
+        function createClockTicks() {
+            const face = document.getElementById('clock-face');
+            for (let i = 0; i < 60; i++) {
+                const tick = document.createElement('div');
+                if (i % 5 === 0) {
+                    tick.className = 'tick hour-tick'; // علامة ساعة (سميكة)
+                } else {
+                    tick.className = 'tick'; // علامة دقيقة (رفيعة)
+                }
+                tick.style.transform = `rotate(${i * 6}deg)`;
+                face.appendChild(tick);
+            }
+        }
+
+        // --- Analog Clock Logic ---
+        function updateAnalogClock() {
+            const now = new Date();
+            const seconds = now.getSeconds();
+            const minutes = now.getMinutes();
+            const hours = now.getHours();
+
+            const secondsDegrees = ((seconds / 60) * 360);
+            const minutesDegrees = ((minutes / 60) * 360) + ((seconds/60)*6);
+            const hoursDegrees = ((hours / 12) * 360) + ((minutes/60)*30);
+
+            document.getElementById('second-hand').style.transform = `rotate(${secondsDegrees}deg)`;
+            document.getElementById('minute-hand').style.transform = `rotate(${minutesDegrees}deg)`;
+            document.getElementById('hour-hand').style.transform = `rotate(${hoursDegrees}deg)`;
+
+            // تنسيق التاريخ باللغتين
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const locale = currentLang === 'ar' ? 'ar-EG' : 'sv-SE';
+            document.getElementById('lux-date').innerText = now.toLocaleDateString(locale, options);
+        }
+        setInterval(updateAnalogClock, 1000);
+        updateAnalogClock(); // تشغيل فوري
+
+        // --- Keep Screen Awake (Mosque Display Mode) ---
+        let wakeLock = null;
+        async function requestWakeLock() {
+            try {
+                if ('wakeLock' in navigator) {
+                    wakeLock = await navigator.wakeLock.request('screen');
+                    console.log('Wake Lock is active (Screen will not sleep)');
+                }
+            } catch (err) {
+                console.error('Wake Lock error:', err.message);
+            }
+        }
+        document.addEventListener('visibilitychange', async () => {
+            if (wakeLock !== null && document.visibilityState === 'visible') {
+                await requestWakeLock();
+            }
+        });
+
         // --- 3. Firebase Fetch ---
         let lastAdminNotif = null;
         function listenToFirebase() {
@@ -555,7 +732,7 @@
                     lastAdminNotif = siteData.notifications[0];
                     let lastSeen = localStorage.getItem('last_seen_notif');
                     if(lastSeen !== lastAdminNotif.id) {
-                        setTimeout(() => { showToast(currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv); localStorage.setItem('last_seen_notif', lastAdminNotif.id); }, 2000);
+                        setTimeout(() => { showToast(currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv, 8000); localStorage.setItem('last_seen_notif', lastAdminNotif.id); }, 2000);
                     }
                 }
                 renderNotifications();
@@ -584,7 +761,7 @@
             firebase.auth().signInWithEmailAndPassword(email, pass).then((userCred) => {
                 if (userCred.user.uid === ADMIN_UID) { 
                     localStorage.setItem('isAdmin', 'true'); closeAdminModal();
-                    showToast(currentLang === 'ar' ? "أهلاً بك يا مدير 👑" : "Välkommen Admin 👑");
+                    showToast(currentLang === 'ar' ? "أهلاً بك يا مدير 👑" : "Välkommen Admin 👑", 4000);
                     document.getElementById('logout-btn').style.display = 'flex'; renderActivities(); renderGallery(); 
                 } else { firebase.auth().signOut(); throw new Error("Unauthorized"); }
             }).catch(() => { document.getElementById('login-error').style.display = 'block'; }).finally(() => { btn.disabled = false; btn.innerText = "دخول"; });
@@ -601,8 +778,8 @@
             document.getElementById('sidebar-overlay').classList.toggle('active'); 
         }
         function showPage(page) { document.getElementById('main-content').style.display = page === 'main' ? 'block' : 'none'; document.getElementById('admin-panel').style.display = page === 'admin' ? 'block' : 'none'; window.scrollTo(0,0); }
-        function toggleLanguage() { currentLang = currentLang === 'ar' ? 'sv' : 'ar'; localStorage.setItem('lang', currentLang); applyTranslations(); }
-        
+        function toggleLanguage() { currentLang = currentLang === 'ar' ? 'sv' : 'ar'; localStorage.setItem('lang', currentLang); applyTranslations(); updateAnalogClock(); }
+
         function updateNotifBtnUI() {
             const t = langData[currentLang]; const btnText = document.getElementById('menu-notif-btn'); const btnIcon = document.getElementById('menu-notif-icon');
             if (isNotifEnabled) { btnText.innerText = t.notifBtnDisable; btnIcon.className = "fas fa-bell-slash"; btnIcon.parentElement.style.color = "#ff3b30"; } 
@@ -641,7 +818,15 @@
             });
             body.innerHTML = html; document.getElementById('notif-dot').classList.add('active');
         }
-        function showToast(text) { const toastEl = document.getElementById('app-toast-box'); document.getElementById('toast-msg-text').innerText = text; toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, 6000); }
+        
+        function showToast(text, duration = 6000) { 
+            const toastEl = document.getElementById('app-toast-box'); 
+            document.getElementById('toast-msg-text').innerText = text; 
+            toastEl.classList.remove('show'); 
+            void toastEl.offsetWidth; 
+            toastEl.classList.add('show'); 
+            setTimeout(() => { toastEl.classList.remove('show'); }, duration); 
+        }
 
         function sendLocalPushNotification(title, body) {
             if (Notification.permission === "granted" && isNotifEnabled) { navigator.serviceWorker.ready.then(reg => { reg.showNotification(title, { body: body, icon: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg", vibrate:[200, 100, 200] }); }); }
@@ -675,24 +860,30 @@
                 else if (now < iDate) { target = iDate; title = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; cId = p.id; actualPrayerName = t.prayerNames[p.id]; targetType = "iqama"; break; }
             }
             if (!target) { let f = prayerTimes[0]; target = new Date(); target.setDate(target.getDate() + 1); target.setHours(...f.adhan.split(':'), 0, 0); title = `${t.timerTexts.adhan} ${t.prayerNames[f.id]}`; cId = f.id; actualPrayerName = t.prayerNames[f.id]; targetType = "adhan"; }
-            
+
             let diff = target - now; let h = Math.floor((diff % 86400000) / 3600000); let m = Math.floor((diff % 3600000) / 60000); let s = Math.floor((diff % 60000) / 1000);
             document.getElementById('timer-title').innerText = title; document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
-            
-            // تنبيه الأذان (15 دقيقة)
+
+            // تنبيه الأذان (15 دقيقة) وعرضه على الشاشة (15 ثانية)
             if (targetType === "adhan" && h === 0 && m === 15 && s === 0 && !notifiedPrayers[cId+'_adhan']) { 
                 notifiedPrayers[cId+'_adhan'] = true; 
                 let pushTitle = currentLang === 'ar' ? "تنبيه الأذان" : "Adhan Påminnelse";
                 let pushBody = currentLang === 'ar' ? `باقي 15 دقيقة على أذان ${actualPrayerName}` : `15 minuter till Adhan för ${actualPrayerName}`;
-                sendLocalPushNotification(pushTitle, pushBody); savePrayerNotificationLocal(cId, 'adhan'); 
+                
+                showToast(pushBody, 15000); // عرض لمدة 15 ثانية على شاشة المسجد
+                sendLocalPushNotification(pushTitle, pushBody); 
+                savePrayerNotificationLocal(cId, 'adhan'); 
             }
-            // تنبيه الإقامة (5 دقائق)
+            // تنبيه الإقامة (5 دقائق) وعرضه على الشاشة (15 ثانية)
             if (targetType === "iqama" && h === 0 && m === 5 && s === 0 && !notifiedPrayers[cId+'_iqama']) { 
                 notifiedPrayers[cId+'_iqama'] = true; 
                 let pushTitle = currentLang === 'ar' ? "تنبيه الإقامة" : "Iqama Påminnelse";
                 let pushBody = currentLang === 'ar' ? `باقي 5 دقائق على إقامة ${actualPrayerName}` : `5 minuter till Iqama för ${actualPrayerName}`;
-                sendLocalPushNotification(pushTitle, pushBody); savePrayerNotificationLocal(cId, 'iqama'); 
+                
+                showToast(pushBody, 15000); // عرض لمدة 15 ثانية على شاشة المسجد
+                sendLocalPushNotification(pushTitle, pushBody); 
+                savePrayerNotificationLocal(cId, 'iqama'); 
             }
         } setInterval(updateTimer, 1000);
 
@@ -766,8 +957,8 @@
             });
         }
 
-        function deleteActivity(id) { showConfirmModal(() => { db.collection("activities").doc(id).delete(); showToast("تم الحذف بنجاح"); }); }
-        function deleteGallery(id, event) { event.stopPropagation(); showConfirmModal(() => { db.collection("gallery").doc(id).delete(); showToast("تم الحذف بنجاح"); }); }
+        function deleteActivity(id) { showConfirmModal(() => { db.collection("activities").doc(id).delete(); showToast("تم الحذف بنجاح", 4000); }); }
+        function deleteGallery(id, event) { event.stopPropagation(); showConfirmModal(() => { db.collection("gallery").doc(id).delete(); showToast("تم الحذف بنجاح", 4000); }); }
 
         function openEditActivityModal(id) {
             const act = siteData.activities.find(a => a.id === id); if(!act) return;
@@ -780,7 +971,7 @@
             document.getElementById('edit-activity-modal').style.display = 'flex';
         }
         function closeEditActivityModal() { document.getElementById('edit-activity-modal').style.display = 'none'; }
-        
+
         async function saveEditedActivity() {
             const id = document.getElementById('modal-edit-act-id').value;
             const titleAr = document.getElementById('modal-act-title-ar').value; const titleSv = document.getElementById('modal-act-title-sv').value || titleAr;
@@ -791,9 +982,9 @@
             if(!titleAr) return; btn.disabled = true; btn.innerText = "جاري الحفظ...";
             let updateData = { titleAr, titleSv, descAr, descSv };
             if(file) { try { updateData.img = await uploadToCloudinary(file); } catch(e){} }
-            
+
             db.collection("activities").doc(id).update(updateData).then(() => {
-                showToast("تم تحديث النشاط بنجاح ✔️"); closeEditActivityModal();
+                showToast("تم تحديث النشاط بنجاح ✔️", 4000); closeEditActivityModal();
             }).finally(() => { btn.disabled = false; btn.innerText = "حفظ التعديلات"; });
         }
 
@@ -813,25 +1004,32 @@
             const capAr = document.getElementById('modal-gal-cap-ar').value;
             const capSv = document.getElementById('modal-gal-cap-sv').value || capAr;
             const btn = document.getElementById('modal-btn-save-gal');
-            
+
             if(!url) return; btn.disabled = true; btn.innerText = "جاري الحفظ...";
             db.collection("gallery").doc(id).update({ url: url, captionAr: capAr, captionSv: capSv }).then(() => {
-                showToast("تم تحديث الصورة بنجاح ✔️"); closeEditGalleryModal();
+                showToast("تم تحديث الصورة بنجاح ✔️", 4000); closeEditGalleryModal();
             }).finally(() => { btn.disabled = false; btn.innerText = "حفظ التعديلات"; });
         }
 
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+        
         window.onload = () => {
+            // تفعيل منع انطفاء الشاشة (وضع المسجد)
+            requestWakeLock();
+            
+            // رسم علامات الساعة (الدقائق والساعات)
+            createClockTicks();
+
             if(localStorage.getItem('isAdmin') === 'true') document.getElementById('logout-btn').style.display = 'flex';
             if ('serviceWorker' in navigator) { 
-    navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
-    .then(function(registration) {
-        console.log('Service Worker Registered successfully with scope: ', registration.scope);
-    })
-    .catch(function(err) {
-        console.error('Service Worker registration failed: ', err);
-    }); 
-}
+                navigator.serviceWorker.register('/firebase-messaging-sw.js', { scope: '/' })
+                .then(function(registration) {
+                    console.log('Service Worker Registered successfully with scope: ', registration.scope);
+                })
+                .catch(function(err) {
+                    console.error('Service Worker registration failed: ', err);
+                }); 
+            }
             loadTodaysPrayers(); applyTranslations(); listenToFirebase();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
