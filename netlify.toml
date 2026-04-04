@@ -1,3 +1,11 @@
-/.well-known/assetlinks.json  /public/well-known/assetlinks.json  200!
-/well-known/assetlinks.json   /public/well-known/assetlinks.json  200!
-/* /index.html  200
+[[headers]]
+  for = "/.well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
+
+[[headers]]
+  for = "/public/well-known/assetlinks.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Access-Control-Allow-Origin = "*"
