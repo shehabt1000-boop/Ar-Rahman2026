@@ -20,10 +20,14 @@
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- PWA -->
+    <!-- PWA & Standalone (إخفاء شريط المتصفح) -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0a3622">
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="مسجد الرحمن">
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
@@ -232,6 +236,20 @@
         .modal-btn.danger { background: #ff3b30; color: #fff; }
         .modal-btn.danger:hover { background: #d32f2f; }
 
+        /* Image Viewer Modal (الجديد لعرض الصور داخل التطبيق) */
+        .image-viewer-overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 4000;
+            display: none; justify-content: center; align-items: center; cursor: pointer;
+        }
+        .image-viewer-overlay img {
+            max-width: 95%; max-height: 90vh; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: scale(0.9); animation: scaleUpImg 0.3s ease-out forwards;
+        }
+        @keyframes scaleUpImg { to { transform: scale(1); } }
+        .close-img-btn {
+            position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer;
+        }
+
         /* PWA Install Prompt */
         .install-prompt-container {
             position: fixed; bottom: -120px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 400px; background: linear-gradient(145deg, #0a3622, #052014); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); padding: 15px 20px; z-index: 10000; display: flex; align-items: center; gap: 15px; opacity: 0; visibility: hidden; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
@@ -288,7 +306,7 @@
             position: relative;
             background: radial-gradient(circle, #0a3622 0%, #03120b 100%);
             box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3);
-            box-sizing: border-box; /* إصلاح الإطار */
+            box-sizing: border-box; 
         }
         .clock-face {
             width: 100%; height: 100%; position: relative;
@@ -301,7 +319,7 @@
             width: 2px;
             height: 6px;
             background: rgba(212, 175, 55, 0.5);
-            transform-origin: 50% 72px; /* إصلاح نقطة الدوران */
+            transform-origin: 50% 72px; 
             margin-left: -1px;
             z-index: 1;
         }
@@ -365,7 +383,7 @@
     </style>
 </head>
 <body>
-    <!-- كود منع وميض اللغة عند التحديث (يجب أن يكون هنا مباشرة) -->
+    <!-- كود منع وميض اللغة عند التحديث -->
     <script>
         (function() {
             let initLang = localStorage.getItem('lang') || 'ar';
@@ -395,9 +413,7 @@
                         <i class="fas fa-times" style="cursor:pointer;" onclick="toggleNotifications()"></i>
                     </div>
                     <div class="notif-body" id="notif-body">
-                        <!-- الإشعار الديناميكي الحي للوقت المتبقي للصلاة -->
                         <div id="dynamic-prayer-notif"></div>
-                        <!-- إشعارات الإدارة من فايربيس -->
                         <div id="admin-notifs"></div>
                     </div>
                 </div>
@@ -481,6 +497,12 @@
                 <button class="modal-btn primary" id="modal-btn-save-gal" onclick="saveEditedGallery()">حفظ التعديلات</button>
             </div>
         </div>
+    </div>
+
+    <!-- Image Viewer Modal (الجديد لعرض الصور داخل التطبيق) -->
+    <div class="image-viewer-overlay" id="image-viewer-modal" onclick="this.style.display='none'">
+        <i class="fas fa-times close-img-btn"></i>
+        <img id="full-screen-img" src="" alt="Full Screen Image">
     </div>
 
     <!-- Luxurious PWA Install Prompt -->
@@ -582,7 +604,8 @@
                     <div style="font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-mobile-alt" style="color: var(--primary);"></i> Swish</div>
                     <p id="text-swish">ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.</p>
                     <div class="swish-number">123-297 15 47</div><br>
-                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" target="_blank" class="donate-btn-modern" id="btn-donate">اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i></a>
+                    <!-- تمت إزالة target="_blank" من هنا -->
+                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" class="donate-btn-modern" id="btn-donate">اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i></a>
                 </div>
                 <div class="qr-scanner-box">
                     <div class="qr-wrapper"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" alt="Swish QR Code"><img class="qr-logo-center" src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774915234/yjqwld9orxskwkl4ttsq.jpg" alt="Swish Logo"></div>
@@ -830,12 +853,12 @@
             let allNotifs =[];
             siteData.notifications.forEach(n => { allNotifs.push({ text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-envelope' }); });
             allNotifs.sort((a, b) => b.time - a.time);
-            
+
             if(allNotifs.length === 0) { 
                 adminContainer.innerHTML = `<div class="notif-item" style="justify-content:center; color:#888;">لا توجد إشعارات إدارية</div>`; 
                 return; 
             }
-            
+
             let html = '';
             allNotifs.forEach(n => {
                 const date = new Date(n.time).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'sv-SE'); 
@@ -902,7 +925,7 @@
 
             let diff = target - now; let h = Math.floor((diff % 86400000) / 3600000); let m = Math.floor((diff % 3600000) / 60000); let s = Math.floor((diff % 60000) / 1000);
             let timeString = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-            
+
             document.getElementById('timer-title').innerText = title; 
             document.getElementById('countdown-clock').innerText = timeString;
             document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
@@ -954,6 +977,7 @@
             container.innerHTML = html;
         }
 
+        // --- تم تعديل كود المعرض لفتح الصور داخل التطبيق ---
         function renderGallery() {
             const container = document.getElementById('gallery-container'); const msg = document.getElementById('no-gallery-msg'); const isAdmin = localStorage.getItem('isAdmin') === 'true';
             if(siteData.gallery.length === 0) { container.innerHTML = ''; msg.style.display = 'block'; document.getElementById('btn-load-more').style.display='none'; return; } else { msg.style.display = 'none'; }
@@ -962,7 +986,9 @@
                 const cap = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
                 let adminBtns = '';
                 if(isAdmin) adminBtns = `<div class="admin-controls"><button class="btn-edit" onclick="openEditGalleryModal('${img.id}', event)" title="تعديل"><i class="fas fa-pen"></i></button><button class="btn-delete" onclick="deleteGallery('${img.id}', event)" title="حذف"><i class="fas fa-trash"></i></button></div>`;
-                html += `<div class="gallery-item" onclick="if(event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') window.open('${img.url.replace('w_400,', '')}','_blank')">${adminBtns}<img src="${img.url}" loading="lazy">${cap ? `<div class="gallery-caption">${cap}</div>` : ''}</div>`;
+                
+                // التعديل هنا: استخدام Modal داخلي بدلاً من window.open
+                html += `<div class="gallery-item" onclick="if(event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') { document.getElementById('full-screen-img').src='${img.url.replace('w_400,', '')}'; document.getElementById('image-viewer-modal').style.display='flex'; }">${adminBtns}<img src="${img.url}" loading="lazy">${cap ? `<div class="gallery-caption">${cap}</div>` : ''}</div>`;
             });
             container.innerHTML = html; document.getElementById('btn-load-more').style.display = siteData.gallery.length > visibleGalleryCount ? 'inline-flex' : 'none';
         }
