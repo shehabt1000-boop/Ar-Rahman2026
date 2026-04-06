@@ -1,10 +1,8 @@
-[
-  {
-    "relation": ["delegate_permission/common.handle_all_urls"],
-    "target": {
-      "namespace": "android_app",
-      "package_name": "com.perstorp.moske",
-      "sha256_cert_fingerprint": "9F:C9:DB:04:1D:85:3B:E3:52:04:E1:DC:F4:41:5A:A5:93:FC:70:D6:15:A3:11:BE:6F:EB:88:2C:A6:67:A2:FB"
-    }
-  }
-]
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "app.netlify.perstorp_moske.twa",
+        "sha256_cert_fingerprints": ["35:44:54:21:E0:80:68:FF:63:26:92:2F:25:61:78:2E:0B:26:F0:25:BA:7D:12:1E:39:42:82:67:7F:7B:4D:70"]
+      }
+    }]
