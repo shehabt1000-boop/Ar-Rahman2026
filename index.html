@@ -1,29 +1,21 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="sv" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مسجد الرحمن | Masjid Ar-Rahman</title>
+    <title>Moské Ar-Rahman | مسجد الرحمن</title>
 
-    <meta name="description" content="مسجد الرحمن في Perstorp - مواعيد الصلاة، الأنشطة الإسلامية، دروس القرآن للأطفال والكبار في السويد">
+    <meta name="description" content="Moské Ar-Rahman i Perstorp - Bönetider, Islamiska aktiviteter, Koranlektioner för barn och vuxna i Sverige">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://perstorp-moske.netlify.app/">
-
-    <meta property="og:title" content="مسجد الرحمن | Masjid Ar-Rahman">
-    <meta property="og:description" content="نرحب بكم في بيت الله في مدينة بيرستورب السويدية">
+    
+    <meta property="og:title" content="Moské Ar-Rahman | مسجد الرحمن">
+    <meta property="og:description" content="Välkommen till Allahs hus i Perstorp, Sverige">
     <meta property="og:image" content="https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg">
-    <meta property="og:url" content="https://perstorp-moske.netlify.app/">
     <meta property="og:type" content="website">
-
-    <meta name="twitter:card" content="summary_large_image">
 
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#0a3622">
     <link rel="apple-touch-icon" href="https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="مسجد الرحمن">
 
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -34,6 +26,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
 
+    <!-- ملف مواقيت الصلاة (تأكد من وجوده) -->
     <script src="prayers.js"></script>
 
     <style>
@@ -46,15 +39,16 @@
             --shadow: 0 8px 20px rgba(0,0,0,0.06);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Cairo', sans-serif; background-color: var(--light-bg); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
-        h1, h2, h3 { font-family: 'Amiri', serif; }
+        /* كلاس لإيقاف التأثيرات مؤقتاً عند تبديل اللغة لمنع طيران القائمة */
+        .no-transition, .no-transition * {
+            transition: none !important;
+        }
 
-        body.lang-sv { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body.lang-sv h1, body.lang-sv h2, body.lang-sv h3, body.lang-sv .prayer-name { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; letter-spacing: 0.5px; }
-        body.lang-sv .hero-title { font-size: 2rem; }
-        body.lang-sv .section-title { font-size: 1.8rem; }
-        body.lang-sv .city-badge { font-family: inherit; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-bg); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
+        
+        body.lang-ar { font-family: 'Cairo', sans-serif; }
+        body.lang-ar h1, body.lang-ar h2, body.lang-ar h3 { font-family: 'Amiri', serif; }
 
         header {
             position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
@@ -62,8 +56,8 @@
             padding: 0 5%; display: flex; justify-content: space-between; align-items: center;
             color: var(--secondary); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; font-weight: bold; white-space: nowrap; }
-        body.lang-sv .header-brand { font-size: 1.1rem; } 
+        .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; white-space: nowrap; }
+        body.lang-ar .header-brand { font-size: 1.2rem; } 
 
         .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: nowrap; }
         .icon-btn { cursor: pointer; font-size: 20px; transition: transform 0.2s ease, color 0.2s ease; }
@@ -74,11 +68,11 @@
         .notif-dot.active { display: block; }
 
         .notif-box {
-            position: absolute; top: 50px; left: 0; width: 300px; background: var(--white);
+            position: absolute; top: 50px; left: auto; right: 0; width: 300px; background: var(--white);
             border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); opacity: 0; visibility: hidden;
             transform: translateY(-10px); transition: opacity 0.2s ease, transform 0.2s ease; z-index: 1001;
             display: flex; flex-direction: column; overflow: hidden;
-        }[dir="ltr"] .notif-box { left: auto; right: 0; }
+        }[dir="rtl"] .notif-box { left: 0; right: auto; }
         .notif-box.show { opacity: 1; visibility: visible; transform: translateY(0); }
         .notif-header { background: var(--primary); color: var(--secondary); padding: 10px 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 0.95rem; }
         .notif-body { max-height: 350px; overflow-y: auto; }
@@ -87,7 +81,7 @@
         .notif-body::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 5px; }
 
         .notif-item { padding: 12px; border-bottom: 1px solid #eee; display: flex; gap: 10px; color: var(--text-dark); }
-        .notif-item.prayer-alert { background: #f4fdf8; border-right: 3px solid var(--secondary); border-bottom: 2px solid var(--secondary); }[dir="ltr"] .notif-item.prayer-alert { border-right: none; border-left: 3px solid var(--secondary); }
+        .notif-item.prayer-alert { background: #f4fdf8; border-left: 3px solid var(--secondary); border-bottom: 2px solid var(--secondary); }[dir="rtl"] .notif-item.prayer-alert { border-left: none; border-right: 3px solid var(--secondary); }
 
         .sidebar-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1001;
@@ -96,46 +90,40 @@
         .sidebar-overlay.active { opacity: 1; visibility: visible; }
 
         .sidebar {
-            position: fixed; top: 0; right: 0; width: 240px; height: 100vh;
-            background: var(--white); box-shadow: -5px 0 15px rgba(0,0,0,0.1);
-            transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: fixed; top: 0; left: 0; right: auto; width: 240px; height: 100vh;
+            background: var(--white); box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+            transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1002; display: flex; flex-direction: column; will-change: transform;
-        }[dir="ltr"] .sidebar { right: auto; left: 0; transform: translateX(-100%); }
-        .sidebar.active { transform: translateX(0); }[dir="ltr"] .sidebar.active { transform: translateX(0); }
+        }[dir="rtl"] .sidebar { left: auto; right: 0; transform: translateX(100%); box-shadow: -5px 0 15px rgba(0,0,0,0.1); }
+        .sidebar.active { transform: translateX(0); }
 
         .sidebar-header { padding: 20px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
-        .menu-links a, .menu-links button { text-decoration: none; color: var(--text-dark); font-size: 1.05rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; text-align: right; font-family: inherit; width: 100%; transition: background 0.2s;}
+        .menu-links a, .menu-links button { text-decoration: none; color: var(--text-dark); font-size: 1.05rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; width: 100%; transition: background 0.2s;}
+        [dir="rtl"] .menu-links a, [dir="rtl"] .menu-links button { text-align: right; }
         .menu-links a:hover, .menu-links button:hover { background: var(--light-bg); color: var(--primary); }
 
         .hero {
             position: relative; padding-top: 65px; min-height: 350px; height: auto;
-            background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
+            background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_800,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
             background-position: center center; background-size: cover; background-repeat: no-repeat;
             display: flex; align-items: center; justify-content: center; text-align: center; padding-bottom: 50px;
         }
-        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,54,34,0.2), rgba(10,54,34,0.5)); }
+        .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,54,34,0.3), rgba(10,54,34,0.7)); }
         .hero-content { position: relative; z-index: 1; color: var(--white); padding: 0 20px; width: 100%; max-width: 800px; animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(15px); }
-        .hero-title { font-size: 2.2rem; color: var(--secondary); margin-bottom: 5px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); word-break: break-word; }
-        .hero-subtitle { font-size: 1rem; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); line-height: 1.5; }
-
-        @media(min-width: 768px) { .hero { min-height: 450px; } .hero-title { font-size: 2.8rem; } .hero-subtitle { font-size: 1.2rem; } body.lang-sv .hero-title { font-size: 2.5rem; } }
+        .hero-title { font-size: 2rem; color: var(--secondary); margin-bottom: 5px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); word-break: break-word; letter-spacing: 0.5px;}
+        body.lang-ar .hero-title { font-size: 2.5rem; letter-spacing: normal; }
+        .hero-subtitle { font-size: 1.1rem; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); line-height: 1.5; }
 
         .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; position: relative;}
         .section-header { text-align: center; margin-bottom: 30px; }
         .title-row { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
-        .section-title { font-size: 2rem; color: var(--primary); margin: 0; word-break: break-word; }
-        .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Cairo', sans-serif; }
+        .section-title { font-size: 1.8rem; color: var(--primary); margin: 0; word-break: break-word; }
+        body.lang-ar .section-title { font-size: 2rem; }
+        .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Segoe UI', sans-serif; }
         .title-separator { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
         .title-separator i { color: var(--primary); font-size: 1.1rem; }
-
-        .loader-spinner { border: 4px solid #f3f3f3; border-top: 4px solid var(--secondary); border-right: 4px solid var(--primary); border-radius: 50%; width: 35px; height: 35px; animation: spin 0.8s linear infinite; margin: 20px auto; display: none; }
-        .loader-spinner.active { display: block; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .date-wrapper { text-align: center; margin-top: -15px; margin-bottom: 15px; } 
-        .current-date-box { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); padding: 3px 15px; border-radius: 12px; display: inline-block; font-size: 0.85rem; font-weight: bold; border: 1px solid var(--secondary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
 
         .timer-container { text-align: center; margin-bottom: 30px; background: var(--white); padding: 15px; border-radius: 15px; box-shadow: var(--shadow); border-bottom: 3px solid var(--secondary); width: fit-content; min-width: 200px; max-width: 90%; margin-left: auto; margin-right: auto; }
         .timer-title { font-size: 0.95rem; color: var(--text-dark); margin-bottom: 5px; font-weight: bold; }
@@ -150,23 +138,18 @@
         .prayer-card.next-prayer .prayer-time { color: #ddd; }
 
         .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s ease; position: relative; will-change: transform;}
+        .activity-card { background: var(--white); border-radius: 12px; overflow: hidden; box-shadow: var(--shadow); transition: transform 0.2s ease; }
         .activity-card:hover { transform: translateY(-3px); }
         .activity-img { width: 100%; height: 160px; object-fit: cover; }
         .activity-content { padding: 15px; }
         .activity-title { font-size: 1.1rem; color: var(--primary); margin-bottom: 8px; font-weight: bold; }
         .activity-desc { color: #666; font-size: 0.95rem; max-height: 90px; overflow-y: auto; padding-right: 5px; white-space: pre-wrap; line-height: 1.5; }
-        .activity-desc::-webkit-scrollbar { width: 4px; }
-        .activity-desc::-webkit-scrollbar-thumb { background: var(--secondary); border-radius: 4px; }
 
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
-        .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; will-change: transform;}
+        .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
-        .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; pointer-events: none; }
+        .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; }
         @media (hover: hover) { .gallery-item:hover img { transform: scale(1.05); } .gallery-item:hover .gallery-caption { bottom: 0; } }
-
-        .load-more-container { text-align: center; margin-top: 25px; width: 100%; }
-        .btn-load-more { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--secondary); border: 2px solid var(--secondary); padding: 10px 25px; font-size: 1rem; font-family: inherit; font-weight: bold; border-radius: 50px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 
         .donation-wrap { background: linear-gradient(145deg, #ffffff, #f4fdf8); border-radius: 20px; padding: 30px 15px; box-shadow: var(--shadow); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 20px; position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); }
         .donation-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, var(--primary), var(--secondary)); }
@@ -174,41 +157,11 @@
         .donation-info p { font-size: 1rem; color: #555; margin-bottom: 12px; line-height: 1.5; }
         .swish-number { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: 2px; padding: 8px 20px; background: var(--white); border-radius: 10px; margin: 10px 0; border: 2px dashed var(--secondary); display: inline-block; }
         .donate-btn-modern { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--secondary), #b8962e); color: var(--white); padding: 10px 25px; border-radius: 50px; font-size: 1rem; font-weight: bold; text-decoration: none; margin-top: 10px; }
-        .qr-scanner-box { position: relative; background: var(--white); padding: 8px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: inline-block; z-index: 2; }
-        .qr-wrapper img.qr-img { width: 130px; height: 130px; display: block; border-radius: 6px; }
-        .qr-logo-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 35px; height: 35px; background: #fff; border-radius: 6px; padding: 2px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); z-index: 10; }
-        .donation-deco { position: absolute; opacity: 0.03; font-size: 250px; color: var(--primary); right: -30px; bottom: -50px; transform: rotate(-15deg); pointer-events: none; }
 
         .contact-card { background: linear-gradient(135deg, var(--primary), #052014); color: var(--white); border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
-        .contact-avatar { width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--primary); margin: 0 auto 15px auto; border: 3px solid var(--white); }
         .social-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
         .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; }
         .btn-wa { background: #25D366; } .btn-fb { background: #1877F2; }
-
-        .image-viewer-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 4000;
-            display: none; justify-content: center; align-items: center; cursor: pointer;
-        }
-        .image-viewer-overlay img {
-            max-width: 95%; max-height: 90vh; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transform: scale(0.9); animation: scaleUpImg 0.3s ease-out forwards;
-        }
-        @keyframes scaleUpImg { to { transform: scale(1); } }
-        .close-img-btn {
-            position: absolute; top: 20px; right: 20px; color: white; font-size: 30px; cursor: pointer;
-        }
-
-        .install-prompt-container {
-            position: fixed; bottom: -120px; left: 50%; transform: translateX(-50%); width: 92%; max-width: 400px; background: linear-gradient(145deg, #0a3622, #052014); border: 1px solid rgba(212, 175, 55, 0.4); border-radius: 20px; box-shadow: 0 15px 30px rgba(0,0,0,0.5); padding: 15px 20px; z-index: 10000; display: flex; align-items: center; gap: 15px; opacity: 0; visibility: hidden; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s;
-        }
-        .install-prompt-container.show { transform: translate(-50%, -150px); opacity: 1; visibility: visible; }
-        .install-icon img { width: 55px; height: 55px; border-radius: 15px; border: 2px solid var(--secondary); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
-        .install-text { flex: 1; color: var(--white); text-align: right; }[dir="ltr"] .install-text { text-align: left; }
-        .install-text h4 { margin: 0 0 5px 0; font-family: 'Amiri', serif; color: var(--secondary); font-size: 1.15rem; letter-spacing: 0.5px;}
-        .install-text p { margin: 0; font-size: 0.8rem; color: #e0e0e0; line-height: 1.4; font-family: 'Cairo', sans-serif;}
-        .install-actions { display: flex; flex-direction: column; align-items: center; gap: 8px; }
-        .btn-install-yes { background: linear-gradient(135deg, #d4af37, #b8962e); border: none; color: #fff; padding: 8px 20px; border-radius: 50px; font-weight: bold; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 0.9rem; }
-        .btn-install-no { background: none; border: none; color: #888; font-size: 1rem; cursor: pointer; padding: 5px; }
 
         .app-toast-container { 
             position: fixed; top: 80px; left: 50%; transform: translate(-50%, -50px); 
@@ -217,79 +170,53 @@
             opacity: 0; visibility: hidden; transition: transform 0.4s ease, opacity 0.4s ease; 
             z-index: 10000; border: 1px solid var(--secondary); text-align: center; 
             max-width: 90%; font-size: 1.1rem; font-family: inherit; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            will-change: transform, opacity;
         }
-        .app-toast-container i { font-size: 1.1rem; }
         .app-toast-container.show { transform: translate(-50%, 0); opacity: 1; visibility: visible; }
 
         .fade-in { opacity: 0; transform: translateY(15px); transition: opacity 0.5s ease, transform 0.5s ease; will-change: transform, opacity; }
         .fade-in.visible { opacity: 1; transform: translateY(0); }
         @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-        .clock-section {
-            display: flex; justify-content: center; align-items: center;
-            margin-top: -30px; position: relative; z-index: 10; padding: 0 20px;
-            margin-bottom: 15px;
-        }
-        .lux-clock-wrapper {
-            background: linear-gradient(145deg, #0a3622, #052014);
-            border: 2px solid var(--secondary);
-            border-radius: 20px; padding: 15px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            text-align: center; color: var(--white);
-            backdrop-filter: blur(10px);
-            display: flex; flex-direction: column; align-items: center;
-        }
-
-        .analog-clock {
-            width: 160px; height: 160px; border: 4px solid var(--secondary); border-radius: 50%;
-            margin-bottom: 10px; position: relative; background: radial-gradient(circle, #0a3622 0%, #03120b 100%);
-            box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3); box-sizing: border-box; 
-        }
+        /* الساعة الدائرية */
+        .clock-section { display: flex; justify-content: center; align-items: center; margin-top: -30px; position: relative; z-index: 10; padding: 0 20px; margin-bottom: 15px; }
+        .lux-clock-wrapper { background: linear-gradient(145deg, #0a3622, #052014); border: 2px solid var(--secondary); border-radius: 20px; padding: 15px; box-shadow: 0 15px 35px rgba(0,0,0,0.3); text-align: center; color: var(--white); backdrop-filter: blur(10px); display: flex; flex-direction: column; align-items: center; }
+        .analog-clock { width: 160px; height: 160px; border: 4px solid var(--secondary); border-radius: 50%; margin-bottom: 10px; position: relative; background: radial-gradient(circle, #0a3622 0%, #03120b 100%); box-shadow: inset 0 0 15px rgba(0,0,0,0.6), 0 5px 15px rgba(0,0,0,0.3); box-sizing: border-box; }
         .clock-face { width: 100%; height: 100%; position: relative; }
-
         .tick { position: absolute; top: 4px; left: 50%; width: 2px; height: 6px; background: rgba(212, 175, 55, 0.5); transform-origin: 50% 72px; margin-left: -1px; z-index: 1; }
         .tick.hour-tick { width: 3px; height: 10px; background: var(--secondary); margin-left: -1.5px; transform-origin: 50% 72px; }
-
         .clock-number { position: absolute; font-family: 'Amiri', serif; font-size: 1.1rem; font-weight: bold; color: var(--secondary); transform: translate(-50%, -50%); z-index: 2; }
         .num-12 { top: 20px; left: 50%; } .num-3 { top: 50%; left: calc(100% - 20px); } .num-6 { top: calc(100% - 20px); left: 50%; } .num-9 { top: 50%; left: 20px; }
-
         .hand { position: absolute; bottom: 50%; transform-origin: bottom center; border-radius: 10px; z-index: 3; }
         .hour-hand { width: 5px; height: 40px; background: var(--white); left: calc(50% - 2.5px); }
         .minute-hand { width: 4px; height: 55px; background: var(--secondary); left: calc(50% - 2px); }
         .second-hand { width: 2px; height: 65px; background: #ff3b30; left: calc(50% - 1px); z-index: 4; }
         .center-dot { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: var(--secondary); border-radius: 50%; transform: translate(-50%, -50%); z-index: 5; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
-
-        .lux-date { font-size: 1rem; color: #e0e0e0; font-family: 'Cairo', sans-serif; font-weight: 600; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 10px; }
-        body.lang-sv .lux-date { font-family: 'Segoe UI', Tahoma, sans-serif; }
+        .lux-date { font-size: 1rem; color: #e0e0e0; font-family: inherit; font-weight: 600; background: rgba(0,0,0,0.2); padding: 5px 12px; border-radius: 10px; }
     </style>
 </head>
 <body>
     <script>
-        (function() {
-            let initLang = localStorage.getItem('lang') || 'ar';
-            document.documentElement.lang = initLang;
-            document.documentElement.dir = initLang === 'ar' ? 'rtl' : 'ltr';
-            if (initLang === 'sv') {
-                document.body.classList.add('lang-sv');
-            }
-        })();
+        // جعل السويدية هي اللغة الافتراضية
+        let currentLang = localStorage.getItem('lang') || 'sv';
+        document.documentElement.lang = currentLang;
+        document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+        if (currentLang === 'ar') document.body.classList.add('lang-ar');
     </script>
 
     <header>
         <div class="header-brand">
             <i class="fas fa-bars icon-btn" onclick="toggleSidebar()"></i>
             <i class="fas fa-mosque"></i>
-            <span id="nav-title">مسجد الرحمن</span>
+            <span id="nav-title">Moské Ar-Rahman</span>
         </div>
         <div class="header-actions">
-            <div class="icon-btn" onclick="toggleLanguage()" style="font-size: 13px; border: 1px solid var(--secondary); padding: 3px 6px; border-radius: 12px; font-weight:bold;">AR/SV</div>
+            <div class="icon-btn" onclick="toggleLanguage()" style="font-size: 13px; border: 1px solid var(--secondary); padding: 3px 6px; border-radius: 12px; font-weight:bold;">SV/AR</div>
             <div class="bell-container">
                 <i class="fas fa-bell icon-btn" onclick="toggleNotifications()"></i>
                 <div class="notif-dot" id="notif-dot"></div>
                 <div class="notif-box" id="notif-box">
                     <div class="notif-header">
-                        <span id="notif-title-text">الإشعارات</span>
+                        <span id="notif-title-text">Notiser</span>
                         <i class="fas fa-times" style="cursor:pointer;" onclick="toggleNotifications()"></i>
                     </div>
                     <div class="notif-body" id="notif-body">
@@ -305,33 +232,16 @@
 
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
-            <h3>القائمة</h3>
+            <h3 id="menu-title">Meny</h3>
             <i class="fas fa-times icon-btn" onclick="toggleSidebar()"></i>
         </div>
         <div class="menu-links">
-            <a href="#" onclick="toggleSidebar();"><i class="fas fa-home"></i> <span id="menu-home">الرئيسية</span></a>
-            <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">مواقيت الصلاة</span></a>
-            <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">الأنشطة</span></a>
-            <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">المعرض</span></a>
-            <button onclick="toggleNotificationPermission()"><i id="menu-notif-icon" class="fas fa-bell"></i> <span id="menu-notif-btn">تفعيل الإشعارات</span></button>
-            <a href="admin.html"><i class="fas fa-cog"></i> <span id="menu-admin">الإدارة</span></a>
-        </div>
-    </div>
-
-    <div class="image-viewer-overlay" id="image-viewer-modal" onclick="this.style.display='none'">
-        <i class="fas fa-times close-img-btn"></i>
-        <img id="full-screen-img" src="" alt="Full Screen Image">
-    </div>
-
-    <div id="install-app-prompt" class="install-prompt-container">
-        <div class="install-icon"><img src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg" alt="App Icon"></div>
-        <div class="install-text">
-            <h4 id="install-title-text">تطبيق المسجد</h4>
-            <p id="install-desc-text">قم بتثبيت التطبيق على هاتفك للوصول السريع وتلقي التنبيهات.</p>
-        </div>
-        <div class="install-actions">
-            <button id="btn-install" class="btn-install-yes">تثبيت</button>
-            <button id="btn-install-close" class="btn-install-no"><i class="fas fa-times"></i></button>
+            <a href="#" onclick="toggleSidebar();"><i class="fas fa-home"></i> <span id="menu-home">Hem</span></a>
+            <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">Bönetider</span></a>
+            <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">Aktiviteter</span></a>
+            <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">Galleri</span></a>
+            <button onclick="requestNativeNotifications()"><i id="menu-notif-icon" class="fas fa-bell"></i> <span id="menu-notif-btn">Aktivera Notiser</span></button>
+            <a href="admin.html"><i class="fas fa-cog"></i> <span id="menu-admin">Admin</span></a>
         </div>
     </div>
 
@@ -339,8 +249,8 @@
         <section class="hero">
             <div class="hero-overlay"></div>
             <div class="hero-content">
-                <h1 class="hero-title" id="hero-title">مسجد الرحمن</h1>
-                <p class="hero-subtitle" id="hero-subtitle">نرحب بكم في بيت الله في مدينة بيرستورب السويدية</p>
+                <h1 class="hero-title" id="hero-title">Moské Ar-Rahman</h1>
+                <p class="hero-subtitle" id="hero-subtitle">Välkommen till Allahs hus i Perstorp, Sverige</p>
             </div>
         </section>
 
@@ -365,14 +275,13 @@
         <section class="section fade-in" id="prayers">
             <div class="section-header">
                 <div class="title-row">
-                    <h2 class="section-title" id="title-prayer">مواقيت الصلاة</h2>
+                    <h2 class="section-title" id="title-prayer">Bönetider</h2>
                     <span class="city-badge">Perstorp</span>
                 </div>
                 <div class="title-separator"><i class="fas fa-star-and-crescent"></i></div>
             </div>
-            <div class="date-wrapper"><div class="current-date-box" id="current-date-text">--/--/----</div></div>
             <div class="timer-container">
-                <div class="timer-title" id="timer-title">باقي على ...</div>
+                <div class="timer-title" id="timer-title">Tid kvar...</div>
                 <div class="countdown-clock" id="countdown-clock">00:00:00</div>
             </div>
             <div class="prayer-grid" id="prayer-container"></div>
@@ -381,53 +290,43 @@
         <section class="section fade-in" id="activities" style="background: var(--white);">
             <div class="section-header">
                 <div class="title-row">
-                    <h2 class="section-title" id="title-activities">أنشطة المسجد</h2>
+                    <h2 class="section-title" id="title-activities">Aktiviteter</h2>
                 </div>
                 <div class="title-separator"><i class="fas fa-users"></i></div>
             </div>
-            <div id="loader-activities" class="loader-spinner active"></div>
             <div class="activities-grid" id="activities-container"></div>
-            <p id="no-activities-msg" style="text-align:center; color:#666; display:none;">لا توجد أنشطة حالياً. الإدارة ستقوم بإضافة الأنشطة قريباً.</p>
         </section>
 
         <section class="section fade-in" id="gallery">
             <div class="section-header">
                 <div class="title-row">
-                    <h2 class="section-title" id="title-gallery">معرض الصور</h2>
+                    <h2 class="section-title" id="title-gallery">Bildgalleri</h2>
                 </div>
                 <div class="title-separator"><i class="fas fa-camera"></i></div>
             </div>
-            <div id="loader-gallery" class="loader-spinner active"></div>
             <div class="gallery-grid" id="gallery-container"></div>
-            <p id="no-gallery-msg" style="text-align:center; color:#666; display:none;">لا توجد صور حالياً. الإدارة ستقوم بإضافة الصور قريباً.</p>
-            <div class="load-more-container"><button class="btn-load-more" id="btn-load-more" onclick="loadMoreGallery()" style="display: none;"><span id="text-load-more">عرض المزيد</span> <i class="fas fa-chevron-down"></i></button></div>
         </section>
 
         <section class="section fade-in" id="donate">
             <div class="section-header">
-                <div class="title-row"><h2 class="section-title" id="title-donate">تبرع للمسجد</h2></div>
+                <div class="title-row"><h2 class="section-title" id="title-donate">Stöd Moskén</h2></div>
                 <div class="title-separator"><i class="fas fa-hand-holding-heart"></i></div>
             </div>
             <div class="donation-wrap">
-                <i class="fas fa-mosque donation-deco"></i>
                 <div class="donation-info">
-                    <div style="font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;"><i class="fas fa-mobile-alt" style="color: var(--primary);"></i> Swish</div>
-                    <p id="text-swish">ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.</p>
+                    <div style="font-size: 24px; font-weight: 800; color: var(--text-dark); margin-bottom: 10px;"><i class="fas fa-mobile-alt" style="color: var(--primary);"></i> Swish</div>
+                    <p id="text-swish">Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.</p>
                     <div class="swish-number">123-297 15 47</div><br>
-                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" class="donate-btn-modern" id="btn-donate">اضغط هنا للتبرع <i class="fas fa-hand-holding-usd"></i></a>
-                </div>
-                <div class="qr-scanner-box">
-                    <div class="qr-wrapper"><img class="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK&msg=&edit=amt,msg&src=qr" alt="Swish QR Code"><img class="qr-logo-center" src="https://res.cloudinary.com/db9h7zm1h/image/upload/w_100,q_auto,f_auto/v1774915234/yjqwld9orxskwkl4ttsq.jpg" alt="Swish Logo"></div>
+                    <a href="https://app.swish.nu/1/p/sw/?sw=1232971547&amt=200&cur=SEK" class="donate-btn-modern" id="btn-donate">Klicka här för att donera <i class="fas fa-hand-holding-usd"></i></a>
                 </div>
             </div>
         </section>
 
         <section class="section fade-in" id="contact" style="padding-bottom: 60px;">
             <div class="contact-card">
-                <div class="contact-avatar"><i class="fas fa-user-tie"></i></div>
-                <h2 class="section-title" id="title-contact" style="color: var(--white);">تواصل مع الإدارة</h2>
-                <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
-                <p id="address-text" style="font-size: 0.85rem; margin: 10px 0; color: #eee; direction: ltr;"></p>
+                <div class="contact-avatar"><i class="fas fa-envelope"></i></div>
+                <h2 class="section-title" id="title-contact" style="color: var(--white);">Kontakta Admin</h2>
+                <p id="address-text" style="font-size: 0.9rem; margin: 10px 0; color: #eee; direction: ltr;">Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp</p>
                 <div class="social-btns">
                     <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
                     <a href="https://www.facebook.com/share/1JBr9EDvWA/" class="btn btn-fb"><i class="fab fa-facebook-f"></i> Facebook</a>
@@ -453,160 +352,129 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const analytics = firebase.analytics();
-        let messaging; try { if (firebase.messaging.isSupported()) messaging = firebase.messaging(); } catch (e) {}
+        const publicVapidKey = "BOX0a8Dg181ZMjLic3risMEkJZio0hNHGIABg1Mym1qaSorpI6NcJ3QQ79WXg0qi6R1n4SXo-aib3WUkNcIII6E";
+        
+        let messaging; 
+        try { if (firebase.messaging.isSupported()) messaging = firebase.messaging(); } catch (e) { console.warn('Messaging not supported'); }
 
-        let currentLang = localStorage.getItem('lang') || 'ar';
         let isNotifEnabled = localStorage.getItem('notifEnabled') === 'true';
-        let visibleGalleryCount = 6;
         let siteData = { activities:[], gallery:[], notifications:[] };
         let prayerTimes =[];
-        let notifiedPrayers = {};
 
         const langData = {
             ar: { 
-                nav: "مسجد الرحمن", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة", heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية", tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد", tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.", btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>", tGallery: "معرض الصور", loadMore: "عرض المزيد", tContact: "تواصل مع الإدارة", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد", 
-                prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnDisable: "إلغاء الإشعارات",
-                installTitle: "تطبيق المسجد", installDesc: "قم بتثبيت التطبيق على هاتفك للوصول السريع والإشعارات.", installBtn: "تثبيت"
+                nav: "مسجد الرحمن", menuTitle: "القائمة", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة", heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية", tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد", tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.", btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>", tGallery: "معرض الصور", tContact: "تواصل مع الإدارة", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد", 
+                prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnDisable: "إلغاء الإشعارات"
             },
             sv: { 
-                nav: "Moské Ar-Rahman", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.", btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", loadMore: "Visa mer", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
-                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnDisable: "Inaktivera Notiser",
-                installTitle: "Moskéns App", installDesc: "Installera appen på din telefon för snabb åtkomst.", installBtn: "Installera"
+                nav: "Moské Ar-Rahman", menuTitle: "Meny", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.", btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
+                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnDisable: "Inaktivera Notiser"
             }
         };
 
+        // ================= الإشعارات وحفظ التوكن =================
+        async function requestNativeNotifications() {
+            if (!('Notification' in window)) {
+                alert(currentLang === 'sv' ? "Din webbläsare stöder inte notiser." : "متصفحك لا يدعم الإشعارات."); return;
+            }
+            if (Notification.permission === 'granted') { saveFCMToken(); return; }
+
+            try {
+                const permission = await Notification.requestPermission();
+                if (permission === 'granted') {
+                    isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true');
+                    updateNotifBtnUI(); saveFCMToken();
+                    showToast(currentLang === 'sv' ? "Notiser är nu aktiverade! 🔔" : "تم تفعيل الإشعارات بنجاح! 🔔");
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function saveFCMToken() {
+            if(!messaging) return;
+            try {
+                const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+                const token = await messaging.getToken({ vapidKey: publicVapidKey, serviceWorkerRegistration: registration });
+                if (token) {
+                    await db.collection('users_tokens').doc(token).set({
+                        token: token,
+                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                        userAgent: navigator.userAgent
+                    });
+                }
+            } catch(e) { console.log('Error saving token', e); }
+        }
+
+        // طلب الإشعارات تلقائياً عند أول ضغطة للمستخدم في الصفحة
+        window.addEventListener('click', function firstInteraction() {
+            if ('Notification' in window && Notification.permission === 'default') {
+                requestNativeNotifications();
+            }
+            window.removeEventListener('click', firstInteraction);
+        }, { once: true });
+
+
+        // ================= التبديل بين اللغات (مع منع الطيران) =================
+        function toggleLanguage() {
+            // إضافة كلاس يمنع الحركات مؤقتاً
+            document.body.classList.add('no-transition');
+            
+            currentLang = currentLang === 'ar' ? 'sv' : 'ar';
+            localStorage.setItem('lang', currentLang);
+            applyTranslations();
+            updateAnalogClock();
+
+            // إجبار المتصفح على قراءة التغييرات فوراً لتجنب تأثير الانتقال المرئي السيئ
+            void document.body.offsetHeight; 
+
+            // إزالة الكلاس بعد جزء من الثانية
+            setTimeout(() => {
+                document.body.classList.remove('no-transition');
+            }, 50);
+        }
+
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
+        function toggleNotifications() { const box = document.getElementById('notif-box'); box.classList.toggle('show'); if(box.classList.contains('show')) document.getElementById('notif-dot').classList.remove('active'); }
+
+        function updateNotifBtnUI() {
+            const t = langData[currentLang]; const btnText = document.getElementById('menu-notif-btn'); const btnIcon = document.getElementById('menu-notif-icon');
+            if (Notification.permission === 'granted' || isNotifEnabled) { btnText.innerText = t.notifBtnDisable; btnIcon.className = "fas fa-bell-slash"; btnIcon.parentElement.style.color = "#ff3b30"; } 
+            else { btnText.innerText = t.notifBtnEnable; btnIcon.className = "fas fa-bell"; btnIcon.parentElement.style.color = "var(--text-dark)"; }
+        }
+
+        function applyTranslations() {
+            const t = langData[currentLang]; document.documentElement.lang = currentLang; document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            if (currentLang === 'ar') document.body.classList.add('lang-ar'); else document.body.classList.remove('lang-ar');
+            
+            document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-title').innerText = t.menuTitle; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle;
+            updateNotifBtnUI(); renderPrayers(); renderActivities(); renderGallery();
+        }
+
+        // ================= الساعة والصلاة =================
         function createClockTicks() {
             const face = document.getElementById('clock-face');
             for (let i = 0; i < 60; i++) {
                 const tick = document.createElement('div');
                 if (i % 5 === 0) { tick.className = 'tick hour-tick'; } else { tick.className = 'tick'; }
-                tick.style.transform = `rotate(${i * 6}deg)`;
-                face.appendChild(tick);
+                tick.style.transform = `rotate(${i * 6}deg)`; face.appendChild(tick);
             }
         }
 
         function updateAnalogClock() {
             const now = new Date();
-            const seconds = now.getSeconds(); const minutes = now.getMinutes(); const hours = now.getHours();
-            const secondsDegrees = ((seconds / 60) * 360);
-            const minutesDegrees = ((minutes / 60) * 360) + ((seconds/60)*6);
-            const hoursDegrees = ((hours / 12) * 360) + ((minutes/60)*30);
-            document.getElementById('second-hand').style.transform = `rotate(${secondsDegrees}deg)`;
-            document.getElementById('minute-hand').style.transform = `rotate(${minutesDegrees}deg)`;
-            document.getElementById('hour-hand').style.transform = `rotate(${hoursDegrees}deg)`;
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            const locale = currentLang === 'ar' ? 'ar-EG' : 'sv-SE';
-            document.getElementById('lux-date').innerText = now.toLocaleDateString(locale, options);
-        }
-        setInterval(updateAnalogClock, 1000); updateAnalogClock();
+            document.getElementById('second-hand').style.transform = `rotate(${((now.getSeconds() / 60) * 360)}deg)`;
+            document.getElementById('minute-hand').style.transform = `rotate(${((now.getMinutes() / 60) * 360) + ((now.getSeconds()/60)*6)}deg)`;
+            document.getElementById('hour-hand').style.transform = `rotate(${((now.getHours() / 12) * 360) + ((now.getMinutes()/60)*30)}deg)`;
+            document.getElementById('lux-date').innerText = now.toLocaleDateString(currentLang === 'ar' ? 'ar-EG' : 'sv-SE', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        } setInterval(updateAnalogClock, 1000);
 
-        let wakeLock = null;
-        async function requestWakeLock() { try { if ('wakeLock' in navigator) { wakeLock = await navigator.wakeLock.request('screen'); } } catch (err) {} }
-        document.addEventListener('visibilitychange', async () => { if (wakeLock !== null && document.visibilityState === 'visible') { await requestWakeLock(); } });
-
-        let lastAdminNotif = null;
-        function listenToFirebase() {
-            db.collection("activities").orderBy("timestamp", "desc").limit(30).onSnapshot(snapshot => {
-                siteData.activities =[]; snapshot.forEach(doc => siteData.activities.push({ id: doc.id, ...doc.data() }));
-                document.getElementById('loader-activities').classList.remove('active'); renderActivities();
-            });
-            db.collection("gallery").orderBy("timestamp", "desc").limit(50).onSnapshot(snapshot => {
-                siteData.gallery =[]; snapshot.forEach(doc => siteData.gallery.push({ id: doc.id, ...doc.data() }));
-                document.getElementById('loader-gallery').classList.remove('active'); renderGallery();
-            });
-            db.collection("notifications").orderBy("timestamp", "desc").limit(10).onSnapshot(snapshot => {
-                siteData.notifications =[]; snapshot.forEach(doc => siteData.notifications.push({ id: doc.id, ...doc.data() }));
-                if(siteData.notifications.length > 0) {
-                    lastAdminNotif = siteData.notifications[0];
-                    let lastSeen = localStorage.getItem('last_seen_notif');
-                    if(lastSeen !== lastAdminNotif.id) {
-                        setTimeout(() => { showToast(currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv, 8000); localStorage.setItem('last_seen_notif', lastAdminNotif.id); }, 2000);
-                    }
-                }
-                renderNotifications();
-            });
-        }
-        setInterval(() => { if(lastAdminNotif && isNotifEnabled) { const text = currentLang === 'ar' ? lastAdminNotif.ar : lastAdminNotif.sv; showToast(text); sendLocalPushNotification(langData[currentLang].notifTitle, text); } }, 3600000);
-
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; setTimeout(() => { document.getElementById('install-app-prompt').classList.add('show'); }, 4000); });
-        document.getElementById('btn-install').addEventListener('click', async () => { document.getElementById('install-app-prompt').classList.remove('show'); if (deferredPrompt) { deferredPrompt.prompt(); const { outcome } = await deferredPrompt.userChoice; deferredPrompt = null; } });
-        document.getElementById('btn-install-close').addEventListener('click', () => { document.getElementById('install-app-prompt').classList.remove('show'); });
-
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
-        function toggleLanguage() { currentLang = currentLang === 'ar' ? 'sv' : 'ar'; localStorage.setItem('lang', currentLang); applyTranslations(); updateAnalogClock(); }
-
-        function updateNotifBtnUI() {
-            const t = langData[currentLang]; const btnText = document.getElementById('menu-notif-btn'); const btnIcon = document.getElementById('menu-notif-icon');
-            if (isNotifEnabled) { btnText.innerText = t.notifBtnDisable; btnIcon.className = "fas fa-bell-slash"; btnIcon.parentElement.style.color = "#ff3b30"; } 
-            else { btnText.innerText = t.notifBtnEnable; btnIcon.className = "fas fa-bell"; btnIcon.parentElement.style.color = "var(--text-dark)"; }
-        }
-
-        function toggleNotificationPermission() {
-            if (isNotifEnabled) {
-                isNotifEnabled = false; localStorage.setItem('notifEnabled', 'false'); alert(currentLang === 'ar' ? "تم إيقاف الإشعارات" : "Notiser inaktiverade"); updateNotifBtnUI(); toggleSidebar();
-            } else {
-                if (!("Notification" in window)) { alert("متصفحك لا يدعم الإشعارات"); return; }
-                Notification.requestPermission().then(permission => { 
-                    if (permission === "granted") { 
-                        isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true'); alert(currentLang === 'ar' ? "تم تفعيل الإشعارات بنجاح" : "Notiser aktiverade"); updateNotifBtnUI(); toggleSidebar(); 
-                        if(messaging) {
-                            messaging.getToken().then((currentToken) => {
-                                if (currentToken) {
-                                    db.collection('users_tokens').doc(currentToken).set({
-                                        token: currentToken,
-                                        timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-                                        userAgent: navigator.userAgent
-                                    });
-                                }
-                            }).catch((err) => console.log('Error getting token', err));
-                        }
-                    } 
-                });
-            }
-        }
-
-        function applyTranslations() {
-            const t = langData[currentLang]; document.documentElement.lang = currentLang; document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            if (currentLang === 'sv') document.body.classList.add('lang-sv'); else document.body.classList.remove('lang-sv');
-            document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('text-load-more').innerText = t.loadMore; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle; document.getElementById('install-title-text').innerText = t.installTitle; document.getElementById('install-desc-text').innerText = t.installDesc; document.getElementById('btn-install').innerText = t.installBtn;
-            updateNotifBtnUI(); renderPrayers(); renderActivities(); renderGallery(); renderNotifications();
-        }
-
-        function toggleNotifications() { const box = document.getElementById('notif-box'); box.classList.toggle('show'); if(box.classList.contains('show')) document.getElementById('notif-dot').classList.remove('active'); }
-
-        function renderNotifications() {
-            const adminContainer = document.getElementById('admin-notifs'); let allNotifs =[];
-            siteData.notifications.forEach(n => { allNotifs.push({ text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-envelope' }); });
-            allNotifs.sort((a, b) => b.time - a.time);
-            if(allNotifs.length === 0) { adminContainer.innerHTML = `<div class="notif-item" style="justify-content:center; color:#888;">لا توجد إشعارات إدارية</div>`; return; }
-            let html = '';
-            allNotifs.forEach(n => { const date = new Date(n.time).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'sv-SE'); html += `<div class="notif-item"><i class="fas ${n.icon}" style="margin-top:4px; color: var(--primary); font-size:0.9rem;"></i><div><div style="font-size:0.85rem; font-weight:600;">${n.text}</div><div style="font-size:0.7rem; color:#888; margin-top:2px;">${date}</div></div></div>`; });
-            adminContainer.innerHTML = html; document.getElementById('notif-dot').classList.add('active');
-        }
-
-        function showToast(text, duration = 6000) { const toastEl = document.getElementById('app-toast-box'); document.getElementById('toast-msg-text').innerText = text; toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, duration); }
-
-        function playAlertSound() { const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg'); audio.play().catch(e => console.log("الصوت محظور من المتصفح حتى يتفاعل المستخدم")); }
-
-        function sendLocalPushNotification(title, body) {
-            if (Notification.permission === "granted" && isNotifEnabled) { 
-                playAlertSound();
-                navigator.serviceWorker.ready.then(reg => { 
-                    reg.showNotification(title, { body: body, icon: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg", vibrate:[200, 100, 200, 100, 200], requireInteraction: true }); 
-                }); 
-            }
-        }
-
-        function addMinutes(timeStr, minsToAdd) { if (!timeStr) return ""; let[hours, minutes] = timeStr.split(':').map(Number); let date = new Date(); date.setHours(hours, minutes + minsToAdd, 0, 0); return `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`; }
+        function addMinutes(timeStr, minsToAdd) { if (!timeStr) return ""; let[h, m] = timeStr.split(':').map(Number); let d = new Date(); d.setHours(h, m + minsToAdd, 0, 0); return `${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`; }
 
         function loadTodaysPrayers() {
             const today = new Date(); const monthNames =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
             let todayData = null; if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months[monthNames[today.getMonth()]]) todayData = yearlyPrayerData.months[monthNames[today.getMonth()]].find(d => d.Dat === today.getDate().toString());
             if (!todayData) todayData = { Fajr: "04:00", Shuruk: "06:00", Dhohr: "13:00", Asr: "16:00", Magrib: "19:00", Isha: "21:00" };
             prayerTimes =[ { id: 'fajr', icon: 'fa-moon', adhan: todayData.Fajr, iqama: addMinutes(todayData.Fajr, 20) }, { id: 'shurooq', icon: 'fa-sun', time: todayData.Shuruk, type: 'no-prayer' }, { id: 'dhuhr', icon: 'fa-sun', adhan: todayData.Dhohr, iqama: addMinutes(todayData.Dhohr, 10) }, { id: 'asr', icon: 'fa-cloud-sun', adhan: todayData.Asr, iqama: addMinutes(todayData.Asr, 10) }, { id: 'maghrib', icon: 'fa-cloud-moon', adhan: todayData.Magrib, iqama: addMinutes(todayData.Magrib, 10) }, { id: 'isha', icon: 'fa-star-and-crescent', adhan: todayData.Isha, iqama: addMinutes(todayData.Isha, 10) } ];
-            renderPrayers(); document.getElementById('current-date-text').innerText = `${today.getDate()} / ${today.getMonth() + 1} / ${today.getFullYear()}`;
+            renderPrayers(); 
         }
 
         function renderPrayers() {
@@ -616,64 +484,61 @@
         }
 
         function updateTimer() {
-            if (prayerTimes.length === 0) return; const now = new Date(); const t = langData[currentLang]; let target = null; let title = ""; let cId = null; let actualPrayerName = ""; let targetType = "";
+            if (prayerTimes.length === 0) return; const now = new Date(); const t = langData[currentLang]; let target = null; let title = ""; let cId = null; 
             for (let p of prayerTimes.filter(p => p.type !== 'no-prayer')) {
                 let aDate = new Date(); aDate.setHours(...p.adhan.split(':'), 0, 0); let iDate = new Date(); iDate.setHours(...p.iqama.split(':'), 0, 0);
-                if (now < aDate) { target = aDate; title = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; cId = p.id; actualPrayerName = t.prayerNames[p.id]; targetType = "adhan"; break; } 
-                else if (now < iDate) { target = iDate; title = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; cId = p.id; actualPrayerName = t.prayerNames[p.id]; targetType = "iqama"; break; }
+                if (now < aDate) { target = aDate; title = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; cId = p.id; break; } 
+                else if (now < iDate) { target = iDate; title = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; cId = p.id; break; }
             }
-            if (!target) { let f = prayerTimes[0]; target = new Date(); target.setDate(target.getDate() + 1); target.setHours(...f.adhan.split(':'), 0, 0); title = `${t.timerTexts.adhan} ${t.prayerNames[f.id]}`; cId = f.id; actualPrayerName = t.prayerNames[f.id]; targetType = "adhan"; }
+            if (!target) { let f = prayerTimes[0]; target = new Date(); target.setDate(target.getDate() + 1); target.setHours(...f.adhan.split(':'), 0, 0); title = `${t.timerTexts.adhan} ${t.prayerNames[f.id]}`; cId = f.id; }
 
             let diff = target - now; let h = Math.floor((diff % 86400000) / 3600000); let m = Math.floor((diff % 3600000) / 60000); let s = Math.floor((diff % 60000) / 1000);
-            let timeString = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-
             document.getElementById('timer-title').innerText = title; 
-            document.getElementById('countdown-clock').innerText = timeString;
+            document.getElementById('countdown-clock').innerText = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
-
-            const dynamicNotif = document.getElementById('dynamic-prayer-notif');
-            if(dynamicNotif) {
-                dynamicNotif.innerHTML = `<div class="notif-item prayer-alert"><i class="fas fa-clock" style="margin-top:4px; color: var(--primary); font-size:1.1rem;"></i><div style="flex: 1;"><div style="font-size:0.9rem; font-weight:bold; color: var(--text-dark);">${title}</div><div style="font-size:1rem; color:var(--primary); margin-top:4px; font-weight:bold; font-family: monospace; direction: ltr; text-align: ${currentLang === 'ar' ? 'right' : 'left'};">${timeString}</div></div></div>`;
-            }
-
-            if (targetType === "adhan" && h === 0 && m === 15 && s === 0 && !notifiedPrayers[cId+'_adhan']) { 
-                notifiedPrayers[cId+'_adhan'] = true; let pushTitle = currentLang === 'ar' ? "تنبيه الأذان" : "Adhan Påminnelse"; let pushBody = currentLang === 'ar' ? `باقي 15 دقيقة على أذان ${actualPrayerName}` : `15 minuter till Adhan för ${actualPrayerName}`; showToast(pushBody, 15000); sendLocalPushNotification(pushTitle, pushBody); 
-            }
-            if (targetType === "iqama" && h === 0 && m === 5 && s === 0 && !notifiedPrayers[cId+'_iqama']) { 
-                notifiedPrayers[cId+'_iqama'] = true; let pushTitle = currentLang === 'ar' ? "تنبيه الإقامة" : "Iqama Påminnelse"; let pushBody = currentLang === 'ar' ? `باقي 5 دقائق على إقامة ${actualPrayerName}` : `5 minuter till Iqama för ${actualPrayerName}`; showToast(pushBody, 15000); sendLocalPushNotification(pushTitle, pushBody); 
-            }
         } setInterval(updateTimer, 1000);
 
+        // ================= الداتا العامة والتأثيرات =================
+        function showToast(text, duration = 4000) { const toastEl = document.getElementById('app-toast-box'); document.getElementById('toast-msg-text').innerText = text; toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, duration); }
+
+        function listenToFirebase() {
+            db.collection("activities").orderBy("timestamp", "desc").limit(6).onSnapshot(snapshot => {
+                siteData.activities =[]; snapshot.forEach(doc => siteData.activities.push({ id: doc.id, ...doc.data() })); renderActivities();
+            });
+            db.collection("gallery").orderBy("timestamp", "desc").limit(8).onSnapshot(snapshot => {
+                siteData.gallery =[]; snapshot.forEach(doc => siteData.gallery.push({ id: doc.id, ...doc.data() })); renderGallery();
+            });
+            db.collection("notifications").orderBy("timestamp", "desc").limit(5).onSnapshot(snapshot => {
+                siteData.notifications =[]; snapshot.forEach(doc => siteData.notifications.push({ id: doc.id, ...doc.data() })); renderNotifications();
+            });
+        }
+
         function renderActivities() {
-            const container = document.getElementById('activities-container'); const msg = document.getElementById('no-activities-msg');
-            if(siteData.activities.length === 0) { container.innerHTML = ''; msg.style.display = 'block'; return; } else { msg.style.display = 'none'; }
-            let html = '';
+            const container = document.getElementById('activities-container'); let html = '';
             siteData.activities.forEach(act => {
                 const title = currentLang === 'ar' ? (act.titleAr || act.title) : (act.titleSv || act.title);
                 const desc = currentLang === 'ar' ? (act.descAr || act.desc) : (act.descSv || act.desc);
                 html += `<div class="activity-card"><img src="${act.img}" loading="lazy" class="activity-img"><div class="activity-content"><h3 class="activity-title">${title}</h3><p class="activity-desc">${desc}</p></div></div>`;
-            });
-            container.innerHTML = html;
+            }); container.innerHTML = html;
         }
 
         function renderGallery() {
-            const container = document.getElementById('gallery-container'); const msg = document.getElementById('no-gallery-msg');
-            if(siteData.gallery.length === 0) { container.innerHTML = ''; msg.style.display = 'block'; document.getElementById('btn-load-more').style.display='none'; return; } else { msg.style.display = 'none'; }
-            const itemsToShow = siteData.gallery.slice(0, visibleGalleryCount); let html = '';
-            itemsToShow.forEach(img => {
-                const cap = currentLang === 'ar' ? (img.captionAr || img.caption) : (img.captionSv || img.caption);
-                html += `<div class="gallery-item" onclick="if(event.target.tagName !== 'BUTTON' && event.target.tagName !== 'I') { document.getElementById('full-screen-img').src='${img.url.replace('w_400,', '')}'; document.getElementById('image-viewer-modal').style.display='flex'; }"><img src="${img.url}" loading="lazy">${cap ? `<div class="gallery-caption">${cap}</div>` : ''}</div>`;
-            });
-            container.innerHTML = html; document.getElementById('btn-load-more').style.display = siteData.gallery.length > visibleGalleryCount ? 'inline-flex' : 'none';
+            const container = document.getElementById('gallery-container'); let html = '';
+            siteData.gallery.forEach(img => { html += `<div class="gallery-item"><img src="${img.url}" loading="lazy"></div>`; }); container.innerHTML = html;
         }
-        function loadMoreGallery() { visibleGalleryCount += 6; renderGallery(); }
+
+        function renderNotifications() {
+            const adminContainer = document.getElementById('admin-notifs'); let allNotifs =[];
+            siteData.notifications.forEach(n => { allNotifs.push({ text: currentLang === 'ar' ? n.ar : n.sv, time: n.timestamp, icon: 'fa-envelope' }); });
+            if(allNotifs.length === 0) return; let html = '';
+            allNotifs.forEach(n => { const date = new Date(n.time).toLocaleString(currentLang === 'ar' ? 'ar-EG' : 'sv-SE'); html += `<div class="notif-item"><i class="fas ${n.icon}" style="margin-top:4px; color: var(--primary);"></i><div><div style="font-size:0.85rem; font-weight:600;">${n.text}</div><div style="font-size:0.7rem; color:#888; margin-top:2px;">${date}</div></div></div>`; });
+            adminContainer.innerHTML = html; document.getElementById('notif-dot').classList.add('active');
+        }
 
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
 
         window.onload = () => {
-            requestWakeLock(); createClockTicks();
-            if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/firebase-messaging-sw.js').then(function(registration) { console.log('Service Worker Registered'); }).catch(function(err) { console.error('Service Worker registration failed: ', err); }); }
-            loadTodaysPrayers(); applyTranslations(); listenToFirebase();
+            createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
         };
     </script>
