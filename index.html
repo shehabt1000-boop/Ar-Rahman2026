@@ -295,23 +295,23 @@
             position: relative;
         }
         
-        /* صف الصلاة: الرمز على اليمين والتفاصيل على اليسار */
+/* صف الصلاة: الرمز أقصى اليسار وبجواره التفاصيل مباشرة */
         .tv-prayer-row {
             flex: 1; display: flex; flex-direction: row; align-items: center; 
-            padding: 0 15px 0 25px; border-bottom: 1px solid rgba(255,255,255,0.1); 
-            position: relative; justify-content: space-between;
+            padding: 0 15px 0 35px; border-bottom: 1px solid rgba(255,255,255,0.1); 
+            direction: ltr; justify-content: flex-start; gap: 20px;
         }
-        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 12px; }
-        .tv-prayer-icon { font-size: min(3vw, 4vh); color: #fff; width: 25%; text-align: right; }
-        .tv-prayer-details { width: 75%; display: flex; flex-direction: column; align-items: flex-end; text-align: left; }
+        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-left: 8px solid #d4af37; padding-left: 27px; border-right: none; }
+        .tv-prayer-icon { font-size: min(3.5vw, 4vh); color: #fff; }
+        .tv-prayer-details { display: flex; flex-direction: column; align-items: center; text-align: center; direction: rtl; }
         .tv-prayer-name { font-size: min(1.8vw, 2.5vh); font-weight: bold; color: #e0e0e0; margin-bottom: 2px; }
         .tv-prayer-time { font-size: min(3.5vw, 4.5vh); font-weight: 900; color: #fff; line-height: 1; font-family: monospace; letter-spacing: 2px; direction: ltr; }
         .tv-prayer-iqama { font-size: min(1vw, 1.5vh); color: #fff; background: rgba(0,0,0,0.4); padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 6px; }
-
+      
         /* المنطقة الرئيسية (الخلفية والساعة) - على اليمين بصرياً */
         .tv-main {
             width: 72%; position: relative;
-            background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg');
+            background-image: url('https://res.cloudinary.com/dsxrjmcxs/image/upload/c_limit,w_600,q_auto,f_auto/v1777669774/cufyfeqolg9b0lbx1nyd.jpg');
             background-size: cover; background-position: center;
         }
         .tv-main-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
