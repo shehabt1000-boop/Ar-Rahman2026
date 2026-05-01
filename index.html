@@ -26,7 +26,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-analytics.js"></script>
 
-    <!-- ملف مواقيت الصلاة (تأكد من وجوده) -->
+    <!-- ملف مواقيت الصلاة (تأكد من وجوده بجانب هذا الملف) -->
     <script src="prayers.js"></script>
 
     <style>
@@ -36,19 +36,38 @@
             --light-bg: #f8f9fa;
             --white: #ffffff;
             --text-dark: #2c3e50;
+            --text-muted: #6c7a89;
+            --success: #27ae60;
+            --danger: #e74c3c;
             --shadow: 0 8px 20px rgba(0,0,0,0.06);
+            --transition: all 0.3s ease;
         }
 
-        /* كلاس لإيقاف التأثيرات مؤقتاً عند تبديل اللغة لمنع طيران القائمة */
-        .no-transition, .no-transition * {
-            transition: none !important;
-        }
+        .no-transition, .no-transition * { transition: none !important; }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-bg); color: var(--text-dark); overflow-x: hidden; scroll-behavior: smooth; }
         
-        body.lang-ar { font-family: 'Cairo', sans-serif; }
+        /* === تعديلات أحجام الخطوط للغة العربية فقط لتتطابق مع السويدية === */
+        body.lang-ar { font-family: 'Cairo', sans-serif; font-size: 0.95rem; }
         body.lang-ar h1, body.lang-ar h2, body.lang-ar h3 { font-family: 'Amiri', serif; }
+        body.lang-ar .header-brand { font-size: 1.05rem; }
+        body.lang-ar .hero-title { font-size: 1.8rem; }
+        body.lang-ar .hero-subtitle { font-size: 1rem; }
+        body.lang-ar .section-title { font-size: 1.6rem; }
+        body.lang-ar .timer-title { font-size: 0.85rem; }
+        body.lang-ar .countdown-clock { font-size: 1.6rem; }
+        body.lang-ar .prayer-name { font-size: 0.9rem; }
+        body.lang-ar .prayer-time { font-size: 0.8rem; }
+        body.lang-ar .activity-title { font-size: 1rem; }
+        body.lang-ar .activity-desc { font-size: 0.85rem; line-height: 1.5; }
+        body.lang-ar .clock-number { font-size: 1rem; }
+        body.lang-ar .lux-date { font-size: 0.85rem; }
+        body.lang-ar .menu-links a, body.lang-ar .menu-links button { font-size: 0.95rem; }
+        body.lang-ar .btn, body.lang-ar .donate-btn-modern { font-size: 0.9rem; }
+        body.lang-ar .city-badge { font-size: 0.85rem; padding: 2px 10px; }
+        /* ============================================================= */
 
         header {
             position: fixed; top: 0; width: 100%; z-index: 1000; height: 65px;
@@ -57,7 +76,6 @@
             color: var(--secondary); box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
         .header-brand { display: flex; align-items: center; gap: 10px; font-size: 1.1rem; font-weight: bold; white-space: nowrap; }
-        body.lang-ar .header-brand { font-size: 1.2rem; } 
 
         .header-actions { display: flex; align-items: center; gap: 15px; flex-wrap: nowrap; }
         .icon-btn { cursor: pointer; font-size: 20px; transition: transform 0.2s ease, color 0.2s ease; }
@@ -103,6 +121,9 @@
         [dir="rtl"] .menu-links a, [dir="rtl"] .menu-links button { text-align: right; }
         .menu-links a:hover, .menu-links button:hover { background: var(--light-bg); color: var(--primary); }
 
+        /* حالة الزر المفعل في القائمة */
+        .btn-notif-active { color: var(--success) !important; background: rgba(39, 174, 96, 0.1) !important; border: 1px solid rgba(39, 174, 96, 0.3) !important; }
+
         .hero {
             position: relative; padding-top: 65px; min-height: 350px; height: auto;
             background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/w_800,q_auto,f_auto/v1774919582/aeujmznngbgp4ubcokht.jpg');
@@ -112,14 +133,12 @@
         .hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(10,54,34,0.3), rgba(10,54,34,0.7)); }
         .hero-content { position: relative; z-index: 1; color: var(--white); padding: 0 20px; width: 100%; max-width: 800px; animation: fadeInUp 0.8s ease-out forwards; opacity: 0; transform: translateY(15px); }
         .hero-title { font-size: 2rem; color: var(--secondary); margin-bottom: 5px; text-shadow: 2px 2px 5px rgba(0,0,0,0.8); word-break: break-word; letter-spacing: 0.5px;}
-        body.lang-ar .hero-title { font-size: 2.5rem; letter-spacing: normal; }
         .hero-subtitle { font-size: 1.1rem; margin-bottom: 10px; text-shadow: 1px 1px 3px rgba(0,0,0,0.8); line-height: 1.5; }
 
         .section { padding: 50px 5%; max-width: 1200px; margin: 0 auto; position: relative;}
         .section-header { text-align: center; margin-bottom: 30px; }
         .title-row { display: flex; justify-content: center; align-items: baseline; gap: 10px; margin-bottom: 5px; flex-wrap: wrap; }
         .section-title { font-size: 1.8rem; color: var(--primary); margin: 0; word-break: break-word; }
-        body.lang-ar .section-title { font-size: 2rem; }
         .city-badge { font-size: 0.9rem; color: var(--white); background: var(--secondary); padding: 3px 12px; border-radius: 20px; font-weight: bold; font-family: 'Segoe UI', sans-serif; }
         .title-separator { display: flex; align-items: center; justify-content: center; gap: 15px; }
         .title-separator::before, .title-separator::after { content: ''; height: 2px; width: 50px; background: linear-gradient(to right, transparent, var(--secondary), transparent); border-radius: 2px; }
@@ -149,7 +168,6 @@
         .gallery-item { position: relative; border-radius: 10px; overflow: hidden; height: 160px; box-shadow: var(--shadow); cursor: pointer; }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
         .gallery-caption { position: absolute; bottom: -100%; left: 0; width: 100%; padding: 8px; background: rgba(0,0,0,0.7); color: var(--white); transition: bottom 0.3s ease; text-align: center; font-size: 0.85rem; }
-        @media (hover: hover) { .gallery-item:hover img { transform: scale(1.05); } .gallery-item:hover .gallery-caption { bottom: 0; } }
 
         .donation-wrap { background: linear-gradient(145deg, #ffffff, #f4fdf8); border-radius: 20px; padding: 30px 15px; box-shadow: var(--shadow); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-evenly; gap: 20px; position: relative; overflow: hidden; border: 1px solid rgba(212, 175, 55, 0.2); }
         .donation-wrap::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, var(--primary), var(--secondary)); }
@@ -158,10 +176,30 @@
         .swish-number { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: 2px; padding: 8px 20px; background: var(--white); border-radius: 10px; margin: 10px 0; border: 2px dashed var(--secondary); display: inline-block; }
         .donate-btn-modern { display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(135deg, var(--secondary), #b8962e); color: var(--white); padding: 10px 25px; border-radius: 50px; font-size: 1rem; font-weight: bold; text-decoration: none; margin-top: 10px; }
 
+        /* الفوتر الأصلي بالكامل */
         .contact-card { background: linear-gradient(135deg, var(--primary), #052014); color: var(--white); border-radius: 20px; padding: 40px 15px; text-align: center; box-shadow: var(--shadow); position: relative; overflow: hidden; }
+        .contact-avatar { width: 80px; height: 80px; background: var(--secondary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 35px; color: var(--primary); margin: 0 auto 15px auto; border: 3px solid var(--white); }
         .social-btns { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-        .btn { padding: 10px 20px; border-radius: 30px; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .btn { padding: 10px 20px; border-radius: 30px; border: none; text-decoration: none; color: var(--white); font-weight: bold; display: inline-flex; align-items: center; gap: 8px; font-size: 0.95rem; cursor: pointer; transition: opacity 0.2s;}
+        .btn:hover { opacity: 0.8; }
         .btn-wa { background: #25D366; } .btn-fb { background: #1877F2; }
+        
+        /* أزرار ونوافذ التأكيد المنبثقة */
+        .modal-overlay { 
+            position: fixed; inset: 0; background: rgba(10, 54, 34, 0.7); z-index: 3000; 
+            display: none; justify-content: center; align-items: center; backdrop-filter: blur(4px); 
+        }
+        .modal-content { 
+            background: var(--white); padding: 30px; border-radius: 15px; width: 90%; 
+            max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); 
+            transform: scale(0.95); animation: scaleUp 0.2s ease forwards; 
+        }
+        @keyframes scaleUp { to { transform: scale(1); } }
+        .modal-actions { display: flex; gap: 10px; margin-top: 25px; }
+        .modal-actions .btn { flex: 1; padding: 12px; justify-content: center;}
+        .btn-cancel { background: #e0e6ed; color: var(--text-dark); }
+        .btn-confirm { background: var(--primary); }
+        .btn-danger { background: var(--danger); }
 
         .app-toast-container { 
             position: fixed; top: 80px; left: 50%; transform: translate(-50%, -50px); 
@@ -196,7 +234,6 @@
 </head>
 <body>
     <script>
-        // جعل السويدية هي اللغة الافتراضية
         let currentLang = localStorage.getItem('lang') || 'sv';
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
@@ -240,8 +277,21 @@
             <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">Bönetider</span></a>
             <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">Aktiviteter</span></a>
             <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">Galleri</span></a>
-            <button onclick="requestNativeNotifications()"><i id="menu-notif-icon" class="fas fa-bell"></i> <span id="menu-notif-btn">Aktivera Notiser</span></button>
+            <button id="btn-toggle-notif" onclick="openNotificationModal()"><i id="menu-notif-icon" class="fas fa-bell"></i> <span id="menu-notif-btn">Aktivera Notiser</span></button>
             <a href="admin.html"><i class="fas fa-cog"></i> <span id="menu-admin">Admin</span></a>
+        </div>
+    </div>
+
+    <!-- نافذة تأكيد الإشعارات (Modal) -->
+    <div class="modal-overlay" id="notif-confirm-modal">
+        <div class="modal-content">
+            <i id="notif-modal-icon" class="fas fa-bell" style="font-size: 45px; color: var(--primary); margin-bottom: 15px;"></i>
+            <h3 id="notif-modal-title" style="color: var(--primary); font-size: 1.4em; margin-bottom: 10px;">تفعيل الإشعارات</h3>
+            <p id="notif-modal-msg" style="color: var(--text-muted); font-size: 1em; margin-bottom: 25px; line-height: 1.5;">هل ترغب في تفعيل الإشعارات لتصلك تنبيهات المسجد؟</p>
+            <div class="modal-actions">
+                <button class="btn btn-cancel" onclick="closeNotifModal()" id="notif-btn-no">إلغاء</button>
+                <button class="btn btn-confirm" id="notif-btn-yes" onclick="confirmNotificationAction()">تأكيد</button>
+            </div>
         </div>
     </div>
 
@@ -322,10 +372,12 @@
             </div>
         </section>
 
+        <!-- الفوتر الأصلي المستعاد -->
         <section class="section fade-in" id="contact" style="padding-bottom: 60px;">
             <div class="contact-card">
-                <div class="contact-avatar"><i class="fas fa-envelope"></i></div>
+                <div class="contact-avatar"><i class="fas fa-user-tie"></i></div>
                 <h2 class="section-title" id="title-contact" style="color: var(--white);">Kontakta Admin</h2>
+                <div class="title-separator" style="margin-bottom: 20px;"><i class="fas fa-envelope" style="color: var(--secondary);"></i></div>
                 <p id="address-text" style="font-size: 0.9rem; margin: 10px 0; color: #eee; direction: ltr;">Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp</p>
                 <div class="social-btns">
                     <a href="https://wa.me/46700371288" class="btn btn-wa"><i class="fab fa-whatsapp"></i> WhatsApp</a>
@@ -358,35 +410,85 @@
         try { if (firebase.messaging.isSupported()) messaging = firebase.messaging(); } catch (e) { console.warn('Messaging not supported'); }
 
         let isNotifEnabled = localStorage.getItem('notifEnabled') === 'true';
+        let pendingNotifAction = ''; // 'enable' or 'disable'
+        
         let siteData = { activities:[], gallery:[], notifications:[] };
         let prayerTimes =[];
 
         const langData = {
             ar: { 
                 nav: "مسجد الرحمن", menuTitle: "القائمة", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة", heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية", tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد", tSwish: "ساهم في دعم المسجد وأنشطته، تبرعك صدقة جارية. يمكنك التبرع بسهولة وبشكل آمن عبر تطبيق Swish.", btnDonate: "اضغط هنا للتبرع <i class='fas fa-hand-holding-usd'></i>", tGallery: "معرض الصور", tContact: "تواصل مع الإدارة", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد", 
-                prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnDisable: "إلغاء الإشعارات"
+                prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "طلوع الشمس" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnActive: "الإشعارات مفعلة",
+                modalEnableTitle: "تفعيل الإشعارات", modalEnableMsg: "هل ترغب في السماح بوصول الإشعارات لمعرفة مواعيد الصلاة وأخبار المسجد؟",
+                modalDisableTitle: "إيقاف الإشعارات", modalDisableMsg: "هل أنت متأكد من رغبتك في إيقاف استلام الإشعارات من المسجد؟", btnYes: "تأكيد", btnNo: "إلغاء"
             },
             sv: { 
                 nav: "Moské Ar-Rahman", menuTitle: "Meny", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén och dess aktiviteter. Du kan enkelt och säkert donera via Swish-appen.", btnDonate: "Klicka här för att donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
-                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnDisable: "Inaktivera Notiser"
+                prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid kvar till Adhan", iqama: "Tid kvar till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnActive: "Notiser Aktiverade",
+                modalEnableTitle: "Aktivera Notiser", modalEnableMsg: "Vill du tillåta notiser för att få bönetider och nyheter från moskén?",
+                modalDisableTitle: "Inaktivera Notiser", modalDisableMsg: "Är du säker på att du vill sluta ta emot notiser från moskén?", btnYes: "Bekräfta", btnNo: "Avbryt"
             }
         };
 
-        // ================= الإشعارات وحفظ التوكن =================
-        async function requestNativeNotifications() {
-            if (!('Notification' in window)) {
-                alert(currentLang === 'sv' ? "Din webbläsare stöder inte notiser." : "متصفحك لا يدعم الإشعارات."); return;
-            }
-            if (Notification.permission === 'granted') { saveFCMToken(); return; }
+        // ================= نافذة الإشعارات المخصصة =================
+        function openNotificationModal() {
+            toggleSidebar(); // إغلاق القائمة الجانبية
+            const t = langData[currentLang];
+            const modal = document.getElementById('notif-confirm-modal');
+            const title = document.getElementById('notif-modal-title');
+            const msg = document.getElementById('notif-modal-msg');
+            const icon = document.getElementById('notif-modal-icon');
+            const btnYes = document.getElementById('notif-btn-yes');
 
-            try {
-                const permission = await Notification.requestPermission();
-                if (permission === 'granted') {
-                    isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true');
-                    updateNotifBtnUI(); saveFCMToken();
-                    showToast(currentLang === 'sv' ? "Notiser är nu aktiverade! 🔔" : "تم تفعيل الإشعارات بنجاح! 🔔");
+            document.getElementById('notif-btn-no').innerText = t.btnNo;
+            btnYes.innerText = t.btnYes;
+
+            if (!isNotifEnabled) {
+                // حالة طلب التفعيل
+                pendingNotifAction = 'enable';
+                title.innerText = t.modalEnableTitle;
+                msg.innerText = t.modalEnableMsg;
+                icon.className = "fas fa-bell";
+                icon.style.color = "var(--primary)";
+                btnYes.className = "btn btn-confirm";
+            } else {
+                // حالة طلب الإيقاف
+                pendingNotifAction = 'disable';
+                title.innerText = t.modalDisableTitle;
+                msg.innerText = t.modalDisableMsg;
+                icon.className = "fas fa-bell-slash";
+                icon.style.color = "var(--danger)";
+                btnYes.className = "btn btn-danger";
+            }
+            
+            modal.style.display = 'flex';
+        }
+
+        function closeNotifModal() {
+            document.getElementById('notif-confirm-modal').style.display = 'none';
+        }
+
+        async function confirmNotificationAction() {
+            closeNotifModal();
+            if (pendingNotifAction === 'enable') {
+                if (!('Notification' in window)) {
+                    showToast(currentLang === 'sv' ? "Din webbläsare stöder inte notiser." : "متصفحك لا يدعم الإشعارات."); return;
                 }
-            } catch(e) { console.error(e); }
+                try {
+                    const permission = await Notification.requestPermission(); // طلب المتصفح الافتراضي
+                    if (permission === 'granted') {
+                        isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true');
+                        updateNotifBtnUI(); saveFCMToken();
+                        showToast(currentLang === 'sv' ? "Notiser är nu aktiverade! 🔔" : "تم تفعيل الإشعارات بنجاح! 🔔");
+                    } else {
+                        showToast(currentLang === 'sv' ? "Du avvisade behörigheten." : "لقد قمت برفض الإذن.");
+                    }
+                } catch(e) { console.error(e); }
+            } else if (pendingNotifAction === 'disable') {
+                isNotifEnabled = false; localStorage.setItem('notifEnabled', 'false');
+                updateNotifBtnUI();
+                showToast(currentLang === 'sv' ? "Notiser har inaktiverats." : "تم إيقاف الإشعارات.");
+            }
         }
 
         async function saveFCMToken() {
@@ -407,38 +509,41 @@
         // طلب الإشعارات تلقائياً عند أول ضغطة للمستخدم في الصفحة
         window.addEventListener('click', function firstInteraction() {
             if ('Notification' in window && Notification.permission === 'default') {
-                requestNativeNotifications();
+                openNotificationModal();
             }
             window.removeEventListener('click', firstInteraction);
         }, { once: true });
 
 
-        // ================= التبديل بين اللغات (مع منع الطيران) =================
+        // ================= التبديل بين اللغات =================
         function toggleLanguage() {
-            // إضافة كلاس يمنع الحركات مؤقتاً
             document.body.classList.add('no-transition');
-            
             currentLang = currentLang === 'ar' ? 'sv' : 'ar';
             localStorage.setItem('lang', currentLang);
             applyTranslations();
             updateAnalogClock();
-
-            // إجبار المتصفح على قراءة التغييرات فوراً لتجنب تأثير الانتقال المرئي السيئ
             void document.body.offsetHeight; 
-
-            // إزالة الكلاس بعد جزء من الثانية
-            setTimeout(() => {
-                document.body.classList.remove('no-transition');
-            }, 50);
+            setTimeout(() => { document.body.classList.remove('no-transition'); }, 50);
         }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
         function toggleNotifications() { const box = document.getElementById('notif-box'); box.classList.toggle('show'); if(box.classList.contains('show')) document.getElementById('notif-dot').classList.remove('active'); }
 
         function updateNotifBtnUI() {
-            const t = langData[currentLang]; const btnText = document.getElementById('menu-notif-btn'); const btnIcon = document.getElementById('menu-notif-icon');
-            if (Notification.permission === 'granted' || isNotifEnabled) { btnText.innerText = t.notifBtnDisable; btnIcon.className = "fas fa-bell-slash"; btnIcon.parentElement.style.color = "#ff3b30"; } 
-            else { btnText.innerText = t.notifBtnEnable; btnIcon.className = "fas fa-bell"; btnIcon.parentElement.style.color = "var(--text-dark)"; }
+            const t = langData[currentLang]; 
+            const btnWrapper = document.getElementById('btn-toggle-notif');
+            const btnText = document.getElementById('menu-notif-btn'); 
+            const btnIcon = document.getElementById('menu-notif-icon');
+            
+            if (isNotifEnabled) { 
+                btnText.innerText = t.notifBtnActive; 
+                btnIcon.className = "fas fa-check-circle"; 
+                btnWrapper.classList.add('btn-notif-active'); 
+            } else { 
+                btnText.innerText = t.notifBtnEnable; 
+                btnIcon.className = "fas fa-bell"; 
+                btnWrapper.classList.remove('btn-notif-active'); 
+            }
         }
 
         function applyTranslations() {
@@ -498,7 +603,7 @@
             document.querySelectorAll('.prayer-card').forEach(el => el.classList.remove('next-prayer')); if(document.getElementById(`card-${cId}`)) document.getElementById(`card-${cId}`).classList.add('next-prayer');
         } setInterval(updateTimer, 1000);
 
-        // ================= الداتا العامة والتأثيرات =================
+        // ================= الداتا العامة =================
         function showToast(text, duration = 4000) { const toastEl = document.getElementById('app-toast-box'); document.getElementById('toast-msg-text').innerText = text; toastEl.classList.remove('show'); void toastEl.offsetWidth; toastEl.classList.add('show'); setTimeout(() => { toastEl.classList.remove('show'); }, duration); }
 
         function listenToFirebase() {
