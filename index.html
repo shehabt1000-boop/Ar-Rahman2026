@@ -159,7 +159,7 @@
         [dir="rtl"] .stat-item:not(:last-child) { border-right: none; border-left: 2px solid var(--light-bg); }
         .stat-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; font-family: monospace; }
         .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 5px; }
-        
+
         .active-icon-wrapper { position: relative; display: inline-flex; }
         .pulse-dot { position: absolute; top: -3px; right: -5px; width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 0 rgba(39, 174, 96, 0.4); animation: pulse 1.5s infinite; border: 2px solid var(--white); }
         [dir="rtl"] .pulse-dot { right: auto; left: -5px; }
@@ -176,10 +176,10 @@
         /* حاوية الجدول الشهري (Modal) */
         .timetable-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; opacity: 0; transition: opacity 0.3s; }
         .timetable-backdrop.active { display: block; opacity: 1; }
-        
+
         .timetable-wrapper { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); width: 95%; max-width: 600px; max-height: 85vh; background: var(--white); border-radius: 15px; z-index: 2001; box-shadow: 0 10px 30px rgba(0,0,0,0.3); opacity: 0; transition: all 0.3s ease; flex-direction: column; overflow: hidden;}
         .timetable-wrapper.active { display: flex; transform: translate(-50%, -50%); opacity: 1; }
-        
+
         .timetable-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--primary); color: var(--secondary); }
         .timetable-header h3 { margin: 0; font-size: 1.2rem; }
         .timetable-body { padding: 15px; overflow-y: auto; background: var(--light-bg); }
@@ -256,6 +256,103 @@
         .second-hand { width: 2px; height: 60px; background: #ff3b30; left: calc(50% - 1px); z-index: 4; }
         .center-dot { position: absolute; top: 50%; left: 50%; width: 8px; height: 8px; background: var(--secondary); border-radius: 50%; transform: translate(-50%, -50%); z-index: 5; }
         .lux-date { font-size: 0.9rem; color: #e0e0e0; font-weight: 600; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px; }
+
+        /* =========================================
+           TV Display Mode Styles (وضع شاشة العرض)
+           ========================================= */
+        .tv-mode-overlay {
+            display: none; position: fixed; inset: 0; z-index: 99999;
+            background-color: #000; color: #fff; font-family: 'Cairo', sans-serif;
+            overflow: hidden; direction: rtl;
+        }
+        .tv-mode-overlay.active { display: flex; }
+
+        .tv-exit-btn {
+            position: absolute; top: 20px; left: 20px; z-index: 100000;
+            background: rgba(0,0,0,0.5); color: #fff; border: 2px solid #fff;
+            padding: 10px 15px; border-radius: 8px; font-size: 1.2rem; cursor: pointer;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        .tv-mode-overlay:hover .tv-exit-btn { opacity: 1; }
+
+        .tv-layout { display: flex; flex-direction: row-reverse; width: 100vw; height: 100vh; }
+
+        /* الشريط الجانبي (مواقيت الصلاة) - على اليسار */
+        .tv-sidebar {
+            width: 28%; background: linear-gradient(to bottom, #004b87, #002b5e);
+            display: flex; flex-direction: column; border-right: 3px solid #d4af37;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 2;
+        }
+        .tv-prayer-row {
+            flex: 1; display: flex; align-items: center; padding: 0 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1); position: relative;
+        }
+        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 12px; }
+        .tv-prayer-icon { font-size: 2.5vw; color: #fff; width: 25%; text-align: center; }
+        .tv-prayer-details { width: 75%; text-align: center; }
+        .tv-prayer-name { font-size: 1.8vw; font-weight: bold; color: #e0e0e0; margin-bottom: 5px; }
+        .tv-prayer-time { font-size: 3.5vw; font-weight: 900; color: #fff; line-height: 1; font-family: monospace; letter-spacing: 2px; }
+        .tv-prayer-iqama { font-size: 1vw; color: #fff; background: rgba(0,0,0,0.4); padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 8px; }
+
+        /* المنطقة الرئيسية (الخلفية والساعة) - على اليمين */
+        .tv-main {
+            width: 72%; position: relative;
+            background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg');
+            background-size: cover; background-position: center;
+        }
+        .tv-main-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); }
+
+        /* الهيدر العلوي */
+        .tv-header {
+            position: absolute; top: 0; left: 0; right: 0; padding: 30px 40px;
+            display: flex; justify-content: space-between; align-items: flex-start; z-index: 3;
+        }
+        .tv-mosque-info { text-align: right; display: flex; align-items: center; gap: 15px; }
+        .tv-mosque-info h1 { font-size: 3vw; font-family: 'Amiri', serif; color: #d4af37; text-shadow: 2px 2px 4px #000; margin: 0; line-height: 1.2; }
+        .tv-mosque-info p { font-size: 1.2vw; color: #fff; text-shadow: 1px 1px 2px #000; margin: 0; }
+        .tv-mosque-logo { font-size: 4vw; color: #fff; text-shadow: 2px 2px 4px #000; }
+        .tv-date-bar { background: rgba(0, 75, 135, 0.8); padding: 10px 25px; border-radius: 20px; font-size: 1.3vw; font-weight: bold; border: 1px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+
+        /* الساعة الأنالوج الزرقاء */
+        .tv-clock-wrapper {
+            position: absolute; top: 50%; left: 0; transform: translate(-50%, -50%); z-index: 10;
+        }
+        .tv-analog-clock {
+            width: 32vw; height: 32vw; max-width: 600px; max-height: 600px;
+            border: 12px solid #002b5e; border-radius: 50%;
+            background: radial-gradient(circle, #00509e 0%, #002b5e 100%);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(0,0,0,0.8);
+            position: relative;
+        }
+        .tv-clock-face { width: 100%; height: 100%; position: relative; }
+        .tv-clock-number {
+            position: absolute; font-size: 2.2vw; font-weight: bold; color: #fff;
+            transform: translate(-50%, -50%); font-family: 'Amiri', serif; text-shadow: 2px 2px 4px #000;
+        }
+        .tv-hand { position: absolute; bottom: 50%; transform-origin: bottom center; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
+        .tv-hour-hand { width: 10px; height: 25%; background: #fff; left: calc(50% - 5px); }
+        .tv-minute-hand { width: 6px; height: 38%; background: #e0e0e0; left: calc(50% - 3px); }
+        .tv-second-hand { width: 3px; height: 45%; background: #ff3b30; left: calc(50% - 1.5px); }
+        .tv-center-dot { position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; background: #ff3b30; border-radius: 50%; transform: translate(-50%, -50%); border: 4px solid #fff; z-index: 5; }
+        .tv-clock-brand { position: absolute; bottom: 25%; left: 50%; transform: translateX(-50%); text-align: center; color: #fff; opacity: 0.8; }
+        .tv-clock-brand div { font-size: 1.2vw; font-weight: bold; letter-spacing: 2px; }
+        .tv-clock-brand span { font-size: 0.8vw; }
+
+        /* الشريط السفلي والعداد */
+        .tv-bottom-area {
+            position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+            display: flex; flex-direction: column; align-items: flex-start;
+        }
+        .tv-countdown-pill {
+            background: rgba(0, 75, 135, 0.9); border: 2px solid #fff; border-radius: 30px;
+            padding: 12px 35px; margin: 0 40px 20px 0; display: flex; align-items: center; gap: 15px;
+            font-size: 2.2vw; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        .tv-countdown-pill i { color: #d4af37; }
+        .tv-ticker-bar {
+            width: 100%; background: rgba(0,0,0,0.8); color: #fff; padding: 12px 0;
+            font-size: 1.8vw; border-top: 3px solid #d4af37; overflow: hidden; white-space: nowrap;
+        }
     </style>
 </head>
 <body>
@@ -264,9 +361,63 @@
         document.documentElement.lang = currentLang;
         document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
         if (currentLang === 'ar') document.body.classList.add('lang-ar');
-        
+
         let currentDayTracker = new Date().getDate();
     </script>
+
+    <!-- حاوية وضع شاشة العرض (TV Mode) -->
+    <div id="tv-mode-overlay" class="tv-mode-overlay">
+        <button class="tv-exit-btn" onclick="exitTvMode()"><i class="fas fa-times"></i> خروج من شاشة العرض</button>
+        
+        <div class="tv-layout">
+            <!-- الشريط الجانبي للمواقيت -->
+            <div class="tv-sidebar" id="tv-prayers-container">
+                <!-- سيتم توليد المواقيت هنا عبر الجافاسكربت -->
+            </div>
+
+            <!-- المنطقة الرئيسية -->
+            <div class="tv-main">
+                <div class="tv-main-overlay"></div>
+                
+                <div class="tv-header">
+                    <div class="tv-mosque-info">
+                        <div style="text-align: right;">
+                            <h1>مسجد الرحمن</h1>
+                            <p>Perstorp skåne sverige 0730787641</p>
+                        </div>
+                        <i class="fas fa-mosque tv-mosque-logo"></i>
+                    </div>
+                    <div class="tv-date-bar" id="tv-date-display">--</div>
+                </div>
+
+                <div class="tv-clock-wrapper">
+                    <div class="tv-analog-clock">
+                        <div class="tv-clock-face" id="tv-clock-face">
+                            <!-- سيتم توليد الأرقام والعقارب عبر الجافاسكربت -->
+                            <div class="tv-hand tv-hour-hand" id="tv-hour-hand"></div>
+                            <div class="tv-hand tv-minute-hand" id="tv-minute-hand"></div>
+                            <div class="tv-hand tv-second-hand" id="tv-second-hand"></div>
+                            <div class="tv-center-dot"></div>
+                            <div class="tv-clock-brand">
+                                <div>MASAJID</div>
+                                <span>VERSION 2.0.4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tv-bottom-area">
+                    <div class="tv-countdown-pill">
+                        <i class="fas fa-clock"></i>
+                        <span id="tv-countdown-text">--:--:--</span>
+                    </div>
+                    <div class="tv-ticker-bar">
+                        <marquee scrollamount="8" id="tv-ticker-text">مرحباً بكم في مسجد الرحمن - يرجى إغلاق الهواتف المحمولة أثناء الخطبة والصلاة - تقبل الله منا ومنكم صالح الأعمال</marquee>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <header>
         <div class="header-brand">
@@ -305,6 +456,10 @@
             <a href="#prayers" onclick="toggleSidebar();"><i class="fas fa-clock"></i> <span id="menu-prayers">Bönetider</span></a>
             <a href="#activities" onclick="toggleSidebar();"><i class="fas fa-users"></i> <span id="menu-activities">Aktiviteter</span></a>
             <a href="#gallery" onclick="toggleSidebar();"><i class="fas fa-images"></i> <span id="menu-gallery">Galleri</span></a>
+            
+            <!-- زر تفعيل شاشة العرض -->
+            <a href="#" onclick="enterTvMode(); toggleSidebar();"><i class="fas fa-tv"></i> <span id="menu-tv">شاشة العرض (TV)</span></a>
+            
             <button id="btn-toggle-notif" onclick="openNotificationModal()"><i id="menu-notif-icon" class="fas fa-bell"></i> <span id="menu-notif-btn">Aktivera Notiser</span></button>
             <a href="admin.html"><i class="fas fa-cog"></i> <span id="menu-admin">Admin</span></a>
         </div>
@@ -515,9 +670,9 @@
                 modalEnableTitle: "تفعيل الإشعارات", modalEnableMsg: "تفعيل التنبيهات لمواعيد الصلاة؟",
                 modalDisableTitle: "إيقاف الإشعارات", modalDisableMsg: "إيقاف استلام الإشعارات من المسجد؟", btnYes: "تأكيد", btnNo: "إلغاء",
                 lblTotal: "إجمالي الزوار", lblActive: "نشط الآن",
-                // ترجمة الجدول
                 btnMonthly: "جدول مواقيت الصلاة الشهري", tableTitle: "مواقيت الصلاة لشهر", thDay: "اليوم", thFajr: "الفجر", thDhuhr: "الظهر", thAsr: "العصر", thMaghrib: "المغرب", thIsha: "العشاء", btnCloseTable: "إغلاق", btnSaveImg: "حفظ كصورة",
-                monthsAr: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
+                monthsAr:["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+                tvMode: "شاشة العرض (TV)"
             },
             sv: { 
                 nav: "Moské Ar-Rahman", menuTitle: "Meny", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén enkelt via Swish.", btnDonate: "Donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
@@ -525,15 +680,15 @@
                 modalEnableTitle: "Aktivera Notiser", modalEnableMsg: "Vill du tillåta notiser för bönetider?",
                 modalDisableTitle: "Inaktivera Notiser", modalDisableMsg: "Vill du sluta ta emot notiser?", btnYes: "Bekräfta", btnNo: "Avbryt",
                 lblTotal: "Totalt Besökare", lblActive: "Aktiva Nu",
-                // ترجمة الجدول
                 btnMonthly: "Månatlig Bönetidtabell", tableTitle: "Bönetider för", thDay: "Dag", thFajr: "Fajr", thDhuhr: "Dhuhr", thAsr: "Asr", thMaghrib: "Maghrib", thIsha: "Isha", btnCloseTable: "Stäng", btnSaveImg: "Spara bild",
-                monthsSv: ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"]
+                monthsSv:["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"],
+                tvMode: "TV-skärm"
             }
         };
 
         // --- نظام الإحصائيات المباشر ---
         auth.signInAnonymously().catch(e => e);
-        let activeUsersData = [];
+        let activeUsersData =[];
 
         auth.onAuthStateChanged((user) => {
             if (user) {
@@ -561,7 +716,7 @@
             });
 
             db.collection('active_users').onSnapshot(snapshot => {
-                activeUsersData = [];
+                activeUsersData =[];
                 snapshot.forEach(doc => {
                     const data = doc.data();
                     if (data.last_active) activeUsersData.push({ ref: doc.ref, time: data.last_active.toMillis() });
@@ -590,24 +745,21 @@
             const today = new Date();
             const monthIndex = today.getMonth();
             const todayDate = today.getDate().toString();
-            
-            // الأشهر الانجليزية كما هي مخزنة في ملف prayers.js
-            const swedishMonths = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+
+            const swedishMonths =["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
             const currentMonthNameForData = swedishMonths[monthIndex];
-            
-            // الاسم الذي سيظهر في العنوان حسب اللغة
+
             const displayMonthName = currentLang === 'ar' ? langData.ar.monthsAr[monthIndex] : langData.sv.monthsSv[monthIndex];
             document.getElementById('timetable-month-name').innerText = `${langData[currentLang].tableTitle} ${displayMonthName}`;
 
             const tbody = document.getElementById('timetable-tbody');
-            tbody.innerHTML = ''; // مسح المحتوى القديم
+            tbody.innerHTML = ''; 
 
             if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months[currentMonthNameForData]) {
                 const monthData = yearlyPrayerData.months[currentMonthNameForData];
-                
+
                 monthData.forEach(dayInfo => {
                     const tr = document.createElement('tr');
-                    // تمييز اليوم الحالي
                     if (dayInfo.Dat === todayDate) tr.className = 'today-row';
 
                     tr.innerHTML = `
@@ -620,8 +772,7 @@
                     `;
                     tbody.appendChild(tr);
                 });
-                
-                // تمرير الجدول للأسفل لليوم الحالي إذا لزم الأمر عند الفتح
+
                 setTimeout(() => {
                     const todayRow = document.querySelector('.today-row');
                     if (todayRow) todayRow.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -633,7 +784,7 @@
             generateMonthlyTable();
             document.getElementById('timetable-backdrop').classList.add('active');
             document.getElementById('timetable-wrapper').classList.add('active');
-            document.body.style.overflow = 'hidden'; // منع التمرير بالخلفية
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeTimetable() {
@@ -645,18 +796,17 @@
         function saveTimetableImage() {
             const captureArea = document.getElementById('capture-area');
             const originalBackground = captureArea.style.background;
-            captureArea.style.background = '#ffffff'; // ضمان خلفية بيضاء للصورة
+            captureArea.style.background = '#ffffff'; 
 
-            // إظهار إشعار جاري التحميل
             showToast(currentLang === 'ar' ? "جاري التقاط الصورة..." : "Sparar bild...", 2000);
 
             html2canvas(captureArea, {
-                scale: 2, // دقة عالية
+                scale: 2, 
                 useCORS: true,
                 backgroundColor: "#ffffff"
             }).then(canvas => {
-                captureArea.style.background = originalBackground; // إرجاع الخلفية
-                
+                captureArea.style.background = originalBackground; 
+
                 const monthName = document.getElementById('timetable-month-name').innerText;
                 const link = document.createElement('a');
                 link.download = `Moske_Ar_Rahman_${monthName}.png`;
@@ -668,7 +818,6 @@
                 showToast(currentLang === 'ar' ? "حدث خطأ" : "Ett fel uppstod", 2000);
             });
         }
-        // -----------------------------
 
         // --- وظائف متصفح الصور الداخلي (Lightbox) ---
         function openLightbox(imageUrl) {
@@ -772,8 +921,7 @@
             currentLang = currentLang === 'ar' ? 'sv' : 'ar';
             localStorage.setItem('lang', currentLang);
             applyTranslations(); updateAnalogClock();
-            
-            // تحديث محتوى الجدول إذا كان مفتوحاً أثناء تغيير اللغة
+
             if(document.getElementById('timetable-wrapper').classList.contains('active')) {
                 generateMonthlyTable();
             }
@@ -794,10 +942,11 @@
             if (currentLang === 'ar') document.body.classList.add('lang-ar'); else document.body.classList.remove('lang-ar');
 
             document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-title').innerText = t.menuTitle; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle;
-            
+
             document.getElementById('label-total').innerText = t.lblTotal; document.getElementById('label-active').innerText = t.lblActive;
             
-            // ترجمة قسم الجدول
+            if(document.getElementById('menu-tv')) document.getElementById('menu-tv').innerText = t.tvMode;
+
             document.getElementById('text-btn-monthly').innerText = t.btnMonthly;
             document.getElementById('timetable-modal-title').innerText = t.btnMonthly;
             document.getElementById('th-day').innerText = t.thDay;
@@ -888,6 +1037,131 @@
         }
 
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
+
+        /* =========================================
+           TV Display Mode Logic (منطق شاشة العرض)
+           ========================================= */
+        function enterTvMode() {
+            document.getElementById('tv-mode-overlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            renderTvPrayers();
+            setupTvClockFace();
+            
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) { elem.requestFullscreen(); }
+            else if (elem.webkitRequestFullscreen) { elem.webkitRequestFullscreen(); }
+            else if (elem.msRequestFullscreen) { elem.msRequestFullscreen(); }
+        }
+
+        function exitTvMode() {
+            document.getElementById('tv-mode-overlay').classList.remove('active');
+            document.body.style.overflow = '';
+            
+            if (document.exitFullscreen) { document.exitFullscreen(); }
+            else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+            else if (document.msExitFullscreen) { document.msExitFullscreen(); }
+        }
+
+        function renderTvPrayers() {
+            const container = document.getElementById('tv-prayers-container');
+            const t = langData['ar']; 
+            let html = '';
+            
+            prayerTimes.forEach(p => {
+                let isActive = document.getElementById(`card-${p.id}`) && document.getElementById(`card-${p.id}`).classList.contains('next-prayer') ? 'active' : '';
+                
+                let iqamaText = p.type === 'no-prayer' ? `${t.pLabels.noP}` : `إقامة ${p.iqama}`;
+                let timeText = p.type === 'no-prayer' ? p.time : p.adhan;
+                
+                html += `
+                <div class="tv-prayer-row ${isActive}" id="tv-row-${p.id}">
+                    <i class="fas ${p.icon} tv-prayer-icon"></i>
+                    <div class="tv-prayer-details">
+                        <div class="tv-prayer-name">${t.prayerNames[p.id]}</div>
+                        <div class="tv-prayer-time">${timeText}</div>
+                        <div class="tv-prayer-iqama">${iqamaText}</div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        function setupTvClockFace() {
+            const face = document.getElementById('tv-clock-face');
+            document.querySelectorAll('.tv-clock-number, .tv-tick').forEach(e => e.remove());
+            
+            const arabicNumbers =['١٢', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩', '١٠', '١١'];
+            
+            for (let i = 0; i < 60; i++) {
+                const tick = document.createElement('div');
+                tick.className = 'tv-tick';
+                tick.style.position = 'absolute';
+                tick.style.bottom = '50%';
+                tick.style.left = 'calc(50% - 1px)';
+                tick.style.width = i % 5 === 0 ? '4px' : '2px';
+                tick.style.height = i % 5 === 0 ? '15px' : '8px';
+                tick.style.background = i % 5 === 0 ? '#fff' : 'rgba(255,255,255,0.5)';
+                tick.style.transformOrigin = 'bottom center';
+                tick.style.transform = `rotate(${i * 6}deg) translateY(-14vw)`; 
+                face.appendChild(tick);
+            }
+
+            for (let i = 0; i < 12; i++) {
+                const num = document.createElement('div');
+                num.className = 'tv-clock-number';
+                num.innerText = arabicNumbers[i];
+                let angle = (i * 30) * (Math.PI / 180);
+                let radius = 38; 
+                let x = 50 + radius * Math.sin(angle);
+                let y = 50 - radius * Math.cos(angle);
+                num.style.left = `${x}%`;
+                num.style.top = `${y}%`;
+                face.appendChild(num);
+            }
+        }
+
+        setInterval(() => {
+            if (!document.getElementById('tv-mode-overlay').classList.contains('active')) return;
+            
+            const now = new Date();
+            
+            document.getElementById('tv-second-hand').style.transform = `rotate(${((now.getSeconds() / 60) * 360)}deg)`;
+            document.getElementById('tv-minute-hand').style.transform = `rotate(${((now.getMinutes() / 60) * 360) + ((now.getSeconds()/60)*6)}deg)`;
+            document.getElementById('tv-hour-hand').style.transform = `rotate(${((now.getHours() / 12) * 360) + ((now.getMinutes()/60)*30)}deg)`;
+            
+            const gregOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const gregDate = now.toLocaleDateString('en-US', gregOptions);
+            let hijriDate = "";
+            try {
+                hijriDate = new Intl.DateTimeFormat('en-US-u-ca-islamic', { day: 'numeric', month: 'long', year: 'numeric' }).format(now) + 'هـ';
+            } catch(e) {}
+            document.getElementById('tv-date-display').innerText = `${gregDate} / ${hijriDate}`;
+            
+            // حساب العداد باللغة العربية لشاشة التلفاز
+            const t = langData['ar'];
+            let target = null; let title = "";
+            for (let p of prayerTimes.filter(p => p.type !== 'no-prayer')) {
+                let aDate = new Date(); aDate.setHours(...p.adhan.split(':'), 0, 0); 
+                let iDate = new Date(); iDate.setHours(...p.iqama.split(':'), 0, 0);
+                if (now < aDate) { target = aDate; title = `${t.timerTexts.adhan} ${t.prayerNames[p.id]}`; break; } 
+                else if (now < iDate) { target = iDate; title = `${t.timerTexts.iqama} ${t.prayerNames[p.id]}`; break; }
+            }
+            if (!target) { 
+                let f = prayerTimes[0]; 
+                target = new Date(); target.setDate(target.getDate() + 1); 
+                target.setHours(...f.adhan.split(':'), 0, 0); 
+                title = `${t.timerTexts.adhan} ${t.prayerNames[f.id]}`; 
+            }
+            let diff = target - now; 
+            let h = Math.floor((diff % 86400000) / 3600000); 
+            let m = Math.floor((diff % 3600000) / 60000); 
+            let s = Math.floor((diff % 60000) / 1000);
+            let timeString = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            
+            document.getElementById('tv-countdown-text').innerText = `${title} - ${timeString}`;
+            
+            renderTvPrayers(); 
+        }, 1000);
 
         window.onload = () => { 
             createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase(); listenToStatistics();
