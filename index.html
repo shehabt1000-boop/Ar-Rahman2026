@@ -261,7 +261,7 @@
         .tv-mode-overlay {
             display: none; position: fixed; inset: 0; z-index: 99999;
             background-color: #000; color: #fff; font-family: 'Cairo', sans-serif;
-            overflow: hidden; direction: rtl;
+            overflow: hidden; direction: rtl !important; /* إجبار الاتجاه لليمين دائماً */
         }
         .tv-mode-overlay.active { display: flex; flex-direction: column; }
 
@@ -274,27 +274,31 @@
         .tv-mode-overlay:hover .tv-exit-btn { opacity: 1; }
 
         /* Layout for TV Mode */
-        .tv-layout { display: flex; flex-direction: row-reverse; width: 100vw; height: 93vh; }
+        .tv-layout { display: flex; flex-direction: row-reverse; width: 100vw; height: 100vh; }
 
-        /* الشريط الجانبي (مواقيت الصلاة) - على اليسار */
+        /* الشريط الجانبي (مواقيت الصلاة) - على اليسار بصرياً بسبب row-reverse */
         .tv-sidebar {
             width: 28%; background: linear-gradient(to bottom, #004b87, #002b5e);
             display: flex; flex-direction: column; border-right: 3px solid #d4af37;
             box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 2;
-            padding-bottom: 2vh; /* مساحة سفلية إضافية لضمان ظهور العشاء */
+            padding-bottom: 8vh; /* مساحة سفلية إضافية لضمان ظهور العشاء فوق الشريط الإخباري */
+            position: relative;
         }
+        
+        /* صف الصلاة: الرمز على اليمين والتفاصيل على اليسار */
         .tv-prayer-row {
-            flex: 1; display: flex; align-items: center; padding: 0 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1); position: relative;
+            flex: 1; display: flex; flex-direction: row; align-items: center; 
+            padding: 0 20px; border-bottom: 1px solid rgba(255,255,255,0.1); 
+            position: relative; justify-content: flex-start;
         }
-        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 7px; }
-        .tv-prayer-icon { font-size: 2.2vw; color: #fff; width: 25%; text-align: center; }
-        .tv-prayer-details { width: 75%; text-align: center; }
+        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 12px; }
+        .tv-prayer-icon { font-size: 2.5vw; color: #fff; width: 20%; text-align: right; }
+        .tv-prayer-details { width: 80%; text-align: right; padding-right: 15px; }
         .tv-prayer-name { font-size: 1.6vw; font-weight: bold; color: #e0e0e0; margin-bottom: 2px; }
         .tv-prayer-time { font-size: 3.2vw; font-weight: 900; color: #fff; line-height: 1; font-family: monospace; letter-spacing: 2px; }
         .tv-prayer-iqama { font-size: 0.9vw; color: #fff; background: rgba(0,0,0,0.4); padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 6px; }
 
-        /* المنطقة الرئيسية (الخلفية والساعة) - على اليمين */
+        /* المنطقة الرئيسية (الخلفية والساعة) - على اليمين بصرياً */
         .tv-main {
             width: 72%; position: relative;
             background-image: url('https://res.cloudinary.com/db9h7zm1h/image/upload/v1774919582/aeujmznngbgp4ubcokht.jpg');
@@ -341,7 +345,8 @@
 
         /* منطقة العداد فوق الشريط الإخباري */
         .tv-bottom-area {
-            position: absolute; bottom: 20px; left: 0; right: 0; z-index: 3;
+            position: absolute; bottom: 9vh; /* مرفوعة فوق الشريط الإخباري */
+            left: 0; right: 0; z-index: 3;
             display: flex; flex-direction: column; align-items: flex-start;
         }
         .tv-countdown-pill {
@@ -351,10 +356,14 @@
         }
         .tv-countdown-pill i { color: #d4af37; }
 
-        /* الشريط الإخباري السفلي (ممتد على كامل الشاشة) */
+        /* الشريط الإخباري السفلي (ممتد على كامل الشاشة بخلفية مقسومة لونين) */
         .tv-ticker-wrapper {
-            width: 100vw; height: 7vh; background: rgba(0,0,0,0.8); color: #fff; 
-            border-top: 3px solid #d4af37; display: flex; align-items: center; z-index: 100;
+            position: absolute; bottom: 0; left: 0;
+            width: 100vw; height: 7vh; 
+            /* خلفية مقسومة: 28% لون القائمة الجانبية، والباقي أسود شفاف */
+            background: linear-gradient(to right, #002b5e 28%, rgba(0,0,0,0.8) 28%);
+            color: #fff; border-top: 3px solid #d4af37; 
+            display: flex; align-items: center; z-index: 100;
         }
         .tv-ticker-wrapper marquee { font-size: 1.8vw; padding: 0 20px; }
     </style>
@@ -424,7 +433,7 @@
             </div>
         </div>
         
-        <!-- الشريط الإخباري ممتد على كامل العرض -->
+        <!-- الشريط الإخباري ممتد على كامل العرض بخلفية مقسومة لونين -->
         <div class="tv-ticker-wrapper">
             <marquee scrollamount="8" id="tv-ticker-text">مرحباً بكم في مسجد الرحمن - يرجى إغلاق الهواتف المحمولة أثناء الخطبة والصلاة - تقبل الله منا ومنكم صالح الأعمال</marquee>
         </div>
@@ -1056,7 +1065,6 @@
         // دالة جلب درجة الحرارة لمدينة بيرستورب السويدية
         async function fetchTvWeather() {
             try {
-                // إحداثيات Perstorp
                 const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=56.1389&longitude=13.3881&current_weather=true');
                 const data = await res.json();
                 const temp = Math.round(data.current_weather.temperature);
@@ -1071,7 +1079,7 @@
             document.body.style.overflow = 'hidden';
             renderTvPrayers();
             setupTvClockFace();
-            fetchTvWeather(); // جلب الطقس عند الدخول
+            fetchTvWeather(); 
             
             let elem = document.documentElement;
             if (elem.requestFullscreen) { elem.requestFullscreen(); }
@@ -1099,6 +1107,7 @@
                 let iqamaText = p.type === 'no-prayer' ? `${t.pLabels.noP}` : `إقامة ${p.iqama}`;
                 let timeText = p.type === 'no-prayer' ? p.time : p.adhan;
                 
+                // الرمز أولاً (سيكون على اليمين) ثم التفاصيل (ستكون على اليسار)
                 html += `
                 <div class="tv-prayer-row ${isActive}" id="tv-row-${p.id}">
                     <i class="fas ${p.icon} tv-prayer-icon"></i>
@@ -1128,7 +1137,8 @@
                 tick.style.height = i % 5 === 0 ? '15px' : '8px';
                 tick.style.background = i % 5 === 0 ? '#fff' : 'rgba(255,255,255,0.5)';
                 tick.style.transformOrigin = 'bottom center';
-                tick.style.transform = `rotate(${i * 6}deg) translateY(-13vw)`; 
+                // تم تعديل translateY ليكون -12vw بدلاً من -13vw لضمان بقاء الشرط داخل الساعة
+                tick.style.transform = `rotate(${i * 6}deg) translateY(-12vw)`; 
                 face.appendChild(tick);
             }
 
@@ -1146,7 +1156,6 @@
             }
         }
 
-        // تحديث الطقس كل ساعة (3600000 مللي ثانية)
         setInterval(() => {
             if (document.getElementById('tv-mode-overlay').classList.contains('active')) {
                 fetchTvWeather();
@@ -1170,7 +1179,6 @@
             } catch(e) {}
             document.getElementById('tv-date-display').innerText = `${gregDate} / ${hijriDate}`;
             
-            // حساب العداد باللغة العربية لشاشة التلفاز
             const t = langData['ar'];
             let target = null; let title = "";
             for (let p of prayerTimes.filter(p => p.type !== 'no-prayer')) {
