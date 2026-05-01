@@ -26,6 +26,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
+    <!-- HTML2Canvas لحفظ الجدول كصورة -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
     <!-- ملف مواقيت الصلاة -->
     <script src="prayers.js"></script>
 
@@ -149,8 +152,8 @@
         .prayer-time { font-size: 0.85rem; color: #666; }
         .prayer-card.next-prayer .prayer-time { color: #ddd; }
 
-        /* شريط الإحصائيات والزوار */
-        .stats-bar { display: flex; justify-content: center; gap: 20px; padding: 15px; margin: -10px auto 30px auto; max-width: 600px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); flex-wrap: wrap; border: 1px solid rgba(10,54,34,0.1); }
+        /* شريط الإحصائيات */
+        .stats-bar { display: flex; justify-content: center; gap: 20px; padding: 15px; margin: -10px auto 20px auto; max-width: 600px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); flex-wrap: wrap; border: 1px solid rgba(10,54,34,0.1); }
         .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 120px; }
         .stat-item:not(:last-child) { border-right: 2px solid var(--light-bg); }
         [dir="rtl"] .stat-item:not(:last-child) { border-right: none; border-left: 2px solid var(--light-bg); }
@@ -164,6 +167,31 @@
 
         @keyframes popUpdate { 0% { transform: scale(1); } 50% { transform: scale(1.3); color: var(--success); } 100% { transform: scale(1); } }
         .pop-update { animation: popUpdate 0.4s ease-out forwards; display: inline-block; }
+
+        /* زر الجدول الشهري */
+        .btn-monthly-wrapper { text-align: center; margin-bottom: 30px; }
+        .btn-monthly { background: linear-gradient(135deg, var(--primary), #0c4a2e); color: var(--white); border: 1px solid var(--secondary); padding: 10px 25px; border-radius: 30px; font-size: 1rem; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); transition: transform 0.2s; font-family: inherit; }
+        .btn-monthly:active { transform: scale(0.95); }
+
+        /* حاوية الجدول الشهري (Modal) */
+        .timetable-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; opacity: 0; transition: opacity 0.3s; }
+        .timetable-backdrop.active { display: block; opacity: 1; }
+        
+        .timetable-wrapper { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -45%); width: 95%; max-width: 600px; max-height: 85vh; background: var(--white); border-radius: 15px; z-index: 2001; box-shadow: 0 10px 30px rgba(0,0,0,0.3); opacity: 0; transition: all 0.3s ease; flex-direction: column; overflow: hidden;}
+        .timetable-wrapper.active { display: flex; transform: translate(-50%, -50%); opacity: 1; }
+        
+        .timetable-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: var(--primary); color: var(--secondary); }
+        .timetable-header h3 { margin: 0; font-size: 1.2rem; }
+        .timetable-body { padding: 15px; overflow-y: auto; background: var(--light-bg); }
+        .timetable-footer { padding: 15px; background: var(--white); display: flex; gap: 10px; border-top: 1px solid #eee; }
+        .timetable-footer .btn { flex: 1; justify-content: center; padding: 10px; font-size: 0.95rem; }
+
+        /* تصميم الجدول المكون من 6 أعمدة */
+        .pray-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center; background: var(--white); border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .pray-table th { background: var(--primary); color: var(--secondary); padding: 10px 5px; position: sticky; top: 0; z-index: 10; font-weight: bold; border-bottom: 2px solid var(--secondary); }
+        .pray-table td { padding: 8px 5px; border-bottom: 1px solid #eee; color: var(--text-dark); font-family: monospace; font-size: 0.9rem;}
+        .pray-table tr:nth-child(even) { background-color: #fcfcfc; }
+        .pray-table tr.today-row { background-color: rgba(212, 175, 55, 0.15); font-weight: bold; border-left: 3px solid var(--secondary); border-right: 3px solid var(--secondary); }
 
         .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
         .activity-card { background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
@@ -180,11 +208,7 @@
         .gallery-item:hover .gallery-caption { opacity: 1; }
 
         /* متصفح الصور الداخلي (Lightbox) */
-        .lightbox-overlay {
-            display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.3s ease;
-        }
+        .lightbox-overlay { display: none; position: fixed; z-index: 5000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; opacity: 0; transition: opacity 0.3s ease; }
         .lightbox-overlay.active { display: flex; opacity: 1; }
         .lightbox-content { max-width: 90%; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 25px rgba(0,0,0,0.5); object-fit: contain; }
         .lightbox-close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 5001; transition: color 0.2s; }
@@ -347,7 +371,7 @@
             <div class="prayer-grid" id="prayer-container"></div>
         </section>
 
-        <!-- شريط الإحصائيات بالرموز الجديدة -->
+        <!-- شريط الإحصائيات -->
         <div class="stats-bar fade-in">
             <div class="stat-item">
                 <div class="stat-number">
@@ -367,6 +391,48 @@
                 <div class="stat-label" id="label-active">نشط الآن</div>
             </div>
         </div>
+
+        <!-- زر جدول المواقيت الشهري -->
+        <div class="btn-monthly-wrapper fade-in">
+            <button class="btn-monthly" id="btn-show-timetable" onclick="openTimetable()">
+                <i class="fas fa-calendar-alt"></i> <span id="text-btn-monthly">جدول مواقيت الصلاة الشهري</span>
+            </button>
+        </div>
+
+        <!-- حاوية الجدول الشهري -->
+        <div id="timetable-backdrop" class="timetable-backdrop" onclick="closeTimetable()"></div>
+        <div id="timetable-wrapper" class="timetable-wrapper">
+            <div class="timetable-header">
+                <h3 id="timetable-modal-title">جدول مواقيت الصلاة</h3>
+                <i class="fas fa-times" style="cursor:pointer; font-size:1.2rem;" onclick="closeTimetable()"></i>
+            </div>
+            <div class="timetable-body" id="capture-area">
+                <div style="text-align: center; margin-bottom: 10px;">
+                    <h4 style="color: var(--primary); font-family: 'Amiri', serif; font-size: 1.3rem;" id="timetable-month-name">--</h4>
+                    <span class="city-badge" style="font-size: 0.75rem;">Perstorp</span>
+                </div>
+                <table class="pray-table" id="monthly-pray-table">
+                    <thead>
+                        <tr>
+                            <th id="th-day">اليوم</th>
+                            <th id="th-fajr">الفجر</th>
+                            <th id="th-dhuhr">الظهر</th>
+                            <th id="th-asr">العصر</th>
+                            <th id="th-maghrib">المغرب</th>
+                            <th id="th-isha">العشاء</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-tbody">
+                        <!-- يتم توليد البيانات هنا بواسطة JS -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="timetable-footer">
+                <button class="btn btn-cancel" id="btn-timetable-close" onclick="closeTimetable()" style="background: #e0e6ed; color: var(--text-dark);">إغلاق</button>
+                <button class="btn btn-confirm" id="btn-timetable-save" onclick="saveTimetableImage()" style="background: var(--primary);"><i class="fas fa-download"></i> حفظ كصورة</button>
+            </div>
+        </div>
+
 
         <section class="section fade-in" id="activities" style="background: var(--white); padding-top: 20px;">
             <div class="section-header">
@@ -429,7 +495,7 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
-        const auth = firebase.auth(); // تعريف Auth
+        const auth = firebase.auth(); 
 
         const publicVapidKey = "BOX0a8Dg181ZMjLic3risMEkJZio0hNHGIABg1Mym1qaSorpI6NcJ3QQ79WXg0qi6R1n4SXo-aib3WUkNcIII6E";
 
@@ -448,107 +514,161 @@
                 prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "الشروق" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnActive: "الإشعارات مفعلة",
                 modalEnableTitle: "تفعيل الإشعارات", modalEnableMsg: "تفعيل التنبيهات لمواعيد الصلاة؟",
                 modalDisableTitle: "إيقاف الإشعارات", modalDisableMsg: "إيقاف استلام الإشعارات من المسجد؟", btnYes: "تأكيد", btnNo: "إلغاء",
-                lblTotal: "إجمالي الزوار", lblActive: "نشط الآن" // ترجمة الإحصائيات
+                lblTotal: "إجمالي الزوار", lblActive: "نشط الآن",
+                // ترجمة الجدول
+                btnMonthly: "جدول مواقيت الصلاة الشهري", tableTitle: "مواقيت الصلاة لشهر", thDay: "اليوم", thFajr: "الفجر", thDhuhr: "الظهر", thAsr: "العصر", thMaghrib: "المغرب", thIsha: "العشاء", btnCloseTable: "إغلاق", btnSaveImg: "حفظ كصورة",
+                monthsAr: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"]
             },
             sv: { 
                 nav: "Moské Ar-Rahman", menuTitle: "Meny", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén enkelt via Swish.", btnDonate: "Donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
                 prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid till Adhan", iqama: "Tid till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnActive: "Notiser Aktiverade",
                 modalEnableTitle: "Aktivera Notiser", modalEnableMsg: "Vill du tillåta notiser för bönetider?",
                 modalDisableTitle: "Inaktivera Notiser", modalDisableMsg: "Vill du sluta ta emot notiser?", btnYes: "Bekräfta", btnNo: "Avbryt",
-                lblTotal: "Totalt Besökare", lblActive: "Aktiva Nu" // ترجمة الإحصائيات
+                lblTotal: "Totalt Besökare", lblActive: "Aktiva Nu",
+                // ترجمة الجدول
+                btnMonthly: "Månatlig Bönetidtabell", tableTitle: "Bönetider för", thDay: "Dag", thFajr: "Fajr", thDhuhr: "Dhuhr", thAsr: "Asr", thMaghrib: "Maghrib", thIsha: "Isha", btnCloseTable: "Stäng", btnSaveImg: "Spara bild",
+                monthsSv: ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"]
             }
         };
 
-        // --- نظام الإحصائيات وتتبع المستخدمين باستخدام Firebase Auth ---
-        auth.signInAnonymously().catch(error => console.error("Auth Error:", error));
+        // --- نظام الإحصائيات المباشر ---
+        auth.signInAnonymously().catch(e => e);
+        let activeUsersData = [];
 
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // 1. زيادة عداد الزوار الإجمالي (مرة واحدة لكل متصفح)
                 if (!localStorage.getItem('hasVisited_v1')) {
-                    db.collection('site_statistics').doc('global_stats').set({
-                        total_visitors: firebase.firestore.FieldValue.increment(1)
-                    }, { merge: true });
+                    db.collection('site_statistics').doc('global_stats').set({ total_visitors: firebase.firestore.FieldValue.increment(1) }, { merge: true });
                     localStorage.setItem('hasVisited_v1', 'true');
                 }
-
-                // 2. نظام التواجد (نشط الآن)
                 const presenceRef = db.collection('active_users').doc(user.uid);
-                
-                const updatePresence = () => {
-                    presenceRef.set({
-                        last_active: firebase.firestore.FieldValue.serverTimestamp()
-                    }).catch(e => console.log("Presence update skipped"));
-                };
-                
-                updatePresence(); // تحديث فوري عند الدخول
-                // تحديث حالة النشاط كل 60 ثانية طالما الموقع مفتوح
-                const presenceInterval = setInterval(updatePresence, 60000); 
-
-                // إزالة الشخص من قائمة النشطين عند إغلاق الموقع
-                window.addEventListener('beforeunload', () => {
-                    presenceRef.delete();
-                });
+                const updatePresence = () => { presenceRef.set({ last_active: firebase.firestore.FieldValue.serverTimestamp() }).catch(e=>e); };
+                updatePresence(); setInterval(updatePresence, 60000); 
+                window.addEventListener('beforeunload', () => { presenceRef.delete(); });
             }
         });
 
-        // 3. الاستماع للإحصائيات وعرضها
-        let activeUsersData = [];
-
         function listenToStatistics() {
-            // الاستماع لإجمالي الزوار (تحديث لحظي)
             db.collection('site_statistics').doc('global_stats').onSnapshot(doc => {
                 if (doc.exists) {
                     const countEl = document.getElementById('count-total');
                     const newCount = doc.data().total_visitors || 0;
-                    
-                    // إضافة تأثير حركي يثبت التحديث المباشر للمستخدم
                     if (countEl.innerText !== newCount.toString() && countEl.innerText !== '...') {
-                        countEl.classList.remove('pop-update');
-                        void countEl.offsetWidth; // إعادة تهيئة التأثير
-                        countEl.classList.add('pop-update');
+                        countEl.classList.remove('pop-update'); void countEl.offsetWidth; countEl.classList.add('pop-update');
                     }
                     countEl.innerText = newCount;
                 }
             });
 
-            // الاستماع لبيانات المتواجدين الآن
             db.collection('active_users').onSnapshot(snapshot => {
                 activeUsersData = [];
                 snapshot.forEach(doc => {
                     const data = doc.data();
-                    if (data.last_active) {
-                        activeUsersData.push({ ref: doc.ref, time: data.last_active.toMillis() });
-                    }
+                    if (data.last_active) activeUsersData.push({ ref: doc.ref, time: data.last_active.toMillis() });
                 });
                 renderActiveCount();
             });
-
-            // نظام فحص محلي يحدّث الرقم كل 5 ثوانٍ ليعكس الأشخاص الذين غادروا لحظياً
             setInterval(renderActiveCount, 5000);
         }
 
         function renderActiveCount() {
-            let activeCount = 0;
-            const now = Date.now();
+            let activeCount = 0; const now = Date.now();
             activeUsersData.forEach(user => {
-                if (now - user.time < 180000) { // يعتبر نشط إذا تفاعل خلال 3 دقائق
-                    activeCount++;
-                } else if (now - user.time > 3600000) { // تنظيف قاعدة البيانات بعد ساعة
-                    user.ref.delete().catch(e=>e);
-                }
+                if (now - user.time < 180000) activeCount++;
+                else if (now - user.time > 3600000) user.ref.delete().catch(e=>e);
             });
             const countEl = document.getElementById('count-active');
             const newCount = Math.max(1, activeCount);
-            
             if (countEl.innerText !== newCount.toString() && countEl.innerText !== '1') {
-                countEl.classList.remove('pop-update');
-                void countEl.offsetWidth;
-                countEl.classList.add('pop-update');
+                countEl.classList.remove('pop-update'); void countEl.offsetWidth; countEl.classList.add('pop-update');
             }
             countEl.innerText = newCount;
         }
-        // -------------------------------------------------------------
+
+        // --- وظائف الجدول الشهري ---
+        function generateMonthlyTable() {
+            const today = new Date();
+            const monthIndex = today.getMonth();
+            const todayDate = today.getDate().toString();
+            
+            // الأشهر الانجليزية كما هي مخزنة في ملف prayers.js
+            const swedishMonths = ["Januari", "Februari", "Mars", "April", "Maj", "Juni", "Juli", "Augusti", "September", "Oktober", "November", "December"];
+            const currentMonthNameForData = swedishMonths[monthIndex];
+            
+            // الاسم الذي سيظهر في العنوان حسب اللغة
+            const displayMonthName = currentLang === 'ar' ? langData.ar.monthsAr[monthIndex] : langData.sv.monthsSv[monthIndex];
+            document.getElementById('timetable-month-name').innerText = `${langData[currentLang].tableTitle} ${displayMonthName}`;
+
+            const tbody = document.getElementById('timetable-tbody');
+            tbody.innerHTML = ''; // مسح المحتوى القديم
+
+            if (typeof yearlyPrayerData !== 'undefined' && yearlyPrayerData.months[currentMonthNameForData]) {
+                const monthData = yearlyPrayerData.months[currentMonthNameForData];
+                
+                monthData.forEach(dayInfo => {
+                    const tr = document.createElement('tr');
+                    // تمييز اليوم الحالي
+                    if (dayInfo.Dat === todayDate) tr.className = 'today-row';
+
+                    tr.innerHTML = `
+                        <td style="font-weight:bold;">${dayInfo.Dat}</td>
+                        <td>${dayInfo.Fajr}</td>
+                        <td>${dayInfo.Dhohr}</td>
+                        <td>${dayInfo.Asr}</td>
+                        <td>${dayInfo.Magrib}</td>
+                        <td>${dayInfo.Isha}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                
+                // تمرير الجدول للأسفل لليوم الحالي إذا لزم الأمر عند الفتح
+                setTimeout(() => {
+                    const todayRow = document.querySelector('.today-row');
+                    if (todayRow) todayRow.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 300);
+            }
+        }
+
+        function openTimetable() {
+            generateMonthlyTable();
+            document.getElementById('timetable-backdrop').classList.add('active');
+            document.getElementById('timetable-wrapper').classList.add('active');
+            document.body.style.overflow = 'hidden'; // منع التمرير بالخلفية
+        }
+
+        function closeTimetable() {
+            document.getElementById('timetable-backdrop').classList.remove('active');
+            document.getElementById('timetable-wrapper').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function saveTimetableImage() {
+            const captureArea = document.getElementById('capture-area');
+            const originalBackground = captureArea.style.background;
+            captureArea.style.background = '#ffffff'; // ضمان خلفية بيضاء للصورة
+
+            // إظهار إشعار جاري التحميل
+            showToast(currentLang === 'ar' ? "جاري التقاط الصورة..." : "Sparar bild...", 2000);
+
+            html2canvas(captureArea, {
+                scale: 2, // دقة عالية
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                captureArea.style.background = originalBackground; // إرجاع الخلفية
+                
+                const monthName = document.getElementById('timetable-month-name').innerText;
+                const link = document.createElement('a');
+                link.download = `Moske_Ar_Rahman_${monthName}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }).catch(err => {
+                captureArea.style.background = originalBackground;
+                console.error("Error saving image:", err);
+                showToast(currentLang === 'ar' ? "حدث خطأ" : "Ett fel uppstod", 2000);
+            });
+        }
+        // -----------------------------
 
         // --- وظائف متصفح الصور الداخلي (Lightbox) ---
         function openLightbox(imageUrl) {
@@ -619,11 +739,7 @@
                 if (token) {
                     const savedLocalToken = localStorage.getItem('savedFCMToken');
                     if (savedLocalToken !== token) {
-                        await db.collection('users_tokens').doc(token).set({ 
-                            token: token, 
-                            timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
-                            userAgent: navigator.userAgent 
-                        });
+                        await db.collection('users_tokens').doc(token).set({ token: token, timestamp: firebase.firestore.FieldValue.serverTimestamp(), userAgent: navigator.userAgent });
                         localStorage.setItem('savedFCMToken', token); 
                     }
                 }
@@ -640,21 +756,15 @@
 
         async function checkAndRefreshFCMToken() {
             if ('Notification' in window && Notification.permission === 'granted') {
-                isNotifEnabled = true; 
-                localStorage.setItem('notifEnabled', 'true'); 
-                updateNotifBtnUI();
-                await saveFCMToken();
+                isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true'); updateNotifBtnUI(); await saveFCMToken();
             } else if ('Notification' in window && Notification.permission !== 'granted') {
-                isNotifEnabled = false;
-                localStorage.setItem('notifEnabled', 'false');
-                updateNotifBtnUI();
+                isNotifEnabled = false; localStorage.setItem('notifEnabled', 'false'); updateNotifBtnUI();
             }
         }
 
         setTimeout(() => {
             if ('Notification' in window && Notification.permission === 'default' && !localStorage.getItem('notifPromptShown')) {
-                openNotificationModal();
-                localStorage.setItem('notifPromptShown', 'true');
+                openNotificationModal(); localStorage.setItem('notifPromptShown', 'true');
             }
         }, 8000);
 
@@ -662,6 +772,11 @@
             currentLang = currentLang === 'ar' ? 'sv' : 'ar';
             localStorage.setItem('lang', currentLang);
             applyTranslations(); updateAnalogClock();
+            
+            // تحديث محتوى الجدول إذا كان مفتوحاً أثناء تغيير اللغة
+            if(document.getElementById('timetable-wrapper').classList.contains('active')) {
+                generateMonthlyTable();
+            }
         }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); document.getElementById('sidebar-overlay').classList.toggle('active'); }
@@ -680,9 +795,19 @@
 
             document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-title').innerText = t.menuTitle; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle;
             
-            // ترجمة الإحصائيات
-            document.getElementById('label-total').innerText = t.lblTotal;
-            document.getElementById('label-active').innerText = t.lblActive;
+            document.getElementById('label-total').innerText = t.lblTotal; document.getElementById('label-active').innerText = t.lblActive;
+            
+            // ترجمة قسم الجدول
+            document.getElementById('text-btn-monthly').innerText = t.btnMonthly;
+            document.getElementById('timetable-modal-title').innerText = t.btnMonthly;
+            document.getElementById('th-day').innerText = t.thDay;
+            document.getElementById('th-fajr').innerText = t.thFajr;
+            document.getElementById('th-dhuhr').innerText = t.thDhuhr;
+            document.getElementById('th-asr').innerText = t.thAsr;
+            document.getElementById('th-maghrib').innerText = t.thMaghrib;
+            document.getElementById('th-isha').innerText = t.thIsha;
+            document.getElementById('btn-timetable-close').innerText = t.btnCloseTable;
+            document.getElementById('btn-timetable-save').innerHTML = `<i class="fas fa-download"></i> ${t.btnSaveImg}`;
 
             updateNotifBtnUI(); renderPrayers(); renderActivities(); renderGallery();
         }
@@ -752,9 +877,7 @@
 
         function renderGallery() { 
             const container = document.getElementById('gallery-container'); let html = ''; 
-            siteData.gallery.forEach(img => { 
-                html += `<div class="gallery-item" onclick="openLightbox('${img.url}')"><img src="${img.url}" loading="lazy"></div>`; 
-            }); 
+            siteData.gallery.forEach(img => { html += `<div class="gallery-item" onclick="openLightbox('${img.url}')"><img src="${img.url}" loading="lazy"></div>`; }); 
             container.innerHTML = html; 
         }
 
@@ -767,8 +890,7 @@
         const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); }); }, { threshold: 0.1 });
 
         window.onload = () => { 
-            createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase(); 
-            listenToStatistics(); // تشغيل الاستماع للإحصائيات
+            createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase(); listenToStatistics();
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
             checkAndRefreshFCMToken(); 
         };
