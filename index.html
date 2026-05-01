@@ -22,6 +22,7 @@
 
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js"></script>
 
@@ -147,6 +148,22 @@
         .prayer-name { font-size: 0.95rem; font-weight: bold; margin-bottom: 2px; }
         .prayer-time { font-size: 0.85rem; color: #666; }
         .prayer-card.next-prayer .prayer-time { color: #ddd; }
+
+        /* شريط الإحصائيات والزوار */
+        .stats-bar { display: flex; justify-content: center; gap: 20px; padding: 15px; margin: -10px auto 30px auto; max-width: 600px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); flex-wrap: wrap; border: 1px solid rgba(10,54,34,0.1); }
+        .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 120px; }
+        .stat-item:not(:last-child) { border-right: 2px solid var(--light-bg); }
+        [dir="rtl"] .stat-item:not(:last-child) { border-right: none; border-left: 2px solid var(--light-bg); }
+        .stat-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; font-family: monospace; }
+        .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 5px; }
+        
+        .active-icon-wrapper { position: relative; display: inline-flex; }
+        .pulse-dot { position: absolute; top: -3px; right: -5px; width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 0 rgba(39, 174, 96, 0.4); animation: pulse 1.5s infinite; border: 2px solid var(--white); }
+        [dir="rtl"] .pulse-dot { right: auto; left: -5px; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); } 100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); } }
+
+        @keyframes popUpdate { 0% { transform: scale(1); } 50% { transform: scale(1.3); color: var(--success); } 100% { transform: scale(1); } }
+        .pop-update { animation: popUpdate 0.4s ease-out forwards; display: inline-block; }
 
         .activities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 15px; }
         .activity-card { background: var(--white); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); }
@@ -330,7 +347,28 @@
             <div class="prayer-grid" id="prayer-container"></div>
         </section>
 
-        <section class="section fade-in" id="activities" style="background: var(--white);">
+        <!-- شريط الإحصائيات بالرموز الجديدة -->
+        <div class="stats-bar fade-in">
+            <div class="stat-item">
+                <div class="stat-number">
+                    <i class="fas fa-users" style="font-size:1.3rem; color:var(--secondary);"></i> 
+                    <span id="count-total">...</span>
+                </div>
+                <div class="stat-label" id="label-total">إجمالي الزوار</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">
+                    <div class="active-icon-wrapper">
+                        <i class="fas fa-user" style="font-size:1.1rem; color:var(--success);"></i>
+                        <span class="pulse-dot"></span>
+                    </div>
+                    <span id="count-active">1</span>
+                </div>
+                <div class="stat-label" id="label-active">نشط الآن</div>
+            </div>
+        </div>
+
+        <section class="section fade-in" id="activities" style="background: var(--white); padding-top: 20px;">
             <div class="section-header">
                 <div class="title-row"><h2 class="section-title" id="title-activities">Aktiviteter</h2></div>
                 <div class="title-separator"><i class="fas fa-users"></i></div>
@@ -391,6 +429,8 @@
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const auth = firebase.auth(); // تعريف Auth
+
         const publicVapidKey = "BOX0a8Dg181ZMjLic3risMEkJZio0hNHGIABg1Mym1qaSorpI6NcJ3QQ79WXg0qi6R1n4SXo-aib3WUkNcIII6E";
 
         let messaging; 
@@ -407,15 +447,108 @@
                 nav: "مسجد الرحمن", menuTitle: "القائمة", home: "الرئيسية", prayers: "مواقيت الصلاة", activities: "الأنشطة", gallery: "المعرض", admin: "الإدارة", heroTitle: "مسجد الرحمن", heroSub: "نرحب بكم في بيت الله في مدينة بيرستورب السويدية", tPrayer: "مواقيت الصلاة", tAct: "أنشطة المسجد", tDonate: "تبرع للمسجد", tSwish: "ساهم في دعم المسجد، تبرعك صدقة جارية.", btnDonate: "التبرع <i class='fas fa-hand-holding-usd'></i>", tGallery: "معرض الصور", tContact: "تواصل مع الإدارة", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, السويد", 
                 prayerNames: { fajr: "الفجر", shurooq: "الشروق", dhuhr: "الظهر", asr: "العصر", maghrib: "المغرب", isha: "العشاء" }, pLabels: { adhan: "أذان:", iqama: "إقامة:", noP: "الشروق" }, timerTexts: { adhan: "باقي على أذان", iqama: "باقي على إقامة" }, notifTitle: "الإشعارات", notifBtnEnable: "تفعيل الإشعارات", notifBtnActive: "الإشعارات مفعلة",
                 modalEnableTitle: "تفعيل الإشعارات", modalEnableMsg: "تفعيل التنبيهات لمواعيد الصلاة؟",
-                modalDisableTitle: "إيقاف الإشعارات", modalDisableMsg: "إيقاف استلام الإشعارات من المسجد؟", btnYes: "تأكيد", btnNo: "إلغاء"
+                modalDisableTitle: "إيقاف الإشعارات", modalDisableMsg: "إيقاف استلام الإشعارات من المسجد؟", btnYes: "تأكيد", btnNo: "إلغاء",
+                lblTotal: "إجمالي الزوار", lblActive: "نشط الآن" // ترجمة الإحصائيات
             },
             sv: { 
                 nav: "Moské Ar-Rahman", menuTitle: "Meny", home: "Hem", prayers: "Bönetider", activities: "Aktiviteter", gallery: "Galleri", admin: "Admin", heroTitle: "Moské Ar-Rahman", heroSub: "Välkommen till Allahs hus i Perstorp, Sverige", tPrayer: "Bönetider", tAct: "Aktiviteter", tDonate: "Stöd Moskén", tSwish: "Bidra till att stödja moskén enkelt via Swish.", btnDonate: "Donera <i class='fas fa-hand-holding-usd'></i>", tGallery: "Bildgalleri", tContact: "Kontakta Admin", address: "Islamiska kultur center Perstorp, Hantverkaregatan 1, 284 31 Perstorp, Sverige", 
                 prayerNames: { fajr: "Fajr", shurooq: "Shurooq", dhuhr: "Dhuhr", asr: "Asr", maghrib: "Maghrib", isha: "Isha" }, pLabels: { adhan: "Adhan:", iqama: "Iqama:", noP: "Soluppgång" }, timerTexts: { adhan: "Tid till Adhan", iqama: "Tid till Iqama" }, notifTitle: "Notiser", notifBtnEnable: "Aktivera Notiser", notifBtnActive: "Notiser Aktiverade",
                 modalEnableTitle: "Aktivera Notiser", modalEnableMsg: "Vill du tillåta notiser för bönetider?",
-                modalDisableTitle: "Inaktivera Notiser", modalDisableMsg: "Vill du sluta ta emot notiser?", btnYes: "Bekräfta", btnNo: "Avbryt"
+                modalDisableTitle: "Inaktivera Notiser", modalDisableMsg: "Vill du sluta ta emot notiser?", btnYes: "Bekräfta", btnNo: "Avbryt",
+                lblTotal: "Totalt Besökare", lblActive: "Aktiva Nu" // ترجمة الإحصائيات
             }
         };
+
+        // --- نظام الإحصائيات وتتبع المستخدمين باستخدام Firebase Auth ---
+        auth.signInAnonymously().catch(error => console.error("Auth Error:", error));
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // 1. زيادة عداد الزوار الإجمالي (مرة واحدة لكل متصفح)
+                if (!localStorage.getItem('hasVisited_v1')) {
+                    db.collection('site_statistics').doc('global_stats').set({
+                        total_visitors: firebase.firestore.FieldValue.increment(1)
+                    }, { merge: true });
+                    localStorage.setItem('hasVisited_v1', 'true');
+                }
+
+                // 2. نظام التواجد (نشط الآن)
+                const presenceRef = db.collection('active_users').doc(user.uid);
+                
+                const updatePresence = () => {
+                    presenceRef.set({
+                        last_active: firebase.firestore.FieldValue.serverTimestamp()
+                    }).catch(e => console.log("Presence update skipped"));
+                };
+                
+                updatePresence(); // تحديث فوري عند الدخول
+                // تحديث حالة النشاط كل 60 ثانية طالما الموقع مفتوح
+                const presenceInterval = setInterval(updatePresence, 60000); 
+
+                // إزالة الشخص من قائمة النشطين عند إغلاق الموقع
+                window.addEventListener('beforeunload', () => {
+                    presenceRef.delete();
+                });
+            }
+        });
+
+        // 3. الاستماع للإحصائيات وعرضها
+        let activeUsersData = [];
+
+        function listenToStatistics() {
+            // الاستماع لإجمالي الزوار (تحديث لحظي)
+            db.collection('site_statistics').doc('global_stats').onSnapshot(doc => {
+                if (doc.exists) {
+                    const countEl = document.getElementById('count-total');
+                    const newCount = doc.data().total_visitors || 0;
+                    
+                    // إضافة تأثير حركي يثبت التحديث المباشر للمستخدم
+                    if (countEl.innerText !== newCount.toString() && countEl.innerText !== '...') {
+                        countEl.classList.remove('pop-update');
+                        void countEl.offsetWidth; // إعادة تهيئة التأثير
+                        countEl.classList.add('pop-update');
+                    }
+                    countEl.innerText = newCount;
+                }
+            });
+
+            // الاستماع لبيانات المتواجدين الآن
+            db.collection('active_users').onSnapshot(snapshot => {
+                activeUsersData = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.last_active) {
+                        activeUsersData.push({ ref: doc.ref, time: data.last_active.toMillis() });
+                    }
+                });
+                renderActiveCount();
+            });
+
+            // نظام فحص محلي يحدّث الرقم كل 5 ثوانٍ ليعكس الأشخاص الذين غادروا لحظياً
+            setInterval(renderActiveCount, 5000);
+        }
+
+        function renderActiveCount() {
+            let activeCount = 0;
+            const now = Date.now();
+            activeUsersData.forEach(user => {
+                if (now - user.time < 180000) { // يعتبر نشط إذا تفاعل خلال 3 دقائق
+                    activeCount++;
+                } else if (now - user.time > 3600000) { // تنظيف قاعدة البيانات بعد ساعة
+                    user.ref.delete().catch(e=>e);
+                }
+            });
+            const countEl = document.getElementById('count-active');
+            const newCount = Math.max(1, activeCount);
+            
+            if (countEl.innerText !== newCount.toString() && countEl.innerText !== '1') {
+                countEl.classList.remove('pop-update');
+                void countEl.offsetWidth;
+                countEl.classList.add('pop-update');
+            }
+            countEl.innerText = newCount;
+        }
+        // -------------------------------------------------------------
 
         // --- وظائف متصفح الصور الداخلي (Lightbox) ---
         function openLightbox(imageUrl) {
@@ -423,14 +556,13 @@
             const img = document.getElementById('lightbox-img');
             img.src = imageUrl;
             modal.classList.add('active');
-            document.body.style.overflow = 'hidden'; // منع التمرير في الخلفية
+            document.body.style.overflow = 'hidden'; 
         }
 
         function closeLightbox(event) {
-            // إغلاق النافذة فقط إذا تم النقر على الخلفية السوداء أو زر الإغلاق (وليس الصورة نفسها)
             if (event && event.target.id === 'lightbox-img') return;
             document.getElementById('lightbox-modal').classList.remove('active');
-            document.body.style.overflow = ''; // إعادة التمرير
+            document.body.style.overflow = ''; 
         }
 
         function openNotificationModal() {
@@ -469,7 +601,7 @@
                         isNotifEnabled = true; localStorage.setItem('notifEnabled', 'true');
                         updateNotifBtnUI(); 
                         showToast(currentLang === 'sv' ? "Aktiverat! 🔔" : "تم التفعيل! 🔔");
-                        await saveFCMToken(); // استخراج وحفظ التوكن فوراً
+                        await saveFCMToken(); 
                     }
                 } catch(e) {}
             } else if (pendingNotifAction === 'disable') {
@@ -479,14 +611,12 @@
             }
         }
 
-        // --- حفظ واستخراج التوكن فوراً ---
         async function saveFCMToken() {
             if(!messaging || !('serviceWorker' in navigator)) return;
             try {
                 const reg = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
                 const token = await messaging.getToken({ vapidKey: publicVapidKey, serviceWorkerRegistration: reg });
                 if (token) {
-                    // نتحقق إذا كان التوكن قد تم حفظه سابقاً في الذاكرة لتجنب استهلاك قاعدة البيانات بلا داعي
                     const savedLocalToken = localStorage.getItem('savedFCMToken');
                     if (savedLocalToken !== token) {
                         await db.collection('users_tokens').doc(token).set({ 
@@ -494,7 +624,7 @@
                             timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
                             userAgent: navigator.userAgent 
                         });
-                        localStorage.setItem('savedFCMToken', token); // تسجيل التوكن كمحفوظ
+                        localStorage.setItem('savedFCMToken', token); 
                     }
                 }
             } catch(e) { console.log("Token error", e); }
@@ -508,17 +638,13 @@
             });
         }
 
-        // --- نظام ذكي لاكتشاف وتحديث التوكن تلقائياً في حال إعطاء الصلاحية بدون زر ---
         async function checkAndRefreshFCMToken() {
-            // يتحقق مما إذا كان المستخدم لديه صلاحية الإشعارات
             if ('Notification' in window && Notification.permission === 'granted') {
                 isNotifEnabled = true; 
                 localStorage.setItem('notifEnabled', 'true'); 
                 updateNotifBtnUI();
-                // سيقوم النظام بمحاولة استخراج وحفظ التوكن فوراً (الدالة ستتجاهل الحفظ إذا كان التوكن مسجلاً بالفعل)
                 await saveFCMToken();
             } else if ('Notification' in window && Notification.permission !== 'granted') {
-                // إذا تم إلغاء الصلاحية من المتصفح
                 isNotifEnabled = false;
                 localStorage.setItem('notifEnabled', 'false');
                 updateNotifBtnUI();
@@ -553,6 +679,11 @@
             if (currentLang === 'ar') document.body.classList.add('lang-ar'); else document.body.classList.remove('lang-ar');
 
             document.getElementById('nav-title').innerText = t.nav; document.getElementById('menu-title').innerText = t.menuTitle; document.getElementById('menu-home').innerText = t.home; document.getElementById('menu-prayers').innerText = t.prayers; document.getElementById('menu-activities').innerText = t.activities; document.getElementById('menu-gallery').innerText = t.gallery; document.getElementById('menu-admin').innerText = t.admin; document.getElementById('hero-title').innerText = t.heroTitle; document.getElementById('hero-subtitle').innerText = t.heroSub; document.getElementById('title-prayer').innerText = t.tPrayer; document.getElementById('title-activities').innerText = t.tAct; document.getElementById('title-donate').innerText = t.tDonate; document.getElementById('text-swish').innerText = t.tSwish; document.getElementById('btn-donate').innerHTML = t.btnDonate; document.getElementById('title-gallery').innerText = t.tGallery; document.getElementById('title-contact').innerText = t.tContact; document.getElementById('address-text').innerText = t.address; document.getElementById('notif-title-text').innerText = t.notifTitle;
+            
+            // ترجمة الإحصائيات
+            document.getElementById('label-total').innerText = t.lblTotal;
+            document.getElementById('label-active').innerText = t.lblActive;
+
             updateNotifBtnUI(); renderPrayers(); renderActivities(); renderGallery();
         }
 
@@ -622,7 +753,6 @@
         function renderGallery() { 
             const container = document.getElementById('gallery-container'); let html = ''; 
             siteData.gallery.forEach(img => { 
-                // إضافة دالة onclick لفتح الصورة في المتصفح الداخلي
                 html += `<div class="gallery-item" onclick="openLightbox('${img.url}')"><img src="${img.url}" loading="lazy"></div>`; 
             }); 
             container.innerHTML = html; 
@@ -638,9 +768,8 @@
 
         window.onload = () => { 
             createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase(); 
+            listenToStatistics(); // تشغيل الاستماع للإحصائيات
             document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-            
-            // يتم استدعاء دالة الفحص بمجرد فتح الصفحة لضمان التقاط التوكن لأي شخص مفعل الإشعارات مسبقاً
             checkAndRefreshFCMToken(); 
         };
     </script>
