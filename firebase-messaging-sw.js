@@ -1,7 +1,6 @@
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 
-// تهيئة فايربيس
 firebase.initializeApp({
   apiKey: "AIzaSyDLOQ3i-cyhZV-A1oN5Jhy_OQj_KdqClzk",
   authDomain: "al-rahman-d0529.firebaseapp.com",
@@ -14,20 +13,18 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-// استقبال الإشعارات في الخلفية
 messaging.setBackgroundMessageHandler(function(payload) {
   const notificationTitle = payload.notification?.title || 'مسجد الرحمن';
   const notificationOptions = {
     body: payload.notification?.body || 'لديك إشعار جديد',
-    icon: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_100/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
-    badge: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_100/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
-    vibrate:[200, 100, 200]
+    icon: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
+    badge: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
+    vibrate:[200, 100, 200, 100, 200]
   };
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// إعدادات التخزين المؤقت (PWA)
-const CACHE_NAME = 'arrahman-v2';
+const CACHE_NAME = 'arrahman-v1';
 const ASSETS =[
   '/',
   '/index.html',
@@ -51,7 +48,7 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // استثناء طلبات قاعدة البيانات ورفع الصور من الكاش لمنع اللاج
+  // استثناء طلبات قاعدة البيانات والصور من الكاش لمنع اللاج وتثقيل الموقع
   if (event.request.url.includes('firestore') || 
       event.request.url.includes('google') || 
       event.request.url.includes('cloudinary')) {
