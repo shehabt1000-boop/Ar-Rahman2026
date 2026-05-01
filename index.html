@@ -115,7 +115,7 @@
         .sidebar-header { padding: 15px; background: var(--primary); color: var(--secondary); display: flex; justify-content: space-between; align-items: center; }
         .menu-links { padding: 15px; display: flex; flex-direction: column; gap: 10px; }
         .menu-links a, .menu-links button { text-decoration: none; color: var(--text-dark); font-size: 1rem; font-weight: 600; padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; background: none; border: none; cursor: pointer; text-align: left; font-family: inherit; width: 100%; transition: background 0.1s;}
-        [dir="rtl"] .menu-links a, [dir="rtl"] .menu-links button { text-align: right; }
+        [dir="rtl"] .menu-links a,[dir="rtl"] .menu-links button { text-align: right; }
         .menu-links a:hover, .menu-links button:hover { background: var(--light-bg); color: var(--primary); }
 
         .btn-notif-active { color: var(--success) !important; background: rgba(39, 174, 96, 0.1) !important; border: 1px solid rgba(39, 174, 96, 0.2) !important; }
@@ -155,14 +155,12 @@
         /* شريط الإحصائيات */
         .stats-bar { display: flex; justify-content: center; gap: 20px; padding: 15px; margin: -10px auto 20px auto; max-width: 600px; background: var(--white); border-radius: 12px; box-shadow: var(--shadow); flex-wrap: wrap; border: 1px solid rgba(10,54,34,0.1); }
         .stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 120px; }
-        .stat-item:not(:last-child) { border-right: 2px solid var(--light-bg); }
-        [dir="rtl"] .stat-item:not(:last-child) { border-right: none; border-left: 2px solid var(--light-bg); }
+        .stat-item:not(:last-child) { border-right: 2px solid var(--light-bg); }[dir="rtl"] .stat-item:not(:last-child) { border-right: none; border-left: 2px solid var(--light-bg); }
         .stat-number { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; font-family: monospace; }
         .stat-label { font-size: 0.85rem; color: var(--text-muted); font-weight: 600; margin-top: 5px; }
 
         .active-icon-wrapper { position: relative; display: inline-flex; }
-        .pulse-dot { position: absolute; top: -3px; right: -5px; width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 0 rgba(39, 174, 96, 0.4); animation: pulse 1.5s infinite; border: 2px solid var(--white); }
-        [dir="rtl"] .pulse-dot { right: auto; left: -5px; }
+        .pulse-dot { position: absolute; top: -3px; right: -5px; width: 10px; height: 10px; background-color: var(--success); border-radius: 50%; box-shadow: 0 0 0 rgba(39, 174, 96, 0.4); animation: pulse 1.5s infinite; border: 2px solid var(--white); }[dir="rtl"] .pulse-dot { right: auto; left: -5px; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); } 100% { box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); } }
 
         @keyframes popUpdate { 0% { transform: scale(1); } 50% { transform: scale(1.3); color: var(--success); } 100% { transform: scale(1); } }
@@ -265,7 +263,7 @@
             background-color: #000; color: #fff; font-family: 'Cairo', sans-serif;
             overflow: hidden; direction: rtl;
         }
-        .tv-mode-overlay.active { display: flex; }
+        .tv-mode-overlay.active { display: flex; flex-direction: column; }
 
         .tv-exit-btn {
             position: absolute; top: 20px; left: 20px; z-index: 100000;
@@ -275,24 +273,26 @@
         }
         .tv-mode-overlay:hover .tv-exit-btn { opacity: 1; }
 
-        .tv-layout { display: flex; flex-direction: row-reverse; width: 100vw; height: 100vh; }
+        /* Layout for TV Mode */
+        .tv-layout { display: flex; flex-direction: row-reverse; width: 100vw; height: 93vh; }
 
         /* الشريط الجانبي (مواقيت الصلاة) - على اليسار */
         .tv-sidebar {
             width: 28%; background: linear-gradient(to bottom, #004b87, #002b5e);
             display: flex; flex-direction: column; border-right: 3px solid #d4af37;
             box-shadow: 5px 0 15px rgba(0,0,0,0.5); z-index: 2;
+            padding-bottom: 2vh; /* مساحة سفلية إضافية لضمان ظهور العشاء */
         }
         .tv-prayer-row {
-            flex: 1; display: flex; align-items: center; padding: 0 20px;
+            flex: 1; display: flex; align-items: center; padding: 0 15px;
             border-bottom: 1px solid rgba(255,255,255,0.1); position: relative;
         }
-        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 12px; }
-        .tv-prayer-icon { font-size: 2.5vw; color: #fff; width: 25%; text-align: center; }
+        .tv-prayer-row.active { background: rgba(255, 255, 255, 0.1); border-right: 8px solid #d4af37; padding-right: 7px; }
+        .tv-prayer-icon { font-size: 2.2vw; color: #fff; width: 25%; text-align: center; }
         .tv-prayer-details { width: 75%; text-align: center; }
-        .tv-prayer-name { font-size: 1.8vw; font-weight: bold; color: #e0e0e0; margin-bottom: 5px; }
-        .tv-prayer-time { font-size: 3.5vw; font-weight: 900; color: #fff; line-height: 1; font-family: monospace; letter-spacing: 2px; }
-        .tv-prayer-iqama { font-size: 1vw; color: #fff; background: rgba(0,0,0,0.4); padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 8px; }
+        .tv-prayer-name { font-size: 1.6vw; font-weight: bold; color: #e0e0e0; margin-bottom: 2px; }
+        .tv-prayer-time { font-size: 3.2vw; font-weight: 900; color: #fff; line-height: 1; font-family: monospace; letter-spacing: 2px; }
+        .tv-prayer-iqama { font-size: 0.9vw; color: #fff; background: rgba(0,0,0,0.4); padding: 3px 10px; border-radius: 10px; display: inline-block; margin-top: 6px; }
 
         /* المنطقة الرئيسية (الخلفية والساعة) - على اليمين */
         .tv-main {
@@ -311,14 +311,15 @@
         .tv-mosque-info h1 { font-size: 3vw; font-family: 'Amiri', serif; color: #d4af37; text-shadow: 2px 2px 4px #000; margin: 0; line-height: 1.2; }
         .tv-mosque-info p { font-size: 1.2vw; color: #fff; text-shadow: 1px 1px 2px #000; margin: 0; }
         .tv-mosque-logo { font-size: 4vw; color: #fff; text-shadow: 2px 2px 4px #000; }
-        .tv-date-bar { background: rgba(0, 75, 135, 0.8); padding: 10px 25px; border-radius: 20px; font-size: 1.3vw; font-weight: bold; border: 1px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .tv-date-bar { background: rgba(0, 75, 135, 0.8); padding: 10px 25px; border-radius: 20px; font-size: 1.3vw; font-weight: bold; border: 1px solid #d4af37; box-shadow: 0 4px 10px rgba(0,0,0,0.5); display: flex; align-items: center; gap: 10px; }
 
         /* الساعة الأنالوج الزرقاء */
         .tv-clock-wrapper {
-            position: absolute; top: 50%; left: 0; transform: translate(-50%, -50%); z-index: 10;
+            position: absolute; top: 50%; left: 8%; /* تحريك الساعة لليمين لتبتعد عن الرموز */
+            transform: translate(-50%, -50%); z-index: 10;
         }
         .tv-analog-clock {
-            width: 32vw; height: 32vw; max-width: 600px; max-height: 600px;
+            width: 28vw; height: 28vw; max-width: 550px; max-height: 550px; /* تصغير طفيف */
             border: 12px solid #002b5e; border-radius: 50%;
             background: radial-gradient(circle, #00509e 0%, #002b5e 100%);
             box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 30px rgba(0,0,0,0.8);
@@ -326,7 +327,7 @@
         }
         .tv-clock-face { width: 100%; height: 100%; position: relative; }
         .tv-clock-number {
-            position: absolute; font-size: 2.2vw; font-weight: bold; color: #fff;
+            position: absolute; font-size: 2vw; font-weight: bold; color: #fff;
             transform: translate(-50%, -50%); font-family: 'Amiri', serif; text-shadow: 2px 2px 4px #000;
         }
         .tv-hand { position: absolute; bottom: 50%; transform-origin: bottom center; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.5); }
@@ -335,24 +336,27 @@
         .tv-second-hand { width: 3px; height: 45%; background: #ff3b30; left: calc(50% - 1.5px); }
         .tv-center-dot { position: absolute; top: 50%; left: 50%; width: 24px; height: 24px; background: #ff3b30; border-radius: 50%; transform: translate(-50%, -50%); border: 4px solid #fff; z-index: 5; }
         .tv-clock-brand { position: absolute; bottom: 25%; left: 50%; transform: translateX(-50%); text-align: center; color: #fff; opacity: 0.8; }
-        .tv-clock-brand div { font-size: 1.2vw; font-weight: bold; letter-spacing: 2px; }
-        .tv-clock-brand span { font-size: 0.8vw; }
+        .tv-clock-brand div { font-size: 1vw; font-weight: bold; letter-spacing: 2px; }
+        .tv-clock-brand span { font-size: 0.7vw; }
 
-        /* الشريط السفلي والعداد */
+        /* منطقة العداد فوق الشريط الإخباري */
         .tv-bottom-area {
-            position: absolute; bottom: 0; left: 0; right: 0; z-index: 3;
+            position: absolute; bottom: 20px; left: 0; right: 0; z-index: 3;
             display: flex; flex-direction: column; align-items: flex-start;
         }
         .tv-countdown-pill {
             background: rgba(0, 75, 135, 0.9); border: 2px solid #fff; border-radius: 30px;
-            padding: 12px 35px; margin: 0 40px 20px 0; display: flex; align-items: center; gap: 15px;
+            padding: 12px 35px; margin: 0 40px 0 0; display: flex; align-items: center; gap: 15px;
             font-size: 2.2vw; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         .tv-countdown-pill i { color: #d4af37; }
-        .tv-ticker-bar {
-            width: 100%; background: rgba(0,0,0,0.8); color: #fff; padding: 12px 0;
-            font-size: 1.8vw; border-top: 3px solid #d4af37; overflow: hidden; white-space: nowrap;
+
+        /* الشريط الإخباري السفلي (ممتد على كامل الشاشة) */
+        .tv-ticker-wrapper {
+            width: 100vw; height: 7vh; background: rgba(0,0,0,0.8); color: #fff; 
+            border-top: 3px solid #d4af37; display: flex; align-items: center; z-index: 100;
         }
+        .tv-ticker-wrapper marquee { font-size: 1.8vw; padding: 0 20px; }
     </style>
 </head>
 <body>
@@ -387,7 +391,12 @@
                         </div>
                         <i class="fas fa-mosque tv-mosque-logo"></i>
                     </div>
-                    <div class="tv-date-bar" id="tv-date-display">--</div>
+                    <div class="tv-date-bar">
+                        <!-- درجة الحرارة -->
+                        <span id="tv-weather-display"><i class="fas fa-spinner fa-spin"></i></span> 
+                        <span style="color:#d4af37;">|</span> 
+                        <span id="tv-date-display">--</span>
+                    </div>
                 </div>
 
                 <div class="tv-clock-wrapper">
@@ -411,11 +420,13 @@
                         <i class="fas fa-clock"></i>
                         <span id="tv-countdown-text">--:--:--</span>
                     </div>
-                    <div class="tv-ticker-bar">
-                        <marquee scrollamount="8" id="tv-ticker-text">مرحباً بكم في مسجد الرحمن - يرجى إغلاق الهواتف المحمولة أثناء الخطبة والصلاة - تقبل الله منا ومنكم صالح الأعمال</marquee>
-                    </div>
                 </div>
             </div>
+        </div>
+        
+        <!-- الشريط الإخباري ممتد على كامل العرض -->
+        <div class="tv-ticker-wrapper">
+            <marquee scrollamount="8" id="tv-ticker-text">مرحباً بكم في مسجد الرحمن - يرجى إغلاق الهواتف المحمولة أثناء الخطبة والصلاة - تقبل الله منا ومنكم صالح الأعمال</marquee>
         </div>
     </div>
 
@@ -1041,11 +1052,26 @@
         /* =========================================
            TV Display Mode Logic (منطق شاشة العرض)
            ========================================= */
+           
+        // دالة جلب درجة الحرارة لمدينة بيرستورب السويدية
+        async function fetchTvWeather() {
+            try {
+                // إحداثيات Perstorp
+                const res = await fetch('https://api.open-meteo.com/v1/forecast?latitude=56.1389&longitude=13.3881&current_weather=true');
+                const data = await res.json();
+                const temp = Math.round(data.current_weather.temperature);
+                document.getElementById('tv-weather-display').innerHTML = `<i class="fas fa-cloud-sun" style="color:#d4af37;"></i> ${temp}°C`;
+            } catch (e) {
+                document.getElementById('tv-weather-display').innerHTML = '';
+            }
+        }
+
         function enterTvMode() {
             document.getElementById('tv-mode-overlay').classList.add('active');
             document.body.style.overflow = 'hidden';
             renderTvPrayers();
             setupTvClockFace();
+            fetchTvWeather(); // جلب الطقس عند الدخول
             
             let elem = document.documentElement;
             if (elem.requestFullscreen) { elem.requestFullscreen(); }
@@ -1102,7 +1128,7 @@
                 tick.style.height = i % 5 === 0 ? '15px' : '8px';
                 tick.style.background = i % 5 === 0 ? '#fff' : 'rgba(255,255,255,0.5)';
                 tick.style.transformOrigin = 'bottom center';
-                tick.style.transform = `rotate(${i * 6}deg) translateY(-14vw)`; 
+                tick.style.transform = `rotate(${i * 6}deg) translateY(-13vw)`; 
                 face.appendChild(tick);
             }
 
@@ -1119,6 +1145,13 @@
                 face.appendChild(num);
             }
         }
+
+        // تحديث الطقس كل ساعة (3600000 مللي ثانية)
+        setInterval(() => {
+            if (document.getElementById('tv-mode-overlay').classList.contains('active')) {
+                fetchTvWeather();
+            }
+        }, 3600000);
 
         setInterval(() => {
             if (!document.getElementById('tv-mode-overlay').classList.contains('active')) return;
