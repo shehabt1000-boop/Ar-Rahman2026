@@ -1,6 +1,6 @@
-// ✅ تم تصحيح حرف i ليكون صغيراً حتى يعمل الـ Service Worker
-importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
+// ✅ تم الترقية إلى الإصدار 10.8.1 ليتطابق مع ملف HTML ويمنع تعارض الـ Tokens
+importScripts('https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js');
+importScripts('https://www.gstatic.com/firebasejs/10.8.1/firebase-messaging-compat.js');
 
 firebase.initializeApp({
   apiKey: "AIzaSyDLOQ3i-cyhZV-A1oN5Jhy_OQj_KdqClzk",
@@ -14,21 +14,46 @@ firebase.initializeApp({
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler(function(payload) {
-  // ✅ دعم قراءة البيانات سواء كانت في notification أو data
+// ✅ استخدام onBackgroundMessage بدلاً من الدالة القديمة التي توقف دعمها
+messaging.onBackgroundMessage(function(payload) {
+  console.log('[firebase-messaging-sw.js] Received background message ', payload);
+  
   const notificationTitle = payload.notification?.title || payload.data?.title || 'مسجد الرحمن';
   const notificationOptions = {
     body: payload.notification?.body || payload.data?.body || 'لديك إشعار جديد',
     icon: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
     badge: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
-    vibrate: [200, 100, 200, 100, 200]
+    vibrate: [200, 100, 200, 100, 200],
+    data: {
+      url: payload.data?.click_action || '/' // لحفظ الرابط الذي سيفتح عند النقر
+    }
   };
 
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-// ✅ تم تغيير اسم الكاش لإجبار متصفحات المستخدمين على تحديث الملف
-const CACHE_NAME = 'arrahman-v2';
+// ✅ إضافة حدث النقر على الإشعار لفتح الموقع إذا كان مغلقاً
+self.addEventListener('notificationclick', function(event) {
+  event.notification.close();
+  const urlToOpen = event.notification.data?.url || '/';
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(function(windowClients) {
+      for (let i = 0; i < windowClients.length; i++) {
+        let client = windowClients[i];
+        if (client.url === urlToOpen && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+});
+
+// ✅ تغيير اسم الكاش لإجبار المتصفح على تحميل التحديث الجديد
+const CACHE_NAME = 'arrahman-v3';
 
 const ASSETS = [
   '/',
@@ -66,8 +91,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
-
-  // ✅ استثناء الطلبات الخارجية وطلبات الـ API من الكاش حتى لا تتعطل الإشعارات
+  // استثناء الطلبات الخارجية لمنع تعطل الإشعارات
   if (
     event.request.method !== 'GET' ||
     url.includes('firestore') ||
@@ -77,7 +101,6 @@ self.addEventListener('fetch', (event) => {
   ) {
     return;
   }
-
   event.respondWith(
     caches.match(event.request).then(res => res || fetch(event.request))
   );
