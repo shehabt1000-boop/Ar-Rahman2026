@@ -95,9 +95,12 @@ async function markSent(id) {
 }
 
 async function sendHourlyReminder(nowMinutes) {
-  if (nowMinutes % 60 !== 0) return null;
 
   const id = `${todayKey()}-hour-${Math.floor(nowMinutes / 60)}`;
+
+const minute = nowMinutes % 60;
+
+if (minute > 5) return null;
 
   if (await alreadySent(id)) return null;
 
