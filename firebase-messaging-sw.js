@@ -1,3 +1,4 @@
+// ✅ تم تصحيح حرف i ليكون صغيراً حتى يعمل الـ Service Worker
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/8.10.1/firebase-messaging.js');
 
@@ -14,9 +15,10 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.setBackgroundMessageHandler(function(payload) {
-  const notificationTitle = payload.notification?.title || 'مسجد الرحمن';
+  // ✅ دعم قراءة البيانات سواء كانت في notification أو data
+  const notificationTitle = payload.notification?.title || payload.data?.title || 'مسجد الرحمن';
   const notificationOptions = {
-    body: payload.notification?.body || 'لديك إشعار جديد',
+    body: payload.notification?.body || payload.data?.body || 'لديك إشعار جديد',
     icon: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
     badge: 'https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg',
     vibrate: [200, 100, 200, 100, 200]
@@ -25,7 +27,8 @@ messaging.setBackgroundMessageHandler(function(payload) {
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-const CACHE_NAME = 'arrahman-v1';
+// ✅ تم تغيير اسم الكاش لإجبار متصفحات المستخدمين على تحديث الملف
+const CACHE_NAME = 'arrahman-v2';
 
 const ASSETS = [
   '/',
@@ -36,10 +39,8 @@ const ASSETS = [
   'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap'
 ];
 
-// ✅ FIX: عدم كسر الموقع لو ملف فشل
 self.addEventListener('install', (event) => {
   self.skipWaiting();
-
   event.waitUntil(
     caches.open(CACHE_NAME).then(async (cache) => {
       for (const asset of ASSETS) {
@@ -66,11 +67,13 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
-  // استثناء خدمات خارجية
+  // ✅ استثناء الطلبات الخارجية وطلبات الـ API من الكاش حتى لا تتعطل الإشعارات
   if (
+    event.request.method !== 'GET' ||
     url.includes('firestore') ||
     url.includes('google') ||
-    url.includes('cloudinary')
+    url.includes('cloudinary') ||
+    url.includes('/api/')
   ) {
     return;
   }
