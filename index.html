@@ -1288,6 +1288,12 @@
             renderTvPrayers(); 
         }, 1000);
 
+        // تم التعديل: تفعيل الـ Service Worker ليعمل الموقع بدون إنترنت (PWA)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(err => console.warn('PWA SW Reg Failed:', err));
+            });
+        }
 
         window.onload = () => { 
             createClockTicks(); updateAnalogClock(); loadTodaysPrayers(); applyTranslations(); listenToFirebase(); listenToStatistics();
