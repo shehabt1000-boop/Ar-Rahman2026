@@ -25,7 +25,8 @@ messaging.setBackgroundMessageHandler(function(payload) {
   return self.registration.showNotification(notificationTitle, notificationOptions);
 });
 
-const CACHE_NAME = 'arrahman-v1';
+// ✅ تم التعديل: تغيير رقم الإصدار لإجبار المتصفح على مسح الكاش القديم
+const CACHE_NAME = 'arrahman-v2';
 
 const ASSETS = [
   '/',
@@ -36,7 +37,6 @@ const ASSETS = [
   'https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;800&display=swap'
 ];
 
-// ✅ FIX: عدم كسر الموقع لو ملف فشل
 self.addEventListener('install', (event) => {
   self.skipWaiting();
 
@@ -63,6 +63,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// ✅ تم التعديل: استراتيجية Network First بدلاً من Cache First
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
@@ -76,6 +77,17 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    caches.match(event.request).then(res => res || fetch(event.request))
+    fetch(event.request)
+      .then(networkResponse => {
+        // إذا نجح الاتصال بالإنترنت، نقوم بحفظ النسخة الجديدة في الكاش
+        return caches.open(CACHE_NAME).then(cache => {
+          cache.put(event.request, networkResponse.clone());
+          return networkResponse;
+        });
+      })
+      .catch(() => {
+        // في حال انقطاع الإنترنت، نعود للنسخة المخبأة في الكاش
+        return caches.match(event.request);
+      })
   );
 });
