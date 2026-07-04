@@ -12,4 +12,4 @@ jobs:
     steps:
       - name: Call Notification API
         run: |
-          curl -X GET https://ar-rahman-seven.vercel.app/api/send-notification
+          curl -X GET https://ar-rahman-seven.vercel.app/api/scheduled-notifications
