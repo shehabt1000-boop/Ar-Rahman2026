@@ -1,5 +1,9 @@
 {
   "appId": "com.alrahman.app",
   "appName": "الرحمن",
-  "webDir": "www"
+  "webDir": "www",
+  "server": {
+    "url": "https://ar-rahman-seven.vercel.app",
+    "cleartext": false
+  }
 }
