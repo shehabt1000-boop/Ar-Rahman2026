@@ -1288,9 +1288,15 @@
             renderTvPrayers(); 
         }, 1000);
 
-        // تم التعديل: تفعيل الـ Service Worker ليعمل الموقع بدون إنترنت (PWA)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
+        // ✅ تم التعديل: تفعيل الـ Service Worker ليعمل الموقع بدون إنترنت (PWA) واستقبال إشعارات فايربيس
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/firebase-messaging-sw.js')
+            .then(reg => console.log('تم تسجيل Service Worker بنجاح!', reg.scope))
+            .catch(err => console.warn('PWA SW Reg Failed:', err));
+    });
+}
+
                 navigator.serviceWorker.register('/sw.js').catch(err => console.warn('PWA SW Reg Failed:', err));
             });
         }
