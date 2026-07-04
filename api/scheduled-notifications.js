@@ -57,7 +57,7 @@ async function sendNotification(title, body) {
   });
 
   return {
-    success: true,
+    success: response.successCount > 0,
     sent: response.successCount,
     failed: response.failureCount
   };
@@ -98,9 +98,9 @@ async function sendHourlyReminder(nowMinutes) {
 
   const id = `${todayKey()}-hour-${Math.floor(nowMinutes / 60)}`;
 
-const minute = nowMinutes % 60;
+  const minute = nowMinutes % 60;
 
-if (minute > 5) return null;
+  if (minute >= 5) return null;
 
   if (await alreadySent(id)) return null;
 
@@ -109,12 +109,15 @@ if (minute > 5) return null;
     "اللهم صلِّ وسلم وبارك على سيدنا محمد ﷺ"
   );
 
-  await markSent(id);
+  if (result.success) {
+    await markSent(id);
+  }
 
   return result;
 }
 
 async function sendPrayerNotifications(nowMinutes) {
+  let notificationSent = false;
 
   const prayers = getPrayerSchedule();
 
@@ -132,12 +135,15 @@ async function sendPrayerNotifications(nowMinutes) {
 
       if (!(await alreadySent(beforeId))) {
 
-        await sendNotification(
+        const result = await sendNotification(
           `🕌 اقترب أذان ${prayer.name}`,
           `باقي ${BEFORE_ADHAN} دقيقة على أذان ${prayer.name}`
         );
 
-        await markSent(beforeId);
+        if (result.success) {
+          await markSent(beforeId);
+          notificationSent = true;
+        }
       }
     }
 
@@ -151,16 +157,72 @@ async function sendPrayerNotifications(nowMinutes) {
 
       if (!(await alreadySent(adhanId))) {
 
-        await sendNotification(
+        const result = await sendNotification(
           `🕌 أذان ${prayer.name}`,
           `حان الآن موعد أذان ${prayer.name}`
         );
 
-        await markSent(adhanId);
+        if (result.success) {
+          await markSent(adhanId);
+          notificationSent = true;
+        }
+      }
+    }
+
+    // حساب وقت الإقامة
+    let iqamaOffset = 0;
+    if (prayer.id === "fajr") {
+      iqamaOffset = 20;
+    } else if (["dhuhr", "asr", "maghrib", "isha"].includes(prayer.id)) {
+      iqamaOffset = 10;
+    }
+
+    if (iqamaOffset > 0) {
+      const iqamaMinutes = (prayerMinutes + iqamaOffset) % (24 * 60);
+
+      const beforeIqamaId = `${todayKey()}-${prayer.id}-before-iqama`;
+
+      if (
+        nowMinutes >= iqamaMinutes - 5 &&
+        nowMinutes < iqamaMinutes
+      ) {
+        if (!(await alreadySent(beforeIqamaId))) {
+          const result = await sendNotification(
+            `⏳ اقتربت إقامة صلاة ${prayer.name}`,
+            `باقي 5 دقائق على إقامة صلاة ${prayer.name}`
+          );
+
+          if (result.success) {
+            await markSent(beforeIqamaId);
+            notificationSent = true;
+          }
+        }
+      }
+
+      const iqamaId = `${todayKey()}-${prayer.id}-iqama`;
+
+      if (
+        nowMinutes >= iqamaMinutes &&
+        nowMinutes < iqamaMinutes + 5
+      ) {
+        if (!(await alreadySent(iqamaId))) {
+          const result = await sendNotification(
+            `🕌 إقامة صلاة ${prayer.name}`,
+            `حان الآن موعد إقامة صلاة ${prayer.name}`
+          );
+
+          if (result.success) {
+            await markSent(iqamaId);
+            notificationSent = true;
+          }
+        }
       }
     }
   }
+
+  return notificationSent;
 }
+
 export default async function handler(req, res) {
   try {
 
@@ -191,3 +253,4 @@ export default async function handler(req, res) {
 
   }
 }
+
