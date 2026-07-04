@@ -2,7 +2,7 @@
       "relation": ["delegate_permission/common.handle_all_urls"],
       "target": {
         "namespace": "android_app",
-        "package_name": "app.netlify.perstorp_moske.twa",
-        "sha256_cert_fingerprints": ["35:44:54:21:E0:80:68:FF:63:26:92:2F:25:61:78:2E:0B:26:F0:25:BA:7D:12:1E:39:42:82:67:7F:7B:4D:70"]
+        "package_name": "app.vercel.ar_rahman_seven.twa",
+        "sha256_cert_fingerprints": ["99:E0:48:BE:FE:83:64:75:BA:C3:5B:8D:40:BB:49:9A:2E:6A:51:D2:08:A8:50:24:EF:C7:7E:4D:43:7F:C5:26"]
       }
     }]
