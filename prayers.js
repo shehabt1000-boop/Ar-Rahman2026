@@ -301,4 +301,3 @@ const yearlyPrayerData = {
         ]
     }
 };
-export default yearlyPrayerData;
