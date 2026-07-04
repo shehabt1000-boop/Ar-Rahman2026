@@ -19,13 +19,31 @@ export default async function handler(req, res) {
       });
     }
 
-    const message = {
-      notification: {
-        title: "الرحمن",
-        body: "هذا إشعار تجريبي لجميع المستخدمين"
-      },
-      tokens: tokens
-    };
+  const message = {
+  tokens,
+
+  notification: {
+    title: "🕌 الرحمن",
+    body: "هذا إشعار تجريبي"
+  },
+
+  android: {
+    priority: "high",
+    notification: {
+      sound: "default"
+    }
+  },
+
+  webpush: {
+    notification: {
+      icon: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg",
+      badge: "https://res.cloudinary.com/db9h7zm1h/image/upload/w_500,q_auto,f_auto/v1774918203/hi5hebyjkpi3gkdgrdef.jpg"
+    },
+    headers: {
+      Urgency: "high"
+    }
+  }
+};   
 
     const response = await admin.messaging().sendEachForMulticast(message);
 
